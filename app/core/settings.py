@@ -25,7 +25,7 @@ SECRET_KEY = 'a=%8k3%7eaqi45bn1=3u8-(hd0sisv=j(kmoz&z6kjc4@&$&+%'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['yandex-gamification.std-884.ist.mospolytech.ru']
 
 
 # Application definition
