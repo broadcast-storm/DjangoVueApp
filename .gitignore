@@ -5,7 +5,7 @@ __pycache__/
 *.py[cod]
 venv/
 *.sqlite3
-
+media/*
 
 # local env files
 .env.local

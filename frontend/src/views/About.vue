@@ -1,5 +1,6 @@
 <template>
   <div class="about">
-    <h1>This is an about page</h1>
+    <h1>Проект Яндекс Геймификация</h1>
+    <h2>Технологии: Django, DjangoRestFramework, Vue.js</h2>
   </div>
 </template>
