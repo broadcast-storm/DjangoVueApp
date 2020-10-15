@@ -3,58 +3,58 @@ import VueRouter from 'vue-router'
 import Main from '@/views/Main'
 import LoginForm from '@/views/AuthViews/LoginForm'
 import ForgotPassword from '@/views/AuthViews/ForgotPassword'
+import routesList from '@/router/routesList'
 
 Vue.use(VueRouter)
 
 const routes = [
     {
-        path: '/',
-        name: 'Main',
+        path: routesList.mainPage.path,
         component: Main,
         children: [
             {
-                path: '/',
+                path: routesList.mainPage.path,
                 components: {
                     'main-router': () =>
                         import('@/views/MainViews/Profile.vue'),
                 },
             },
             {
-                path: '/competitions',
+                path: routesList.competitionsPage.path,
                 components: {
                     'main-router': () =>
                         import('@/views/MainViews/Competitions.vue'),
                 },
             },
             {
-                path: '/main-quest',
+                path: routesList.mainQuestPage.path,
                 components: {
                     'main-router': () =>
                         import('@/views/MainViews/MainQuest.vue'),
                 },
             },
             {
-                path: '/raiting',
+                path: routesList.raitingPage.path,
                 components: {
                     'main-router': () =>
                         import('@/views/MainViews/Raiting.vue'),
                 },
             },
             {
-                path: '/shop',
+                path: routesList.shopPage.path,
                 components: {
                     'main-router': () => import('@/views/MainViews/Shop.vue'),
                 },
             },
             {
-                path: '/statistics',
+                path: routesList.statisticsPage.path,
                 components: {
                     'main-router': () =>
                         import('@/views/MainViews/Statistics.vue'),
                 },
             },
             {
-                path: '/tests',
+                path: routesList.testsPage.path,
                 components: {
                     'main-router': () => import('@/views/MainViews/Tests.vue'),
                 },
@@ -62,18 +62,17 @@ const routes = [
         ],
     },
     {
-        path: '/auth',
-        name: 'Auth',
+        path: routesList.authPage.path,
         component: () => import('@/views/Auth.vue'),
         children: [
             {
-                path: 'login',
+                path: routesList.authPage.children.loginPage.path,
                 components: {
                     'auth-router': LoginForm,
                 },
             },
             {
-                path: 'forgot-password',
+                path: routesList.authPage.children.forgotpasswordPage.path,
                 components: {
                     'auth-router': ForgotPassword,
                 },

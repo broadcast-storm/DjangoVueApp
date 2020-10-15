@@ -1,5 +1,11 @@
 <template>
-    <div>Профиль</div>
+    <div>
+        Профиль
+        <br />
+        <router-link to="/tests">
+            В тесты
+        </router-link>
+    </div>
 </template>
 
 <script>

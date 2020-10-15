@@ -1,6 +1,8 @@
 <template>
     <div class="header-container">
-        <h1 class="header-container__page-name">Профиль</h1>
+        <h1 class="header-container__page-name">
+            {{ pageName }}
+        </h1>
         <div class="user-statistics">
             <div class="user-statistics__stat-block">
                 <CoinSvg class="user-statistics__icon" />
@@ -31,6 +33,8 @@
 import CoinSvg from '@/assets/icons/coin.svg'
 import HeartSvg from '@/assets/icons/heart.svg'
 import LightningSvg from '@/assets/icons/lightning.svg'
+import routesList from '@/router/routesList'
+
 export default {
     name: 'Header',
     components: { CoinSvg, HeartSvg, LightningSvg },
@@ -38,6 +42,35 @@ export default {
         statistics: {
             type: Object,
             required: true,
+        },
+    },
+    data() {
+        return {
+            routesList,
+            pageName: '',
+        }
+    },
+
+    watch: {
+        $route(to) {
+            this.getPageName(to.fullPath)
+        },
+    },
+
+    mounted() {
+        this.getPageName(this.$router.currentRoute.fullPath)
+    },
+
+    methods: {
+        getPageName(currentPath) {
+            for (var page in this.routesList) {
+                const routeFromList = `/${
+                    this.routesList[page].path.split('/')[1]
+                }`
+                if (routeFromList === currentPath) {
+                    this.pageName = this.routesList[page].header
+                }
+            }
         },
     },
 }

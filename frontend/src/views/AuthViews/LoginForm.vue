@@ -19,7 +19,7 @@
             />
             <div class="login-form__link-container">
                 <router-link
-                    to="/auth/forgot-password"
+                    :to="routesList.authPage.children.forgotpasswordPage.path"
                     class="login-form__link-text"
                 >
                     Напомнить пароль
@@ -32,9 +32,15 @@
 
 <script>
 import LogoSvg from '@/components/LogoSvg'
+import routesList from '@/router/routesList'
 export default {
     name: 'LoginForm',
     components: { LogoSvg },
+    data() {
+        return {
+            routesList,
+        }
+    },
 }
 </script>
 

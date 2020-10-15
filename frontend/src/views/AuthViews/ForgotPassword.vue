@@ -18,7 +18,7 @@
             />
             <div class="forgot-password-form__link-container">
                 <router-link
-                    to="/auth/login"
+                    :to="routesList.authPage.children.loginPage.path"
                     class="forgot-password-form__link-text"
                 >
                     Вспомнил пароль
@@ -33,9 +33,16 @@
 
 <script>
 import LogoSvg from '@/components/LogoSvg'
+import routesList from '@/router/routesList'
+
 export default {
     name: 'ForgotPasswordForm',
     components: { LogoSvg },
+    data() {
+        return {
+            routesList,
+        }
+    },
 }
 </script>
 
