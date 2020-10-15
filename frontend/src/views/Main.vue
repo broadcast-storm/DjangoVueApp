@@ -1,15 +1,21 @@
 <template>
   <div class="main-container">
-    <Header />
+    <Header :statistics="stats" />
     <router-view name="main-router" />
   </div>
 </template>
 
 <script>
 import Header from "@/components/Header";
+import { stats } from "@/mocks/headerStats";
 export default {
   name: "Main",
-  components: { Header }
+  components: { Header },
+  data() {
+    return {
+      stats
+    };
+  }
 };
 </script>
 

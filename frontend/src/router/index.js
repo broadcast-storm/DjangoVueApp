@@ -10,7 +10,51 @@ const routes = [
   {
     path: "/",
     name: "Main",
-    component: Main
+    component: Main,
+    children: [
+      {
+        path: "/",
+        components: {
+          "main-router": () => import("@/views/MainViews/Profile.vue")
+        }
+      },
+      {
+        path: "/competitions",
+        components: {
+          "main-router": () => import("@/views/MainViews/Competitions.vue")
+        }
+      },
+      {
+        path: "/main-quest",
+        components: {
+          "main-router": () => import("@/views/MainViews/MainQuest.vue")
+        }
+      },
+      {
+        path: "/raiting",
+        components: {
+          "main-router": () => import("@/views/MainViews/Raiting.vue")
+        }
+      },
+      {
+        path: "/shop",
+        components: {
+          "main-router": () => import("@/views/MainViews/Shop.vue")
+        }
+      },
+      {
+        path: "/statistics",
+        components: {
+          "main-router": () => import("@/views/MainViews/Statistics.vue")
+        }
+      },
+      {
+        path: "/tests",
+        components: {
+          "main-router": () => import("@/views/MainViews/Tests.vue")
+        }
+      }
+    ]
   },
   {
     path: "/auth",
