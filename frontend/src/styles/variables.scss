@@ -19,3 +19,13 @@ $btn-main-blue: #3281a0;
 $text-color-red: #b52119;
 $text-color-green: #50af8d;
 $text-color-yellow: #f2af49;
+
+// MAX-WIDTH:
+// Малые девайсы («ландшафтные телефоны», < 576px)
+$media-breakpoint-xs: 575.98px;
+// Средние девайсы («таблетки», < 768px)
+$media-breakpoint-sm: 767.98px;
+// Большие девайсы (десктопы, < 992px)
+$media-breakpoint-md: 991.98px;
+// Экстрабольшие девайсы (большие десктопы, < 1200px)
+$media-breakpoint-lg: 1199.98px;

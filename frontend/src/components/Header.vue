@@ -86,4 +86,57 @@ export default {
         }
     }
 }
+
+@media (max-width: $media-breakpoint-md) {
+    .header-container {
+        padding: 25px 90px;
+        &__page-name {
+            font-size: 20px;
+        }
+
+        .user-statistics {
+            &__stat-block {
+                margin-left: 20px;
+            }
+            &__icon {
+                width: 20px;
+            }
+            &__text {
+                font-size: 16px;
+                line-height: 16px;
+            }
+        }
+    }
+}
+
+@media (max-width: $media-breakpoint-sm) {
+    .header-container {
+        flex-direction: column-reverse;
+        padding: 0;
+        border: none;
+        &__page-name {
+            margin-top: 16px;
+            font-size: 18px;
+        }
+
+        .user-statistics {
+            width: 100%;
+            height: 36px;
+            padding: 10px 0;
+            justify-content: space-around;
+            align-items: center;
+            box-shadow: 0px 6px 4px rgba(0, 0, 0, 0.1);
+            &__stat-block {
+                margin: 0;
+            }
+            &__icon {
+                width: 20px;
+            }
+            &__text {
+                font-size: 16px;
+                line-height: 16px;
+            }
+        }
+    }
+}
 </style>
