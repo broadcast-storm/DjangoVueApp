@@ -1,12 +1,12 @@
 <template>
-  <div>Соревнования</div>
+    <div>Соревнования</div>
 </template>
 
 <script>
 export default {
-  name: "Competitions",
-  props: {}
-};
+    name: 'Competitions',
+    props: {},
+}
 </script>
 
 <style lang="scss" scoped></style>

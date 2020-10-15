@@ -1,12 +1,12 @@
 <template>
-  <div>Рейтинг</div>
+    <div>Рейтинг</div>
 </template>
 
 <script>
 export default {
-  name: "Raiting",
-  props: {}
-};
+    name: 'Raiting',
+    props: {},
+}
 </script>
 
 <style lang="scss" scoped></style>

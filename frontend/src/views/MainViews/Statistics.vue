@@ -1,12 +1,12 @@
 <template>
-  <div>Статистика</div>
+    <div>Статистика</div>
 </template>
 
 <script>
 export default {
-  name: "Statistics",
-  props: {}
-};
+    name: 'Statistics',
+    props: {},
+}
 </script>
 
 <style lang="scss" scoped></style>

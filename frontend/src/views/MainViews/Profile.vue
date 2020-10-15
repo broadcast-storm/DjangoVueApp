@@ -1,12 +1,12 @@
 <template>
-  <div>Профиль</div>
+    <div>Профиль</div>
 </template>
 
 <script>
 export default {
-  name: "Profile",
-  props: {}
-};
+    name: 'Profile',
+    props: {},
+}
 </script>
 
 <style lang="scss" scoped></style>
