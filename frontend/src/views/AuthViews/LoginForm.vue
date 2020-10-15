@@ -56,6 +56,7 @@ export default {
     &__logo {
         max-width: 100px;
         width: 100%;
+        margin-bottom: 20px;
     }
 
     .login-form {

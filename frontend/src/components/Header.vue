@@ -1,18 +1,27 @@
 <template>
     <div class="header-container">
         <h1 class="header-container__page-name">Профиль</h1>
-        <div class="header-container__user-statistics">
-            <div>
-                <CoinSvg />
-                <span>{{ statistics.coins }}</span>
+        <div class="user-statistics">
+            <div class="user-statistics__stat-block">
+                <CoinSvg class="user-statistics__icon" />
+                <span
+                    class="user-statistics__text user-statistics__text_color_yellow"
+                    >{{ statistics.coins }}</span
+                >
             </div>
-            <div>
-                <LightningSvg />
-                <span>{{ statistics.lightnings }}</span>
+            <div class="user-statistics__stat-block">
+                <LightningSvg class="user-statistics__icon" />
+                <span
+                    class="user-statistics__text user-statistics__text_color_green"
+                    >{{ statistics.lightnings }}</span
+                >
             </div>
-            <div>
-                <HeartSvg />
-                <span>{{ statistics.hearts }}</span>
+            <div class="user-statistics__stat-block">
+                <HeartSvg class="user-statistics__icon" />
+                <span
+                    class="user-statistics__text user-statistics__text_color_red"
+                    >{{ statistics.hearts }}</span
+                >
             </div>
         </div>
     </div>
@@ -47,8 +56,34 @@ export default {
         color: $brand-night;
     }
 
-    &__user-statistics {
+    .user-statistics {
         display: flex;
+        &__stat-block {
+            display: flex;
+            align-items: center;
+            margin-left: 60px;
+        }
+        &__icon {
+            width: 20px;
+        }
+        &__text {
+            font-size: 16px;
+            line-height: 16px;
+            color: #f2af49;
+            margin-left: 5px;
+
+            &_color {
+                &_red {
+                    color: $text-color-red;
+                }
+                &_yellow {
+                    color: $text-color-yellow;
+                }
+                &_green {
+                    color: $text-color-green;
+                }
+            }
+        }
     }
 }
 </style>
