@@ -32,10 +32,10 @@ const routesList = {
         header: 'Авторизация',
         children: {
             loginPage: {
-                path: 'login',
+                path: '/auth/login',
             },
             forgotpasswordPage: {
-                path: 'forgot-password',
+                path: '/auth/forgot-password',
             },
         },
     },

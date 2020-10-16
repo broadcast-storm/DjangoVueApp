@@ -20,6 +20,14 @@ from django.conf.urls.static import static
 from .views import index
 urlpatterns = [
     path('', index, name='index'),
+    path('main-quest/', index, name='index'),
+    path('competitions/', index, name='index'),
+    path('statistics/', index, name='index'),
+    path('raiting/', index, name='index'),
+    path('shop/', index, name='index'),
+    path('tests/', index, name='index'),
+    path('auth/login/', index, name='index'),
+    path('auth/forgot-password/', index, name='index'),
     path('admin/', admin.site.urls),
     path("api/", include('api.urls'))
 ]
