@@ -1,10 +1,6 @@
 <template>
     <div>
-        Тесты
-        <br />
-        <router-link to="/">
-            В профиль
-        </router-link>
+        Контент тестов
     </div>
 </template>
 

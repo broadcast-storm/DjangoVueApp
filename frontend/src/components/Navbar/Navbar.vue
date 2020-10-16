@@ -1,49 +1,85 @@
 <template>
     <div class="navigation" :class="{ navigation_opened: opened }">
+        <div class="navigation__logo-back" />
         <LogoSvg
-            v-if="opened"
+            :class="{ navigation__logo_show: opened }"
             class="navigation__logo"
             :regular-color="'#d8dcea'"
         />
-        <div v-else class="navigation__logo"></div>
-        <nav class="navigation__links-container">
-            <ul class="navigation__links-list">
-                <li
-                    v-for="link in links"
-                    :key="link.name"
-                    class="navigation__links-item"
+
+        <nav class="navigation__links-list">
+            <div
+                v-for="link in links"
+                :key="link.name"
+                class="navigation__links-item"
+            >
+                <router-link
+                    :to="link.path"
+                    class="link"
+                    active-class="link_active"
+                    exact
                 >
-                    <router-link
-                        :to="link.path"
-                        class="link"
-                        active-class="link_active"
-                        exact
+                    <icon-base
+                        :width="iconWidth"
+                        :height="iconHeight"
+                        :view-box-width="link.viewBoxWidth"
+                        :view-box-height="link.viewBoxHeight"
+                        :stroke-color="
+                            link.strokeColor === null
+                                ? 'currentColor'
+                                : link.strokeColor
+                        "
+                        :fill-color="
+                            link.fillColor === null
+                                ? 'currentColor'
+                                : link.fillColor
+                        "
+                        class="link__icon"
                     >
-                        <icon-base
-                            :width="iconWidth"
-                            :height="iconHeight"
-                            :view-box-width="link.viewBoxWidth"
-                            :view-box-height="link.viewBoxHeight"
-                            :stroke-color="
-                                link.strokeColor === null
-                                    ? 'currentColor'
-                                    : link.strokeColor
-                            "
-                            :fill-color="
-                                link.fillColor === null
-                                    ? 'currentColor'
-                                    : link.fillColor
-                            "
-                            class="link__icon"
-                        >
-                            <component :is="link.icon"></component>
-                        </icon-base>
-                        <span v-if="opened" class="link__text">{{
-                            link.name
-                        }}</span>
-                    </router-link>
-                </li>
-            </ul>
+                        <component :is="link.icon"></component>
+                    </icon-base>
+                    <span
+                        :class="{ 'show-text': showText }"
+                        class="link__text"
+                        >{{ link.name }}</span
+                    >
+                </router-link>
+            </div>
+        </nav>
+
+        <nav class="navigation__links-list-mobile">
+            <div
+                v-for="linkMobile in linksMobile"
+                :key="linkMobile.name"
+                class="navigation__links-item"
+            >
+                <router-link
+                    :to="linkMobile.path"
+                    class="link"
+                    active-class="link_active"
+                    exact
+                >
+                    <icon-base
+                        :width="iconWidthMobile"
+                        :height="iconHeightMobile"
+                        :view-box-width="linkMobile.viewBoxWidth"
+                        :view-box-height="linkMobile.viewBoxHeight"
+                        :stroke-color="
+                            linkMobile.strokeColor === null
+                                ? 'currentColor'
+                                : linkMobile.strokeColor
+                        "
+                        :fill-color="
+                            linkMobile.fillColor === null
+                                ? 'currentColor'
+                                : linkMobile.fillColor
+                        "
+                        class="link__icon"
+                    >
+                        <component :is="linkMobile.icon"></component>
+                    </icon-base>
+                </router-link>
+            </div>
         </nav>
 
         <div class="exit-btn">
@@ -57,7 +93,9 @@
             >
                 <ExitSvg />
             </icon-base>
-            <span v-if="opened" class="exit-btn__text">Выход</span>
+            <span class="exit-btn__text" :class="{ 'show-text': showText }"
+                >Выход</span
+            >
         </div>
 
         <icon-base
@@ -109,7 +147,10 @@ export default {
         return {
             iconWidth: 25,
             iconHeight: 25,
-            opened: true,
+            iconWidthMobile: 22,
+            iconHeightMobile: 22,
+            opened: false,
+            showText: false,
             links: [
                 {
                     path: routesList.mainPage.path,
@@ -175,11 +216,71 @@ export default {
                     fillColor: null,
                 },
             ],
+            linksMobile: [
+                {
+                    path: routesList.raitingPage.path,
+                    icon: RaitingSvg,
+                    name: 'Рейтинг',
+                    viewBoxWidth: 18,
+                    viewBoxHeight: 24,
+                    strokeColor: 'none',
+                    fillColor: null,
+                },
+                {
+                    path: routesList.testsPage.path,
+                    icon: TestsSvg,
+                    name: 'Тесты',
+                    viewBoxWidth: 18,
+                    viewBoxHeight: 24,
+                    strokeColor: 'none',
+                    fillColor: null,
+                },
+                {
+                    path: routesList.mainPage.path,
+                    icon: ProfileSvg,
+                    name: 'Профиль',
+                    viewBoxWidth: 19,
+                    viewBoxHeight: 25,
+                    strokeColor: 'none',
+                    fillColor: null,
+                },
+                {
+                    path: routesList.mainQuestPage.path,
+                    icon: MainQuestSvg,
+                    name: 'Основной квест',
+                    viewBoxWidth: 18,
+                    viewBoxHeight: 24,
+                    strokeColor: 'none',
+                    fillColor: null,
+                },
+                {
+                    path: routesList.competitionsPage.path,
+                    icon: CompetitionsSvg,
+                    name: 'Соревнования',
+                    viewBoxWidth: 18,
+                    viewBoxHeight: 24,
+                    strokeColor: 'none',
+                    fillColor: null,
+                },
+            ],
         }
     },
+    watch: {
+        $route() {
+            this.opened = false
+            this.showText = false
+        },
+    },
     methods: {
+        showTextFunc() {
+            this.showText = true
+        },
         openMenu() {
             this.opened = !this.opened
+            if (this.showText) this.showText = false
+            else {
+                setTimeout(this.showTextFunc, 300)
+            }
         },
     },
 }
@@ -199,14 +300,25 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    transition: 0.3s width ease-in-out;
 
     &_opened {
         width: 240px;
     }
 
     &__logo {
+        visibility: hidden;
         height: 82px;
         margin: 0 auto 40px auto;
+        transition: 0.1s visibility ease-in-out;
+
+        &_show {
+            visibility: visible;
+        }
+    }
+
+    &__links-list-mobile {
+        display: none;
     }
 
     &__links-list {
@@ -240,6 +352,12 @@ export default {
                 border-left: 5px solid white;
                 padding-left: -5px;
             }
+            &__text {
+                display: none;
+            }
+        }
+        .link:hover {
+            color: white;
         }
     }
 
@@ -260,6 +378,9 @@ export default {
         &__icon {
             margin-right: 20px;
         }
+        &__text {
+            display: none;
+        }
     }
 
     .open-btn {
@@ -269,8 +390,86 @@ export default {
         color: $basic-grey;
         cursor: pointer;
 
+        transition: 0.3s transform ease-in-out;
+
         &_opened {
             transform: rotate(180deg);
+        }
+    }
+    .open-btn:hover {
+        color: white;
+    }
+    .show-text {
+        display: inline;
+    }
+}
+
+@media (max-width: $media-breakpoint-sm) {
+    .navigation {
+        top: auto;
+        bottom: 0;
+        width: 100%;
+        height: 56px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding: 0;
+        background-color: transparent;
+        box-shadow: 0px -2px 4px rgba(0, 0, 0, 0.1);
+
+        &__logo,
+        &__logo-back,
+        &__links-list,
+        .open-btn,
+        .exit-btn {
+            display: none;
+        }
+
+        &__links-list-mobile {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+        }
+
+        &__links-item {
+            box-sizing: border-box;
+            margin-bottom: 0;
+            width: 40px;
+            height: 40px;
+            left: calc(50% - 36px / 2 - 144px);
+            bottom: 10px;
+            box-shadow: -4px -4px 7px rgba(255, 255, 255, 0.35),
+                4px 4px 7px rgba(0, 0, 0, 0.15),
+                inset -4px -4px 4px rgba(255, 255, 255, 0.05),
+                inset 2px 2px 4px rgba(0, 0, 0, 0.05);
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            .link {
+                width: 25px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                color: $basic-background;
+                padding: 0;
+                border: none;
+                -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+                &__icon {
+                    margin-right: 0;
+                }
+                &__text {
+                    display: none;
+                }
+
+                &_active {
+                    color: $brand-turquoise;
+                }
+            }
+            .link:hover {
+                color: $brand-turquoise;
+            }
         }
     }
 }

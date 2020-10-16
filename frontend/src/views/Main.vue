@@ -33,4 +33,11 @@ export default {
         margin-left: 90px;
     }
 }
+@media (max-width: $media-breakpoint-sm) {
+    .main-container {
+        &__content {
+            margin-left: 0;
+        }
+    }
+}
 </style>
