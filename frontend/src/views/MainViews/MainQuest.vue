@@ -1,5 +1,5 @@
 <template>
-    <div>Основной квест</div>
+    <div>Контент основного квеста</div>
 </template>
 
 <script>

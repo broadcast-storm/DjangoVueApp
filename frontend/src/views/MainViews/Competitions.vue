@@ -1,5 +1,5 @@
 <template>
-    <div>Соревнования</div>
+    <div>Контент Соревнований</div>
 </template>
 
 <script>

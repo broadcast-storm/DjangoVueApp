@@ -79,6 +79,7 @@ export default {
 <style lang="scss" scoped>
 .header-container {
     display: flex;
+    box-sizing: border-box;
     justify-content: space-between;
     align-items: center;
     padding: 30px 90px;
@@ -98,6 +99,7 @@ export default {
         }
         &__icon {
             width: 20px;
+            height: 20px;
         }
         &__text {
             font-size: 16px;

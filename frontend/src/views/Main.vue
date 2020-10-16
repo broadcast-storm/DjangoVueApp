@@ -1,16 +1,20 @@
 <template>
     <div class="main-container">
         <Header :statistics="stats" />
-        <router-view name="main-router" />
+        <Navbar />
+        <div class="main-container__content">
+            <router-view name="main-router" />
+        </div>
     </div>
 </template>
 
 <script>
 import Header from '@/components/Header'
+import Navbar from '@/components/Navbar/Navbar'
 import { stats } from '@/mocks/headerStats'
 export default {
     name: 'Main',
-    components: { Header },
+    components: { Header, Navbar },
     data() {
         return {
             stats,
@@ -23,7 +27,17 @@ export default {
 .main-container {
     box-sizing: border-box;
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
     background-color: $basic-grey;
+    &__content {
+        margin-left: 90px;
+    }
+}
+@media (max-width: $media-breakpoint-sm) {
+    .main-container {
+        &__content {
+            margin-left: 0;
+        }
+    }
 }
 </style>

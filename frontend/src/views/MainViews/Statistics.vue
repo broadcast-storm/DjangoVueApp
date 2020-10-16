@@ -1,5 +1,5 @@
 <template>
-    <div>Статистика</div>
+    <div>Контент статистики</div>
 </template>
 
 <script>

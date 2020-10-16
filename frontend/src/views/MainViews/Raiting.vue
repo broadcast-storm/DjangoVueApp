@@ -1,5 +1,5 @@
 <template>
-    <div>Рейтинг</div>
+    <div>Контент рейтинга</div>
 </template>
 
 <script>
