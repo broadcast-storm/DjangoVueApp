@@ -97,10 +97,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.logo-container {
-    width: 150px;
-}
-
 .canBeActive {
     cursor: pointer;
 }
