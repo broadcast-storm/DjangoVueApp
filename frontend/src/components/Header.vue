@@ -64,10 +64,8 @@ export default {
     methods: {
         getPageName(currentPath) {
             for (var page in this.routesList) {
-                const routeFromList = `/${
-                    this.routesList[page].path.split('/')[1]
-                }`
-                if (routeFromList === currentPath) {
+                const currentRoute = `/${currentPath.split('/')[1]}`
+                if (this.routesList[page].path === currentRoute) {
                     this.pageName = this.routesList[page].header
                 }
             }
