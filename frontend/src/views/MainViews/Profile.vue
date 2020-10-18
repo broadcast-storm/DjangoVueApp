@@ -45,6 +45,13 @@
                 </table>
             </div>
         </div>
+        <div class="tasks">
+            <h2 class="tasks__title">Список задач</h2>
+            <Task 
+                v-for = 'task in tasks' :key = 'task.id'
+                :data = 'task'
+            />
+        </div>
     </div>
 </template>
 
@@ -53,6 +60,7 @@ import CoinSvg from '@/assets/icons/coin.svg'
 import HeartSvg from '@/assets/icons/heart.svg'
 import LightningSvg from '@/assets/icons/lightning.svg'
 import ProgressBar from '@/components/ProgressBar.vue';
+import Task from '@/components/Task.vue';
 import { mapGetters } from 'vuex'
 
 export default {
@@ -61,11 +69,13 @@ export default {
         CoinSvg,
         HeartSvg,
         LightningSvg,
-        ProgressBar
+        ProgressBar,
+        Task
     },
     data() {
         return {
-            user: Object.assign({}, this.$store.getters.getUserData)
+            user: Object.assign({}, this.$store.getters.getUserData),
+            tasks: Object.assign({}, this.$store.getters.getTasks)
         }
     },
     computed: {
@@ -87,10 +97,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.profile-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+}
+
 .profile {
     background-color: #fff;
     box-sizing: border-box;
-    width: calc(100% / 3);
+    width: 412px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -229,6 +244,28 @@ export default {
         }
     }
 
+}
+
+.tasks {
+    height: 100vh;
+    overflow-y: auto;
+    padding-left: 20px;
+    padding-right: 40px;
+    padding-top: 27px;
+
+    &__title {
+        font-size: 18px;
+        font-weight: 400;
+        line-height: 16px;
+        color: $brand-gray-dark;
+        margin: 0;
+        margin-bottom: 38px;
+        
+    }
+}
+
+.task:not(:first-child) {
+    margin-top: 30px;
 }
 
 </style>
