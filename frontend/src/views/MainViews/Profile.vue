@@ -1,6 +1,6 @@
 <template>
     <div class="profile-wrapper">
-        <div class="profile">
+        <div class="profile" :style="commonColStyle">
             <img src="" alt="User photo" class="profile__photo">
             <div class="profile-content">
                 <h2 class="profile__name">{{ user.username }}</h2>
@@ -45,7 +45,7 @@
                 </table>
             </div>
         </div>
-        <div class="tasks">
+        <div class="tasks"  ref="tasks">
             <h2 class="tasks__title">Список задач</h2>
             <Task 
                 v-for = 'task in tasks' :key = 'task.id'
@@ -75,7 +75,8 @@ export default {
     data() {
         return {
             user: Object.assign({}, this.$store.getters.getUserData),
-            tasks: Object.assign({}, this.$store.getters.getTasks)
+            tasks: Object.assign({}, this.$store.getters.getTasks),
+            commonColStyle: {}
         }
     },
     computed: {
@@ -91,7 +92,17 @@ export default {
 
             return days + '.' + month + "." + date.getFullYear();
         }
-    }
+    },
+    methods: {
+        matchHeight() {
+            let height = this.$refs.tasks.clientHeight + 'px';
+            this.$set(this.commonColStyle, 'height', height);
+            return height;
+        }
+    },
+    mounted () {
+        this.matchHeight();
+    },
 }
 
 </script>
@@ -100,6 +111,7 @@ export default {
 .profile-wrapper {
     display: flex;
     flex-wrap: wrap;
+    padding-bottom: 30px;
 }
 
 .profile {
@@ -247,7 +259,7 @@ export default {
 }
 
 .tasks {
-    height: 100vh;
+    height: 943px; // По этой высоте выравниваются левый и правый контейнеры
     overflow-y: auto;
     padding-left: 20px;
     padding-right: 40px;
