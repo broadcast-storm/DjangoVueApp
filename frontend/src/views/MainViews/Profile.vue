@@ -1,7 +1,7 @@
 <template>
     <div class="profile-wrapper">
         <div class="profile" :style="commonColStyle">
-            <img src="" alt="User photo" class="profile__photo">
+            <img src="" alt="User photo" class="profile__photo" />
             <div class="profile-content">
                 <h2 class="profile__name">{{ user.username }}</h2>
                 <p class="profile__department">{{ user.department }}</p>
@@ -9,48 +9,67 @@
                 <div class="profile__stats">
                     <div class="profile__stats-item">
                         <CoinSvg class="profile__stats-icon" />
-                        <span class="profile__stats-value coins">{{ user.stats['coins'] }}</span>
+                        <span class="profile__stats-value coins">{{
+                            user.stats['coins']
+                        }}</span>
                     </div>
                     <div class="profile__stats-item">
                         <LightningSvg class="profile__stats-icon" />
-                        <span class="profile__stats-value lightnings">{{ user.stats['lightnings'] }}</span>
+                        <span class="profile__stats-value lightnings">{{
+                            user.stats['lightnings']
+                        }}</span>
                     </div>
                     <div class="profile__stats-item">
                         <HeartSvg class="profile__stats-icon" />
-                        <span class="profile__stats-value hearts">{{ user.stats['hearts'] }}</span>
+                        <span class="profile__stats-value hearts">{{
+                            user.stats['hearts']
+                        }}</span>
                     </div>
                 </div>
                 <div class="profile__task">
                     <p class="profile__task-title">Основной квест:</p>
                     <h3 class="profile__task-name">{{ user.task.taskname }}</h3>
-                    <ProgressBar :percent='user.task.progress' />
-                    <p class="profile__task-deadline"><span>Срок:</span> до {{ date }}</p>
+                    <ProgressBar :percent="user.task.progress" />
+                    <p class="profile__task-deadline">
+                        <span>Срок:</span> до {{ date }}
+                    </p>
                 </div>
                 <table class="profile__props">
                     <tr class="profile__props-row">
-                        <td class="profile__props-row-title">Продуктивность:</td>
-                        <td class="profile__props-row-value">{{ user.productivity }}%</td>
-                        <td class="profile__props-row-light">из 100% на сегодня</td>
+                        <td class="profile__props-row-title">
+                            Продуктивность:
+                        </td>
+                        <td class="profile__props-row-value">
+                            {{ user.productivity }}%
+                        </td>
+                        <td class="profile__props-row-light">
+                            из 100% на сегодня
+                        </td>
                     </tr>
                     <tr class="profile__props-row">
                         <td class="profile__props-row-title">Качество:</td>
-                        <td class="profile__props-row-value">{{ user.quality }}%</td>
-                        <td class="profile__props-row-light">из 100 на сегодня</td>
+                        <td class="profile__props-row-value">
+                            {{ user.quality }}%
+                        </td>
+                        <td class="profile__props-row-light">
+                            из 100 на сегодня
+                        </td>
                     </tr>
                     <tr class="profile__props-row">
-                        <td class="profile__props-row-title">Текущий уровень:</td>
-                        <td class="profile__props-row-value">{{ user.level }}%</td>
+                        <td class="profile__props-row-title">
+                            Текущий уровень:
+                        </td>
+                        <td class="profile__props-row-value">
+                            {{ user.level }}%
+                        </td>
                         <td></td>
                     </tr>
                 </table>
             </div>
         </div>
-        <div class="tasks"  ref="tasks">
+        <div ref="tasks" class="tasks">
             <h2 class="tasks__title">Список задач</h2>
-            <Task 
-                v-for = 'task in tasks' :key = 'task.id'
-                :data = 'task'
-            />
+            <Task v-for="task in tasks" :key="task.id" :data="task" />
         </div>
         <div class="achievements" :style="commonColStyle">
             <h2 class="achievements__title">Ачивки</h2>
@@ -76,8 +95,8 @@
 import CoinSvg from '@/assets/icons/coin.svg'
 import HeartSvg from '@/assets/icons/heart.svg'
 import LightningSvg from '@/assets/icons/lightning.svg'
-import ProgressBar from '@/components/ProgressBar.vue';
-import Task from '@/components/Task.vue';
+import ProgressBar from '@/components/ProgressBar.vue'
+import Task from '@/components/Task.vue'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -87,41 +106,39 @@ export default {
         HeartSvg,
         LightningSvg,
         ProgressBar,
-        Task
+        Task,
     },
     data() {
         return {
             user: Object.assign({}, this.$store.getters.getUserData),
             tasks: Object.assign({}, this.$store.getters.getTasks),
-            commonColStyle: {}
+            commonColStyle: {},
         }
     },
     computed: {
         ...mapGetters(['getUserData']),
         date() {
+            const date = this.getUserData.task.deadline
 
-            const date = this.getUserData.task.deadline;
+            let month = date.getMonth() + 1
+            let days = date.getDate()
+            month = month < 10 ? '0' + month : month
+            days = days < 10 ? '0' + days : days
 
-            let month = date.getMonth() + 1;
-            let days = date.getDate();
-            month = month < 10 ? '0' + month : month;
-            days = days < 10 ? '0' + days : days;
-
-            return days + '.' + month + "." + date.getFullYear();
-        }
+            return days + '.' + month + '.' + date.getFullYear()
+        },
+    },
+    mounted() {
+        this.matchHeight()
     },
     methods: {
         matchHeight() {
-            let height = this.$refs.tasks.clientHeight + 'px';
-            this.$set(this.commonColStyle, 'height', height);
-            return height;
-        }
-    },
-    mounted () {
-        this.matchHeight();
+            let height = this.$refs.tasks.clientHeight + 'px'
+            this.$set(this.commonColStyle, 'height', height)
+            return height
+        },
     },
 }
-
 </script>
 
 <style lang="scss" scoped>
@@ -146,7 +163,7 @@ export default {
         width: 270px;
         height: 337px;
         border: 1px solid rgb(179, 179, 179);
-        // To center alt 
+        // To center alt
         display: flex;
         justify-content: center;
         align-items: center;
@@ -271,7 +288,6 @@ export default {
             color: $brand-gray-dark;
         }
     }
-
 }
 
 .tasks {
@@ -301,37 +317,36 @@ export default {
         justify-items: center;
 
         &-item:nth-child(1) {
-            background-color: #F2C94C;
+            background-color: #f2c94c;
         }
-        
+
         &-item:nth-child(2) {
-            background-color: #6FCF97;
+            background-color: #6fcf97;
         }
-        
+
         &-item:nth-child(3) {
-            background-color: #BB6BD9;
+            background-color: #bb6bd9;
         }
-        
+
         &-item:nth-child(4) {
-            background-color: #56CCF2;
+            background-color: #56ccf2;
         }
-        
+
         &-item:nth-child(5) {
-            background-color: #BDBDBD;
+            background-color: #bdbdbd;
         }
 
         &-item:nth-child(6) {
-            background-color: #26BCC2;
+            background-color: #26bcc2;
         }
-        
+
         &-item {
             width: 110px;
             height: 110px;
             border-radius: 50%;
-            background-color: #F7D9B9;
+            background-color: #f7d9b9;
         }
     }
-
 }
 
 .achievements__title,
@@ -343,5 +358,4 @@ export default {
     margin: 0;
     margin-bottom: 38px;
 }
-
 </style>

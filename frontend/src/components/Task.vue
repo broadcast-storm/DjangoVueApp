@@ -1,14 +1,14 @@
 <template>
     <div class="task">
         <h4 class="task__name">{{ data.taskname }}</h4>
-        <progressBar class="progressbar" :percent='data.progress' />
+        <progressBar class="progressbar" :percent="data.progress" />
         <div class="task__info">
             <p class="task__type">тип: {{ data.type }}</p>
             <p class="task__deadline">
                 <span v-if="showMore">Дэдлайн: </span>
                 <span v-else>До: </span>
                 {{ data.deadline }}
-                </p>
+            </p>
             <div class="task__awards">
                 <span v-show="showMore">Награда:</span>
                 <div class="task__awards-content">
@@ -22,12 +22,21 @@
                     </div>
                 </div>
             </div>
-            <p v-show="showMore" class="task__difficulty">Сложность: {{ data.difficulty }}</p>
+            <p v-show="showMore" class="task__difficulty">
+                Сложность: {{ data.difficulty }}
+            </p>
             <ol v-show="showMore" class="task__subtasks">
                 <h6 class="task__subtasks-title">Подзадачи</h6>
-                <li v-for="subtask in data.subtasks" :key="subtask.id"
-                :style="[subtask.status == 'done' ? {'text-decoration': 'line-through'} : {'text-decoration': 'none'}]">
-                    {{subtask.id}}. {{ subtask.title }}
+                <li
+                    v-for="subtask in data.subtasks"
+                    :key="subtask.id"
+                    :style="[
+                        subtask.status == 'done'
+                            ? { 'text-decoration': 'line-through' }
+                            : { 'text-decoration': 'none' },
+                    ]"
+                >
+                    {{ subtask.id }}. {{ subtask.title }}
                 </li>
             </ol>
             <div v-show="showMore" class="task__desc">
@@ -35,7 +44,12 @@
                 <p class="task__desc-text">{{ data.desc }}</p>
             </div>
         </div>
-        <input v-model="showMore" class="task__toggle-inp" type="checkbox" :id="'task__toggle' + data.id">
+        <input
+            :id="'task__toggle' + data.id"
+            v-model="showMore"
+            class="task__toggle-inp"
+            type="checkbox"
+        />
         <label class="task__toggle" :for="'task__toggle' + data.id">
             <div class="arrow"></div>
             <div class="dot"></div>
@@ -53,21 +67,23 @@ export default {
     components: {
         ProgressBar,
         CoinSvg,
-        LightningSvg
+        LightningSvg,
     },
     props: {
-        data: Object,
+        data: {
+            type: Object,
+            default: () => {},
+        },
     },
     data() {
         return {
-            showMore: false
+            showMore: false,
         }
-    }
+    },
 }
 </script>
 
 <style lang="scss" scoped>
-
 .task {
     width: 411px;
     max-width: 411px;
@@ -99,7 +115,7 @@ export default {
         list-style: none;
         margin-top: 8px;
     }
-    
+
     &__desc {
         margin-top: 8px;
     }
@@ -109,7 +125,6 @@ export default {
         font-size: 18px;
         margin-bottom: 5px;
     }
-
 
     &__desc-text {
         max-width: 163px;
@@ -122,7 +137,6 @@ export default {
     }
 
     &__toggle-inp:checked + &__toggle {
-
         flex-direction: column;
         align-items: center;
 
@@ -147,7 +161,6 @@ export default {
         .dot::before {
             display: none;
         }
-
     }
 
     &__toggle:hover {

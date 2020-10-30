@@ -1,25 +1,27 @@
 <template>
     <div class="progressbar">
         <span class="progressbar__value">{{ percent }}%</span>
-        <div :style='{ width: percent + "%" }' class="progressbar__bar"></div>
+        <div :style="{ width: percent + '%' }" class="progressbar__bar"></div>
     </div>
 </template>
 
 <script>
-    export default {
-        name: 'ProgressBar',
-        props: {
-            percent: Number
-        }
-    }
+export default {
+    name: 'ProgressBar',
+    props: {
+        percent: {
+            type: Number,
+            default: 0,
+        },
+    },
+}
 </script>
 
 <style lang="scss" scoped>
-
 .progressbar {
-    width: 100%;    
+    width: 100%;
     height: 16px;
-    background-color: #D8DCEA;
+    background-color: #d8dcea;
     position: relative;
     border-radius: 16px;
     display: flex;
@@ -42,5 +44,4 @@
         z-index: 1;
     }
 }
-
 </style>

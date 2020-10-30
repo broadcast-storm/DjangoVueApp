@@ -10,28 +10,28 @@ export const state = {
             deadline: '20.04.20',
             reward: {
                 coins: 1000,
-                lightnings: 100
+                lightnings: 100,
             },
             difficulty: 'omgveryhard',
             subtasks: [
                 {
                     id: 1,
                     title: 'подзадача',
-                    status: 'todo'
+                    status: 'todo',
                 },
                 {
                     id: 2,
                     title: 'подзадача',
-                    status: 'done'
+                    status: 'done',
                 },
                 {
                     id: 3,
                     title: 'подзадача',
-                    status: 'todo'
-                }
+                    status: 'todo',
+                },
             ],
             desc: 'Описание еженедельной задачи тут да описание',
-            status: 'todo'
+            status: 'todo',
         },
         {
             id: 2,
@@ -41,28 +41,28 @@ export const state = {
             deadline: '20.04.20',
             reward: {
                 coins: 1000,
-                lightnings: 100
+                lightnings: 100,
             },
             difficulty: 'omgveryhard',
             subtasks: [
                 {
                     id: 1,
                     title: 'подзадача',
-                    status: 'todo'
+                    status: 'todo',
                 },
                 {
                     id: 2,
                     title: 'подзадача',
-                    status: 'done'
+                    status: 'done',
                 },
                 {
                     id: 3,
                     title: 'подзадача',
-                    status: 'todo'
-                }
+                    status: 'todo',
+                },
             ],
             desc: 'Описание еженедельной задачи тут да описание',
-            status: 'todo'
+            status: 'todo',
         },
         {
             id: 3,
@@ -72,28 +72,28 @@ export const state = {
             deadline: '20.04.20',
             reward: {
                 coins: 1000,
-                lightnings: 100
+                lightnings: 100,
             },
             difficulty: 'omgveryhard',
             subtasks: [
                 {
                     id: 1,
                     title: 'подзадача',
-                    status: 'todo'
+                    status: 'todo',
                 },
                 {
                     id: 2,
                     title: 'подзадача',
-                    status: 'done'
+                    status: 'done',
                 },
                 {
                     id: 3,
                     title: 'подзадача',
-                    status: 'todo'
-                }
+                    status: 'todo',
+                },
             ],
             desc: 'Описание еженедельной задачи тут да описание',
-            status: 'todo'
+            status: 'todo',
         },
         {
             id: 4,
@@ -103,28 +103,28 @@ export const state = {
             deadline: '20.04.20',
             reward: {
                 coins: 1000,
-                lightnings: 100
+                lightnings: 100,
             },
             difficulty: 'omgveryhard',
             subtasks: [
                 {
                     id: 1,
                     title: 'подзадача',
-                    status: 'todo'
+                    status: 'todo',
                 },
                 {
                     id: 2,
                     title: 'подзадача',
-                    status: 'done'
+                    status: 'done',
                 },
                 {
                     id: 3,
                     title: 'подзадача',
-                    status: 'todo'
-                }
+                    status: 'todo',
+                },
             ],
             desc: 'Описание еженедельной задачи тут да описание',
-            status: 'todo'
+            status: 'todo',
         },
         {
             id: 5,
@@ -134,28 +134,28 @@ export const state = {
             deadline: '20.04.20',
             reward: {
                 coins: 1000,
-                lightnings: 100
+                lightnings: 100,
             },
             difficulty: 'omgveryhard',
             subtasks: [
                 {
                     id: 1,
                     title: 'подзадача',
-                    status: 'todo'
+                    status: 'todo',
                 },
                 {
                     id: 2,
                     title: 'подзадача',
-                    status: 'done'
+                    status: 'done',
                 },
                 {
                     id: 3,
                     title: 'подзадача',
-                    status: 'todo'
-                }
+                    status: 'todo',
+                },
             ],
             desc: 'Описание еженедельной задачи тут да описание',
-            status: 'todo'
+            status: 'todo',
         },
         {
             id: 6,
@@ -165,28 +165,28 @@ export const state = {
             deadline: '20.04.20',
             reward: {
                 coins: 1000,
-                lightnings: 100
+                lightnings: 100,
             },
             difficulty: 'omgveryhard',
             subtasks: [
                 {
                     id: 1,
                     title: 'подзадача',
-                    status: 'todo'
+                    status: 'todo',
                 },
                 {
                     id: 2,
                     title: 'подзадача',
-                    status: 'done'
+                    status: 'done',
                 },
                 {
                     id: 3,
                     title: 'подзадача',
-                    status: 'todo'
-                }
+                    status: 'todo',
+                },
             ],
             desc: 'Описание еженедельной задачи тут да описание',
-            status: 'todo'
+            status: 'todo',
         },
         {
             id: 7,
@@ -196,28 +196,28 @@ export const state = {
             deadline: '20.04.20',
             reward: {
                 coins: 1000,
-                lightnings: 100
+                lightnings: 100,
             },
             difficulty: 'omgveryhard',
             subtasks: [
                 {
                     id: 1,
                     title: 'подзадача',
-                    status: 'todo'
+                    status: 'todo',
                 },
                 {
                     id: 2,
                     title: 'подзадача',
-                    status: 'done'
+                    status: 'done',
                 },
                 {
                     id: 3,
                     title: 'подзадача',
-                    status: 'todo'
-                }
+                    status: 'todo',
+                },
             ],
             desc: 'Описание еженедельной задачи тут да описание',
-            status: 'todo'
+            status: 'todo',
         },
         {
             id: 8,
@@ -227,28 +227,28 @@ export const state = {
             deadline: '20.04.20',
             reward: {
                 coins: 1000,
-                lightnings: 100
+                lightnings: 100,
             },
             difficulty: 'omgveryhard',
             subtasks: [
                 {
                     id: 1,
                     title: 'подзадача',
-                    status: 'todo'
+                    status: 'todo',
                 },
                 {
                     id: 2,
                     title: 'подзадача',
-                    status: 'done'
+                    status: 'done',
                 },
                 {
                     id: 3,
                     title: 'подзадача',
-                    status: 'todo'
-                }
+                    status: 'todo',
+                },
             ],
             desc: 'Описание еженедельной задачи тут да описание',
-            status: 'todo'
+            status: 'todo',
         },
         {
             id: 9,
@@ -258,28 +258,28 @@ export const state = {
             deadline: '20.04.20',
             reward: {
                 coins: 1000,
-                lightnings: 100
+                lightnings: 100,
             },
             difficulty: 'omgveryhard',
             subtasks: [
                 {
                     id: 1,
                     title: 'подзадача',
-                    status: 'todo'
+                    status: 'todo',
                 },
                 {
                     id: 2,
                     title: 'подзадача',
-                    status: 'done'
+                    status: 'done',
                 },
                 {
                     id: 3,
                     title: 'подзадача',
-                    status: 'todo'
-                }
+                    status: 'todo',
+                },
             ],
             desc: 'Описание еженедельной задачи тут да описание',
-            status: 'todo'
+            status: 'todo',
         },
         {
             id: 10,
@@ -289,28 +289,28 @@ export const state = {
             deadline: '20.04.20',
             reward: {
                 coins: 1000,
-                lightnings: 100
+                lightnings: 100,
             },
             difficulty: 'omgveryhard',
             subtasks: [
                 {
                     id: 1,
                     title: 'подзадача',
-                    status: 'todo'
+                    status: 'todo',
                 },
                 {
                     id: 2,
                     title: 'подзадача',
-                    status: 'done'
+                    status: 'done',
                 },
                 {
                     id: 3,
                     title: 'подзадача',
-                    status: 'todo'
-                }
+                    status: 'todo',
+                },
             ],
             desc: 'Описание еженедельной задачи тут да описание',
-            status: 'done'
+            status: 'done',
         },
         {
             id: 11,
@@ -320,28 +320,28 @@ export const state = {
             deadline: '20.04.20',
             reward: {
                 coins: 1000,
-                lightnings: 100
+                lightnings: 100,
             },
             difficulty: 'omgveryhard',
             subtasks: [
                 {
                     id: 1,
                     title: 'подзадача',
-                    status: 'todo'
+                    status: 'todo',
                 },
                 {
                     id: 2,
                     title: 'подзадача',
-                    status: 'done'
+                    status: 'done',
                 },
                 {
                     id: 3,
                     title: 'подзадача',
-                    status: 'todo'
-                }
+                    status: 'todo',
+                },
             ],
             desc: 'Описание еженедельной задачи тут да описание',
-            status: 'done'
+            status: 'done',
         },
         {
             id: 12,
@@ -351,28 +351,28 @@ export const state = {
             deadline: '20.04.20',
             reward: {
                 coins: 1000,
-                lightnings: 100
+                lightnings: 100,
             },
             difficulty: 'omgveryhard',
             subtasks: [
                 {
                     id: 1,
                     title: 'подзадача',
-                    status: 'todo'
+                    status: 'todo',
                 },
                 {
                     id: 2,
                     title: 'подзадача',
-                    status: 'done'
+                    status: 'done',
                 },
                 {
                     id: 3,
                     title: 'подзадача',
-                    status: 'todo'
-                }
+                    status: 'todo',
+                },
             ],
             desc: 'Описание еженедельной задачи тут да описание',
-            status: 'done'
+            status: 'done',
         },
         {
             id: 13,
@@ -382,28 +382,28 @@ export const state = {
             deadline: '20.04.20',
             reward: {
                 coins: 1000,
-                lightnings: 100
+                lightnings: 100,
             },
             difficulty: 'omgveryhard',
             subtasks: [
                 {
                     id: 1,
                     title: 'подзадача',
-                    status: 'todo'
+                    status: 'todo',
                 },
                 {
                     id: 2,
                     title: 'подзадача',
-                    status: 'done'
+                    status: 'done',
                 },
                 {
                     id: 3,
                     title: 'подзадача',
-                    status: 'todo'
-                }
+                    status: 'todo',
+                },
             ],
             desc: 'Описание еженедельной задачи тут да описание',
-            status: 'done'
+            status: 'done',
         },
         {
             id: 14,
@@ -413,32 +413,32 @@ export const state = {
             deadline: '20.04.20',
             reward: {
                 coins: 1000,
-                lightnings: 100
+                lightnings: 100,
             },
             difficulty: 'omgveryhard',
             subtasks: [
                 {
                     id: 1,
                     title: 'подзадача',
-                    status: 'todo'
+                    status: 'todo',
                 },
                 {
                     id: 2,
                     title: 'подзадача',
-                    status: 'done'
+                    status: 'done',
                 },
                 {
                     id: 3,
                     title: 'подзадача',
-                    status: 'todo'
-                }
+                    status: 'todo',
+                },
             ],
             desc: 'Описание еженедельной задачи тут да описание',
-            status: 'done'
-        }
-    ]
+            status: 'done',
+        },
+    ],
 }
 
 export const getters = {
-    getTasks: state => state.tasks
+    getTasks: state => state.tasks,
 }
