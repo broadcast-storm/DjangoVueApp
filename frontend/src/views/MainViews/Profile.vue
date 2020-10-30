@@ -52,6 +52,23 @@
                 :data = 'task'
             />
         </div>
+        <div class="achievements" :style="commonColStyle">
+            <h2 class="achievements__title">Ачивки</h2>
+            <div class="achievements__inner">
+                <div class="achievements__inner-item"></div>
+                <div class="achievements__inner-item"></div>
+                <div class="achievements__inner-item"></div>
+                <div class="achievements__inner-item"></div>
+                <div class="achievements__inner-item"></div>
+                <div class="achievements__inner-item"></div>
+                <div class="achievements__inner-item"></div>
+                <div class="achievements__inner-item"></div>
+                <div class="achievements__inner-item"></div>
+                <div class="achievements__inner-item"></div>
+                <div class="achievements__inner-item"></div>
+                <div class="achievements__inner-item"></div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -110,14 +127,13 @@ export default {
 <style lang="scss" scoped>
 .profile-wrapper {
     display: flex;
-    flex-wrap: wrap;
     padding-bottom: 30px;
 }
 
 .profile {
     background-color: #fff;
     box-sizing: border-box;
-    width: 412px;
+    max-width: 412px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -264,20 +280,68 @@ export default {
     padding-left: 20px;
     padding-right: 40px;
     padding-top: 27px;
-
-    &__title {
-        font-size: 18px;
-        font-weight: 400;
-        line-height: 16px;
-        color: $brand-gray-dark;
-        margin: 0;
-        margin-bottom: 38px;
-        
-    }
+    min-width: 412px;
 }
 
 .task:not(:first-child) {
     margin-top: 30px;
+}
+
+.achievements {
+    box-sizing: border-box;
+    padding-left: 32px;
+    padding-right: 51px;
+    padding-top: 27px;
+    overflow-y: auto;
+
+    &__inner {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 30px;
+        justify-items: center;
+
+        &-item:nth-child(1) {
+            background-color: #F2C94C;
+        }
+        
+        &-item:nth-child(2) {
+            background-color: #6FCF97;
+        }
+        
+        &-item:nth-child(3) {
+            background-color: #BB6BD9;
+        }
+        
+        &-item:nth-child(4) {
+            background-color: #56CCF2;
+        }
+        
+        &-item:nth-child(5) {
+            background-color: #BDBDBD;
+        }
+
+        &-item:nth-child(6) {
+            background-color: #26BCC2;
+        }
+        
+        &-item {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            background-color: #F7D9B9;
+        }
+    }
+
+}
+
+.achievements__title,
+.tasks__title {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 16px;
+    color: $brand-gray-dark;
+    margin: 0;
+    margin-bottom: 38px;
 }
 
 </style>
