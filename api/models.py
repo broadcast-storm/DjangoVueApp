@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 # Create your models here.
@@ -14,6 +16,8 @@ class Article(models.Model):
     def __str__(self):
         return self.title
 
+
+###################################################
 
 class JobPosition(models.Model):
     title = models.CharField(max_length=120)
@@ -65,6 +69,18 @@ class Profile(models.Model):
     def __str__(self):
         return self.email
 
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
+
+
 class Statistics(models.Model):
     profile_id = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
@@ -80,6 +96,7 @@ class Statistics(models.Model):
 
     def __str__(self):
         return self.id
+
 
 class Reward(models.Model):
     money = models.IntegerField(default=0)
@@ -116,6 +133,20 @@ class Task(models.Model):
         return self.title
 
 
+class TaskUserStatus(models.Model):
+    task_id = models.OneToOneField(Task, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    status = models.CharField(max_length=120)
+    isCompleted = models.BooleanField(default=False)
+    completeTime = models.DateTimeField()
+    started_at = models.DateTimeField(auto_now_add=True)
+    done_at = models.DateTimeField()
+
+    def __str__(self):
+        return self.id
+
+
 class MainQuest(models.Model):
     reward_id = models.ForeignKey(Reward, on_delete=models.CASCADE)
     tasks = models.ManyToManyField(Task, through='MainQuestTree', through_fields=('mainQuest_id', 'task_id'), )
@@ -130,6 +161,20 @@ class MainQuest(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class MainQuestStatus(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    mainQuest_id = models.OneToOneField(MainQuest, on_delete=models.CASCADE)
+
+    status = models.CharField(max_length=120)
+    isCompleted = models.BooleanField(default=False)
+    completeTime = models.DateTimeField()
+    started_at = models.DateTimeField(auto_now_add=True)
+    done_at = models.DateTimeField()
+
+    def __str__(self):
+        return self.id
 
 
 class MainQuestTree(models.Model):
