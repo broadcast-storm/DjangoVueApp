@@ -75,7 +75,7 @@ class UserProfile(AbstractBaseUser):
     EXPERT = 'expert'
     EMPLOYEE = 'employee'
     GAMEMASTER = 'gamemaster'
-    TASK_TYPE_CHOICES = (
+    USER_TYPE_CHOICES = (
         (ADMIN, 'Администратор'),
         (EXPERT, 'Эксперт'),
         (EMPLOYEE, 'Сотрудник'),
@@ -104,7 +104,7 @@ class UserProfile(AbstractBaseUser):
                                  null=True, blank=True, verbose_name="Подразделение")
     # IDs
 
-    userType = models.CharField(max_length=20, choices=TASK_TYPE_CHOICES, default=EMPLOYEE,
+    userType = models.CharField(max_length=20, choices=USER_TYPE_CHOICES, default=EMPLOYEE,
                                 verbose_name="Тип пользователя")
     name = models.CharField(max_length=100, blank=True, verbose_name="Имя")
     surname = models.CharField(max_length=100, blank=True, verbose_name="Фамилия")
@@ -448,7 +448,7 @@ class MainQuestTree(models.Model):
 class MainQuestStatus(models.Model):
     INPROGRESS = 'inprogress'
     COMPLETED = 'completed'
-    TASK_STATUS_CHOICES = (
+    QUEST_STATUS_CHOICES = (
         (INPROGRESS, 'В процессе выполнения'),
         (COMPLETED, 'Выполнено'),
     )
@@ -459,7 +459,7 @@ class MainQuestStatus(models.Model):
 
     # IDs
 
-    status = models.CharField(max_length=20, choices=TASK_STATUS_CHOICES, default=INPROGRESS,
+    status = models.CharField(max_length=20, choices=QUEST_STATUS_CHOICES, default=INPROGRESS,
                               verbose_name="Статус выполнения", )
     completeTime = models.DateTimeField(blank=True, null=True, )
     started_at = models.DateTimeField(auto_now_add=True)
