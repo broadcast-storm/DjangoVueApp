@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'api.apps.ApiConfig',
+    'taggit'
 ]
 
 MIDDLEWARE = [
@@ -70,6 +71,10 @@ TEMPLATES = [
         },
     },
 ]
+
+AUTH_USER_MODEL='api.UserProfile'
+
+TAGGIT_CASE_INSENSITIVE = True
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
