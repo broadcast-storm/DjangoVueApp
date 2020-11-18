@@ -1,11 +1,5 @@
 from rest_framework import serializers
-from .models import Article, JobPosition, UserType, Division
-
-
-class ArticleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Article
-        fields = ["id", "title", "content", "picture", "created_at", "updated_at"]
+from .models import JobPosition, Division, UserProfile, Statistics, Task, TaskUserStatus, Team
 
 
 class JobPositionSerializer(serializers.ModelSerializer):
@@ -14,13 +8,55 @@ class JobPositionSerializer(serializers.ModelSerializer):
         fields = ["id", "title", "description"]
 
 
-class UserTypeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserType
-        fields = ["id", "title", "description"]
-
-
 class DivisionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Division
         fields = ["id", "title", "description"]
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ['id', 'username', 'password', 'email', "name", "surname", "patronymic",
+                  "jobPosition", "userType", "division",
+                  "description", "photo", "level",
+                  "money", "health", "energy",
+                  "quality", "productivity",
+                  "competitionCount", "winCompetitionCount",
+                  "date_joined", "last_login"]
+
+
+class StatisticsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Statistics
+        fields = ['user', 'level', 'quality', 'productivity', 'completedTests', 'completedTasks',
+                  'completedQuests', 'achievements', 'competitions', 'competitionWins']
+
+
+class TaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Task
+        fields = ['taskType', 'parent', 'weekly', 'division', 'tags',  'title', 'description', 'subTasksCount', 'isTeamTask',
+                  'accessLevel', 'deadline',
+                  "money", "health", "energy",
+                  'created_at', 'updated_at', 'tags']
+
+class TeamSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Team
+        fields = ['users', 'division', 'title', 'description', 'maxUsersCount', 'created_at', 'updated_at']
+
+class WeeklyTaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Task
+        fields = ['division', 'difficulty', 'taskType', 'title', 'description', 'subTasksCount', 'isTeamTask',
+                  "money", "health", "energy",
+                  'created_at', 'updated_at', 'tags']
+
+
+class TaskUserStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TaskUserStatus
+        fields = ['task', 'user',
+                  'subTasksCount', 'subTasksCompletedCount', 'status'
+                                                             'started_at', 'done_at']
