@@ -14,8 +14,8 @@ class JobPosition(models.Model):
     description = models.CharField(max_length=1000, verbose_name="Описание трудовых обязанностей")
 
     class Meta:
-        verbose_name = "Должность"
-        verbose_name_plural = "Должности"
+        verbose_name = "должность"
+        verbose_name_plural = "должности"
 
     def __str__(self):
         return self.title
@@ -26,8 +26,8 @@ class Division(models.Model):
     description = models.CharField(max_length=1000, verbose_name="Описание подразделения сотрудников")
 
     class Meta:
-        verbose_name = "Подразделение"
-        verbose_name_plural = "Подразделения"
+        verbose_name = "подразделение"
+        verbose_name_plural = "подразделения"
 
     def __str__(self):
         return self.title
@@ -108,10 +108,10 @@ class UserProfile(AbstractBaseUser):
                                 verbose_name="Тип пользователя")
     name = models.CharField(max_length=100, blank=True, verbose_name="Имя")
     surname = models.CharField(max_length=100, blank=True, verbose_name="Фамилия")
-    patronymic = models.CharField(max_length=100, blank=True, verbose_name="Отчество")
+    patronymic = models.CharField(max_length=100, blank=True, null=True, verbose_name="Отчество")
     birthDate = models.DateField(blank=True, null=True, verbose_name="Дата рождения")
-    description = models.TextField(max_length=200, blank=True, verbose_name="О себе")
-    photo = models.ImageField(verbose_name="Фото", null=True, )
+    description = models.TextField(max_length=200, blank=True, null=True, verbose_name="О себе")
+    photo = models.ImageField(verbose_name="Фото", blank=True, null=True, )
     level = models.IntegerField(default=0, verbose_name="Уровень")
 
     money = models.IntegerField(default=0, verbose_name="Кол-во Валюты")
@@ -187,6 +187,10 @@ class Team(models.Model):
 
     def __str__(self):
         return str(self.title)
+
+    class Meta:
+        verbose_name = "команда"
+        verbose_name_plural = "команды"
 
 
 class TeamMember(models.Model):
