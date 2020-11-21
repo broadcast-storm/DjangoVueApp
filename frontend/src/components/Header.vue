@@ -3,7 +3,12 @@
         <h1 class="header-container__page-name">
             {{ pageName }}
         </h1>
-        <div class="user-statistics">
+        <div
+            class="user-statistics"
+            :class="{
+                hidden: $router.currentRoute.path === '/',
+            }"
+        >
             <div class="user-statistics__stat-block">
                 <CoinSvg class="user-statistics__icon" />
                 <span
@@ -124,6 +129,10 @@ export default {
             }
         }
     }
+
+    .hidden {
+        visibility: hidden;
+    }
 }
 
 @media (max-width: $media-breakpoint-md) {
@@ -150,7 +159,7 @@ export default {
 
 @media (max-width: $media-breakpoint-sm) {
     .header-container {
-        position: initial;
+        position: absolute;
         flex-direction: column-reverse;
         padding: 0;
         border: none;
@@ -176,6 +185,9 @@ export default {
                 font-size: 16px;
                 line-height: 16px;
             }
+        }
+        .hidden {
+            visibility: visible;
         }
     }
 }

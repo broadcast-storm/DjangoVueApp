@@ -215,23 +215,19 @@ export default {
     watch: {
         windowWidth(newWidth) {
             if (newWidth > 768 && this.screenMobile !== 'all') {
+                this.matchHeight()
                 this.screenMobile = 'all'
             }
             if (newWidth < 768 && this.screenMobile === 'all') {
-                this.screenMobile = 'tasks'
-            }
-        },
-        commonHeight() {
-            if (this.screenMobile !== 'all') {
                 this.commonHeight = 'auto'
+                this.screenMobile = 'tasks'
             }
         },
     },
     mounted() {
-        this.matchHeight(),
-            this.$nextTick(() => {
-                window.addEventListener('resize', this.onResize)
-            })
+        this.$nextTick(() => {
+            window.addEventListener('resize', this.onResize)
+        })
     },
 
     beforeDestroy() {
@@ -243,10 +239,13 @@ export default {
         },
         onResize() {
             this.windowWidth = window.innerWidth
-            this.commonHeight = this.$refs.profile.clientHeight + 'px'
+            if (this.$refs.profile.clientHeight !== this.commonHeight)
+                this.matchHeight()
         },
         matchHeight() {
-            this.commonHeight = this.$refs.profile.clientHeight + 'px'
+            if (this.windowWidth > 768) {
+                this.commonHeight = this.$refs.profile.clientHeight + 'px'
+            }
         },
     },
 }
@@ -639,7 +638,8 @@ export default {
 
 @media (max-width: $media-breakpoint-sm) {
     .profile-wrapper {
-        padding-top: 0;
+        padding-top: 100px;
+        min-height: 100vh;
         height: auto;
         flex-direction: column;
         justify-content: flex-start;
