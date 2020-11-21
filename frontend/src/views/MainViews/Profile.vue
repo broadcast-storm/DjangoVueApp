@@ -2,7 +2,7 @@
     <div>
         <div class="profile-wrapper">
             <div class="column-wrap wrap__profile">
-                <div class="profile">
+                <div ref="profile" class="profile">
                     <div class="profile__main-info">
                         <div class="profile__main-info__photo">
                             <img
@@ -132,7 +132,7 @@
                     hide: screenMobile !== 'all' && screenMobile !== 'tasks',
                 }"
             >
-                <div ref="tasks" class="tasks">
+                <div class="tasks" :style="{ height: commonHeight }">
                     <h2 class="tasks__title">Список задач</h2>
                     <Task
                         v-for="task in tasks"
@@ -148,7 +148,7 @@
                     hide: screenMobile !== 'all' && screenMobile !== 'achieves',
                 }"
             >
-                <div class="achievements">
+                <div class="achievements" :style="{ height: commonHeight }">
                     <h2 class="achievements__title">Ачивки</h2>
                     <div class="achievements__inner">
                         <div
@@ -192,6 +192,7 @@ export default {
     },
     data() {
         return {
+            commonHeight: '',
             windowWidth: window.innerWidth,
             screenMobile: window.innerWidth > 768 ? 'all' : 'tasks',
             user: Object.assign({}, this.$store.getters.getUserData),
@@ -220,12 +221,17 @@ export default {
                 this.screenMobile = 'tasks'
             }
         },
+        commonHeight() {
+            if (this.screenMobile !== 'all') {
+                this.commonHeight = 'auto'
+            }
+        },
     },
     mounted() {
-        console.log(this.windowHeight)
-        this.$nextTick(() => {
-            window.addEventListener('resize', this.onResize)
-        })
+        this.matchHeight(),
+            this.$nextTick(() => {
+                window.addEventListener('resize', this.onResize)
+            })
     },
 
     beforeDestroy() {
@@ -237,6 +243,10 @@ export default {
         },
         onResize() {
             this.windowWidth = window.innerWidth
+            this.commonHeight = this.$refs.profile.clientHeight + 'px'
+        },
+        matchHeight() {
+            this.commonHeight = this.$refs.profile.clientHeight + 'px'
         },
     },
 }

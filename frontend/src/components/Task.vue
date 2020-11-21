@@ -248,7 +248,7 @@ export default {
         &__toggle-inp:checked + &__toggle {
             .dot,
             .arrow {
-                border: solid $basic-grey;
+                border-color: $basic-grey;
             }
         }
 
