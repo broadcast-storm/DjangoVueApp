@@ -17,4 +17,11 @@ html {
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
 }
+@media (max-width: $media-breakpoint-sm) {
+    * {
+        font-family: Gerbera;
+        font-style: normal;
+        font-weight: normal;
+    }
+}
 </style>

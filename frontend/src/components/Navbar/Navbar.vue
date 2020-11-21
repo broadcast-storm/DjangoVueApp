@@ -414,7 +414,7 @@ export default {
         flex-direction: row;
         align-items: center;
         padding: 0;
-        background-color: transparent;
+        background-color: $basic-grey;
         box-shadow: 0px -2px 4px rgba(0, 0, 0, 0.1);
 
         &__logo,

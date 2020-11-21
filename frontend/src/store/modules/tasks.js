@@ -67,7 +67,7 @@ export const state = {
         {
             id: 3,
             taskname: 'Название задачи',
-            progress: 75,
+            progress: 55,
             type: 'Еженедельная',
             deadline: '20.04.20',
             reward: {
@@ -98,7 +98,7 @@ export const state = {
         {
             id: 4,
             taskname: 'Название задачи',
-            progress: 75,
+            progress: 25,
             type: 'Еженедельная',
             deadline: '20.04.20',
             reward: {
@@ -129,7 +129,7 @@ export const state = {
         {
             id: 5,
             taskname: 'Название задачи',
-            progress: 75,
+            progress: 50,
             type: 'Еженедельная',
             deadline: '20.04.20',
             reward: {
@@ -160,7 +160,7 @@ export const state = {
         {
             id: 6,
             taskname: 'Название задачи',
-            progress: 75,
+            progress: 25,
             type: 'Еженедельная',
             deadline: '20.04.20',
             reward: {

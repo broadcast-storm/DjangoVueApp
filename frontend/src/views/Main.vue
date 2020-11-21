@@ -25,9 +25,10 @@ export default {
 
 <style lang="scss">
 .main-container {
-    box-sizing: border-box;
+    box-sizing: content-box;
     width: 100%;
-    min-height: 100vh;
+    min-width: 1023px;
+    // min-height: 1100px;
     background-color: $basic-grey;
     &__content {
         margin-left: 90px;
@@ -35,6 +36,7 @@ export default {
 }
 @media (max-width: $media-breakpoint-sm) {
     .main-container {
+        min-width: auto;
         &__content {
             margin-left: 0;
         }

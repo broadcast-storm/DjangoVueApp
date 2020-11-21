@@ -76,6 +76,12 @@ export default {
 
 <style lang="scss" scoped>
 .header-container {
+    background-color: $basic-grey;
+    width: 100%;
+    position: fixed;
+    z-index: 1000;
+    right: 0;
+    top: 0;
     display: flex;
     box-sizing: border-box;
     justify-content: space-between;
@@ -144,6 +150,7 @@ export default {
 
 @media (max-width: $media-breakpoint-sm) {
     .header-container {
+        position: initial;
         flex-direction: column-reverse;
         padding: 0;
         border: none;

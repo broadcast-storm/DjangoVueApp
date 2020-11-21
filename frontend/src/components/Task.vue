@@ -1,7 +1,7 @@
 <template>
     <div class="task">
         <h4 class="task__name">{{ data.taskname }}</h4>
-        <progressBar class="progressbar" :percent="data.progress" />
+        <ProgressBar class="progressbar" :percent="data.progress" />
         <div class="task__info">
             <p class="task__type">тип: {{ data.type }}</p>
             <p class="task__deadline">
@@ -85,12 +85,11 @@ export default {
 
 <style lang="scss" scoped>
 .task {
-    width: 411px;
-    max-width: 411px;
+    width: 100%;
     background-color: $basic-white;
     box-sizing: border-box;
     padding: 6px 12px 13px 8px;
-    font-size: 10px;
+    font-size: 12px;
     line-height: 16px;
     font-weight: 400;
     color: $brand-night;
@@ -237,7 +236,29 @@ export default {
 
 .progressbar {
     color: #fff;
-    width: 386px;
     margin-top: 13px;
+}
+
+@media (max-width: $media-breakpoint-sm) {
+    .task {
+        background-color: $brand-night;
+        color: $basic-grey;
+        border-radius: 10px;
+
+        &__toggle-inp:checked + &__toggle {
+            .dot,
+            .arrow {
+                border: solid $basic-grey;
+            }
+        }
+
+        &__toggle {
+            .dot,
+            .dot::before,
+            .dot::after {
+                background-color: $basic-grey;
+            }
+        }
+    }
 }
 </style>
