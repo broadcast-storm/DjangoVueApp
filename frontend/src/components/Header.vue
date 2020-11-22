@@ -83,7 +83,7 @@ export default {
 .header-container {
     background-color: $basic-grey;
     width: 100%;
-    position: fixed;
+    position: absolute;
     z-index: 1000;
     right: 0;
     top: 0;

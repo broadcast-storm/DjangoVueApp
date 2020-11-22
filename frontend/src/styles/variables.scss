@@ -32,6 +32,9 @@ $media-breakpoint-md: 992px;
 // Экстрабольшие девайсы (большие десктопы, < 1200px)
 $media-breakpoint-lg: 1200px;
 
+// HEIGHT:
+$media-breakpoint-sm-height: 900px;
+
 @font-face {
     font-family: 'Gerbera';
     src: url('~@/assets/fonts/Gerbera-Light.woff2') format('woff2'),

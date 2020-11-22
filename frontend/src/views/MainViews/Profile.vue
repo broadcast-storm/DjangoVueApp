@@ -548,6 +548,31 @@ export default {
     }
 }
 
+@media (max-height: $media-breakpoint-sm-height) {
+    .profile-wrapper {
+        .column-wrap {
+            .profile {
+                &__main-info {
+                    &__photo {
+                        height: 300px;
+                    }
+                    &__text {
+                        .text__name {
+                            font-size: 22px;
+                            margin-top: 10px;
+                        }
+
+                        .text__bio {
+                            font-size: 17px;
+                            margin-top: 10px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 @media (max-width: $media-breakpoint-lg) {
     .profile-wrapper {
         .column-wrap {
