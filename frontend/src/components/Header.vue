@@ -81,12 +81,6 @@ export default {
 
 <style lang="scss" scoped>
 .header-container {
-    background-color: $basic-grey;
-    width: 100%;
-    position: fixed;
-    z-index: 1000;
-    right: 0;
-    top: 0;
     display: flex;
     box-sizing: border-box;
     justify-content: space-between;
@@ -163,6 +157,12 @@ export default {
         flex-direction: column-reverse;
         padding: 0;
         border: none;
+        background-color: $basic-grey;
+        width: 100%;
+        position: fixed;
+        z-index: 1000;
+        right: 0;
+        top: 0;
         &__page-name {
             margin-top: 16px;
             font-size: 18px;
