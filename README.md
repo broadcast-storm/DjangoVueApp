@@ -65,6 +65,15 @@ $ cd ./frontend/
 $ yarn install
 ```
 
+Создайте файлы .env.production и .env.development и введите эти значения
+
+```sh
+Для development
+API_BASE_URL=http://127.0.0.1:8000
+Для production
+API_BASE_URL=ссылка на рабочую версию
+```
+
 Убедитесь, что в редакторе (если у вас VS Code) установлены:
 [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode);
 [ESlint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)

@@ -1,17 +1,24 @@
 <template>
     <div class="login-container">
         <LogoSvg class="login-container__logo" :regular-color="'#3281a0'" />
-        <form action="" class="login-form">
+        <form class="login-form" @submit.prevent="login">
             <div class="login-form__alert-container">
-                <p class="login-form__alert-text">Войдите, чтобы продолжить</p>
+                <p v-if="!incorrectAuth" class="login-form__alert-text">
+                    Войдите, чтобы продолжить
+                </p>
+                <p v-else class="login-form__alert-text error">
+                    Неверный логин или пароль
+                </p>
             </div>
             <input
+                v-model="username"
                 type="text"
                 required
                 class="login-form__input"
                 placeholder="Логин"
             />
             <input
+                v-model="password"
                 type="password"
                 required
                 class="login-form__input"
@@ -33,13 +40,34 @@
 <script>
 import LogoSvg from '@/components/LogoSvg'
 import routesList from '@/router/routesList'
+import { AUTH_REQUEST } from '@/store/actions/tokens'
+
 export default {
     name: 'LoginForm',
     components: { LogoSvg },
     data() {
         return {
             routesList,
+            incorrectAuth: false,
+            username: '',
+            password: '',
         }
+    },
+    methods: {
+        login() {
+            this.$store
+                .dispatch(AUTH_REQUEST, {
+                    username: this.username,
+                    password: this.password,
+                })
+                .then(() => {
+                    this.$router.push(routesList.mainPage.path)
+                })
+                .catch(error => {
+                    console.log(error)
+                    this.incorrectAuth = true
+                })
+        },
     },
 }
 </script>
@@ -82,6 +110,9 @@ export default {
             font-size: 14px;
             line-height: 24px;
             color: $brand-gray;
+        }
+        .error {
+            color: red;
         }
 
         &__input {
