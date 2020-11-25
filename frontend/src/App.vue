@@ -1,8 +1,26 @@
 <template>
     <div id="app">
-        <router-view />
+        <LoadingPopup v-if="$store.state.tokens.status === 'refreshing'" />
+        <router-view v-else />
     </div>
 </template>
+
+<script>
+import LoadingPopup from '@/components/LoadingPopup'
+import { AUTH_REFRESH_REQUEST } from '@/store/actions/tokens'
+
+export default {
+    components: { LoadingPopup },
+    async mounted() {
+        try {
+            if (this.$store.getters.isAuthenticated)
+                await this.$store.dispatch(AUTH_REFRESH_REQUEST)
+        } catch (error) {
+            console.log(error)
+        }
+    },
+}
+</script>
 
 <style lang="scss">
 * {

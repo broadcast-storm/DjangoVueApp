@@ -12,6 +12,10 @@
 import Header from '@/components/Header'
 import Navbar from '@/components/Navbar/Navbar'
 import { stats } from '@/mocks/headerStats'
+
+import routesList from '@/router/routesList'
+import { AUTH_LOGOUT } from '@/store/actions/tokens'
+
 export default {
     name: 'Main',
     components: { Header, Navbar },
@@ -19,6 +23,11 @@ export default {
         return {
             stats,
         }
+    },
+    onIdle() {
+        this.$store.dispatch(AUTH_LOGOUT).then(() => {
+            this.$router.push(routesList.authPage.children.loginPage.path)
+        })
     },
 }
 </script>
@@ -28,7 +37,6 @@ export default {
     box-sizing: content-box;
     width: 100%;
     min-width: 1023px;
-    // min-height: 1100px;
     background-color: $basic-grey;
     &__content {
         margin-left: 90px;

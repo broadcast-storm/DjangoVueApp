@@ -32,7 +32,15 @@
                     Напомнить пароль
                 </router-link>
             </div>
-            <button type="submit" class="login-form__button">Войти</button>
+            <button type="submit" class="login-form__button">
+                <Spinner
+                    v-if="$store.state.tokens.status === 'loading'"
+                    :size="20"
+                    :line-bg-color="'#b1b2b7'"
+                    :line-fg-color="'#ffffff'"
+                />
+                <span v-else>Войти</span>
+            </button>
         </form>
     </div>
 </template>
@@ -41,10 +49,11 @@
 import LogoSvg from '@/components/LogoSvg'
 import routesList from '@/router/routesList'
 import { AUTH_REQUEST } from '@/store/actions/tokens'
+import Spinner from 'vue-simple-spinner'
 
 export default {
     name: 'LoginForm',
-    components: { LogoSvg },
+    components: { LogoSvg, Spinner },
     data() {
         return {
             routesList,
@@ -54,19 +63,17 @@ export default {
         }
     },
     methods: {
-        login() {
-            this.$store
-                .dispatch(AUTH_REQUEST, {
+        async login() {
+            try {
+                await this.$store.dispatch(AUTH_REQUEST, {
                     username: this.username,
                     password: this.password,
                 })
-                .then(() => {
-                    this.$router.push(routesList.mainPage.path)
-                })
-                .catch(error => {
-                    console.log(error)
-                    this.incorrectAuth = true
-                })
+                this.$router.push(routesList.mainPage.path)
+            } catch (error) {
+                console.log(error)
+                this.incorrectAuth = true
+            }
         },
     },
 }
@@ -123,7 +130,7 @@ export default {
             border-radius: 6px;
             margin: 10px 0;
             padding: 5px 10px;
-            color: $brand-gray;
+            color: $brand-night;
         }
 
         &__link-text {
