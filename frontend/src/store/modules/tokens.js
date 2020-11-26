@@ -6,33 +6,40 @@ import {
     AUTH_SUCCESS,
     AUTH_REFRESH_SUCCESS,
     AUTH_LOGOUT,
+    AUTH_REFRESH_ERROR,
+    FIRST_AUTH_REQUEST_SUCCESS,
 } from '@/store/actions/tokens'
+import { getCookie, deleteCookie } from '@/utils/cookies'
 
 export const namespaced = false
 
 export const state = {
-    accessToken: localStorage.getItem('accessToken') || null,
-    refreshToken: localStorage.getItem('refreshToken') || null,
+    accessToken: null,
+    csrfToken: getCookie('csrftoken'),
     status: '',
+    firstRequestSuccess: false,
 }
 
 export const getters = {
-    isAuthenticated: state =>
-        state.accessToken != null && state.refreshToken != null,
+    isAuthenticated: state => state.csrfToken !== null,
     authStatus: state => state.status,
+    firstRequestSuccess: state => state.firstRequestSuccess,
 }
 
 export const mutations = {
     [AUTH_REQUEST]: state => {
         state.status = 'loading'
     },
+    [FIRST_AUTH_REQUEST_SUCCESS]: state => {
+        state.firstRequestSuccess = true
+    },
     [AUTH_REFRESH_REQUEST]: state => {
         state.status = 'refreshing'
     },
-    [AUTH_SUCCESS]: (state, { accessToken, refreshToken }) => {
+    [AUTH_SUCCESS]: (state, { accessToken, csrfToken }) => {
         state.status = 'success'
         state.accessToken = accessToken
-        state.refreshToken = refreshToken
+        state.csrfToken = csrfToken
     },
     [AUTH_REFRESH_SUCCESS]: (state, { accessToken }) => {
         state.status = 'success'
@@ -41,10 +48,17 @@ export const mutations = {
     [AUTH_ERROR]: state => {
         state.status = 'error'
     },
+    [AUTH_REFRESH_ERROR]: state => {
+        state.status = 'error'
+        state.accessToken = null
+        state.csrfToken = null
+        state.firstRequestSuccess = false
+    },
     [AUTH_LOGOUT]: state => {
         state.status = ''
         state.accessToken = null
-        state.refreshToken = null
+        state.csrfToken = null
+        state.firstRequestSuccess = false
     },
 }
 
@@ -52,57 +66,60 @@ export const actions = {
     [AUTH_REQUEST]: async ({ commit }, userCredentials) => {
         try {
             commit(AUTH_REQUEST)
-            const response = await AXIOS_YG_API.post('/api/token/', {
+            const response = await AXIOS_YG_API.post('/api/login', {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
                 username: userCredentials.username,
                 password: userCredentials.password,
             })
-            console.log(response)
             commit(AUTH_SUCCESS, {
-                accessToken: response.data.access,
-                refreshToken: response.data.refresh,
+                accessToken: response.data.access_token,
+                csrfToken: getCookie('csrftoken'),
             })
+            commit(FIRST_AUTH_REQUEST_SUCCESS)
             AXIOS_YG_API.defaults.headers.common[
                 'Authorization'
-            ] = `Bearer ${response.data.access}`
-            localStorage.setItem('accessToken', response.data.access)
-            localStorage.setItem('refreshToken', response.data.refresh)
+            ] = `Bearer ${response.data.access_token}`
+            AXIOS_YG_API.defaults.headers['X-CSRFToken'] = getCookie(
+                'csrftoken'
+            )
         } catch (error) {
             commit(AUTH_ERROR, error)
             delete AXIOS_YG_API.defaults.headers.common['Authorization']
-            localStorage.removeItem('accessToken')
-            localStorage.removeItem('refreshToken')
             throw error
         }
     },
     [AUTH_REFRESH_REQUEST]: async ({ commit, state }) => {
         try {
             commit(AUTH_REFRESH_REQUEST)
-            const response = await AXIOS_YG_API.post('/api/token/refresh/', {
-                refresh: state.refreshToken,
-            })
-            console.log(response)
+            const response = await AXIOS_YG_API.post('/api/refresh-token')
             commit(AUTH_REFRESH_SUCCESS, {
-                accessToken: response.data.access,
+                accessToken: response.data.access_token,
             })
+
+            if (!state.firstRequestSuccess) commit(FIRST_AUTH_REQUEST_SUCCESS)
+
             AXIOS_YG_API.defaults.headers.common[
                 'Authorization'
-            ] = `Bearer ${response.data.access}`
-            localStorage.setItem('accessToken', response.data.access)
+            ] = `Bearer ${response.data.access_token}`
         } catch (error) {
-            commit(AUTH_ERROR, error)
+            commit(AUTH_REFRESH_ERROR)
+            deleteCookie('csrftoken')
             delete AXIOS_YG_API.defaults.headers.common['Authorization']
-            localStorage.removeItem('accessToken')
-            localStorage.removeItem('refreshToken')
             throw error
         }
     },
-    [AUTH_LOGOUT]: ({ commit }) => {
-        return new Promise(resolve => {
+    [AUTH_LOGOUT]: async ({ commit }) => {
+        try {
+            const response = await AXIOS_YG_API.post('/api/logout')
+            deleteCookie('csrftoken')
+            console.log(response)
             commit(AUTH_LOGOUT)
             delete AXIOS_YG_API.defaults.headers.common['Authorization']
-            localStorage.removeItem('accessToken')
-            localStorage.removeItem('refreshToken')
-            resolve()
-        })
+        } catch (error) {
+            commit(AUTH_ERROR)
+            throw error
+        }
     },
 }

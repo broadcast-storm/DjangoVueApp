@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <LoadingPopup v-if="$store.state.tokens.status === 'refreshing'" />
+        <LoadingPopup v-if="isFirstRefreshing" />
         <router-view v-else />
     </div>
 </template>
@@ -8,15 +8,56 @@
 <script>
 import LoadingPopup from '@/components/LoadingPopup'
 import { AUTH_REFRESH_REQUEST } from '@/store/actions/tokens'
+import routesList from '@/router/routesList'
+import { mapState } from 'vuex'
 
 export default {
     components: { LoadingPopup },
+    data() {
+        return {
+            isFirstRefreshing: false,
+            timerId: null,
+        }
+    },
+    computed: {
+        ...mapState({
+            firstRequestSuccess: state => state.tokens.firstRequestSuccess,
+        }),
+    },
+    watch: {
+        firstRequestSuccess(newValue, oldValue) {
+            var self = this
+            var timeToRefresh =
+                parseInt(process.env.VUE_APP_ACCESS_TOKEN_EXPIRES) * 60 * 1000 -
+                30 * 1000
+
+            if (newValue && !oldValue) {
+                console.log(`user signed in`)
+                self.timerId = setTimeout(async function tick() {
+                    await self.$store.dispatch(AUTH_REFRESH_REQUEST)
+                    console.log(`refresh access token`)
+                    self.timerId = setTimeout(tick, timeToRefresh)
+                }, timeToRefresh)
+            }
+
+            if (!newValue && oldValue) {
+                clearTimeout(this.timerId)
+            }
+        },
+    },
     async mounted() {
         try {
-            if (this.$store.getters.isAuthenticated)
+            if (this.$store.getters.isAuthenticated) {
+                this.isFirstRefreshing = true
                 await this.$store.dispatch(AUTH_REFRESH_REQUEST)
+                this.isFirstRefreshing = false
+            }
         } catch (error) {
             console.log(error)
+            this.$router.push(
+                routesList.authPage.children.loginPage.path,
+                () => (this.isFirstRefreshing = false)
+            )
         }
     },
 }
