@@ -26,7 +26,7 @@ ACCESS_TOKEN_EXPIRES = 5  # 5 MINUTES
 REFRESH_TOKEN_EXPIRES = 14  # 14 DAYS
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['yandex-gamification.std-884.ist.mospolytech.ru', '127.0.0.1']
 
