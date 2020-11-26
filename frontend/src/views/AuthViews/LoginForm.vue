@@ -123,6 +123,7 @@ export default {
         }
 
         &__input {
+            font-size: 14px;
             width: 100%;
             height: 38px;
             border: 1px solid $basic-background;
@@ -134,13 +135,14 @@ export default {
         }
 
         &__link-text {
-            font-size: 12px;
+            font-size: 14px;
             line-height: 17px;
             text-decoration-line: underline;
             color: #283c62;
         }
 
         &__button {
+            font-size: 14px;
             margin-top: 20px;
             width: 100%;
             border: none;
