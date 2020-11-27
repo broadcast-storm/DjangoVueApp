@@ -17,8 +17,14 @@
 Для запуска на ПК должны быть установлены:
 [Node.js](https://nodejs.org/);
 [Yarn](https://yarnpkg.com/);
-[Vue-CLI](https://cli.vuejs.org/guide/installation.html)
-[Python 3.8](https://www.python.org/downloads/)
+[Vue-CLI](https://cli.vuejs.org/guide/installation.html);
+[Python 3.8](https://www.python.org/downloads/);
+[Git](https://git-scm.com/);
+
+Склонируйте репозиторий
+```sh
+$ git clone https://github.com/nikita220800/DjangoVueApp.git
+```
 
 ### 1) Настройка Django
 
@@ -37,7 +43,10 @@ $ .\venv\Scripts\activate (для Linux: source ./venv/bin/activate)
 $ pip install -r requirements.txt
 ```
 
-Установите все необходимые миграции, убедитесь, что был создан файл db.sqlite3
+####В папке core переименуйте файл .env.example в .env
+
+ 
+ Установите все необходимые миграции, убедитесь, что был создан файл db.sqlite3
 
 ```sh
 $ python manage.py makemigrations
