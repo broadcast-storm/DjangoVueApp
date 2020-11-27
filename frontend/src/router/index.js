@@ -117,7 +117,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.requiersToBeLoggedOut)) {
-        if (store.getters.isAuthenticated) {
+        if (store.getters['tokens/isAuthenticated']) {
             next(routesList.mainPage.path)
         } else {
             next()
@@ -127,7 +127,7 @@ router.beforeEach((to, from, next) => {
     }
 
     if (to.matched.some(record => record.meta.requiersAuthentication)) {
-        if (!store.getters.isAuthenticated) {
+        if (!store.getters['tokens/isAuthenticated']) {
             next(routesList.authPage.children.loginPage.path)
         } else {
             next()

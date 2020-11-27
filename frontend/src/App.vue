@@ -7,9 +7,9 @@
 
 <script>
 import LoadingPopup from '@/components/LoadingPopup'
-import { AUTH_REFRESH_REQUEST } from '@/store/actions/tokens'
+import { AUTH_REFRESH_REQUEST } from '@/store/action-types/tokens'
 import routesList from '@/router/routesList'
-import { mapState } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 
 export default {
     components: { LoadingPopup },
@@ -23,6 +23,7 @@ export default {
         ...mapState({
             firstRequestSuccess: state => state.tokens.firstRequestSuccess,
         }),
+        ...mapGetters('tokens', ['isAuthenticated']),
     },
     watch: {
         firstRequestSuccess(newValue, oldValue) {
@@ -34,7 +35,7 @@ export default {
             if (newValue && !oldValue) {
                 console.log(`user signed in`)
                 self.timerId = setTimeout(async function tick() {
-                    await self.$store.dispatch(AUTH_REFRESH_REQUEST)
+                    await self.AUTH_REFRESH_REQUEST()
                     console.log(`refresh access token`)
                     self.timerId = setTimeout(tick, timeToRefresh)
                 }, timeToRefresh)
@@ -46,19 +47,25 @@ export default {
         },
     },
     async mounted() {
-        try {
-            if (this.$store.getters.isAuthenticated) {
-                this.isFirstRefreshing = true
-                await this.$store.dispatch(AUTH_REFRESH_REQUEST)
-                this.isFirstRefreshing = false
+        await this.refreshTokenOnMount()
+    },
+    methods: {
+        ...mapActions('tokens', [AUTH_REFRESH_REQUEST]),
+        async refreshTokenOnMount() {
+            try {
+                if (this.isAuthenticated) {
+                    this.isFirstRefreshing = true
+                    await this.AUTH_REFRESH_REQUEST()
+                    this.isFirstRefreshing = false
+                }
+            } catch (error) {
+                console.log(error)
+                this.$router.push(
+                    routesList.authPage.children.loginPage.path,
+                    () => (this.isFirstRefreshing = false)
+                )
             }
-        } catch (error) {
-            console.log(error)
-            this.$router.push(
-                routesList.authPage.children.loginPage.path,
-                () => (this.isFirstRefreshing = false)
-            )
-        }
+        },
     },
 }
 </script>

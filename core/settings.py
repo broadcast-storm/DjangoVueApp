@@ -11,22 +11,29 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
 from pathlib import Path
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
+environ.Env.read_env()
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'a=%8k3%7eaqi45bn1=3u8-(hd0sisv=j(kmoz&z6kjc4@&$&+%'
-REFRESH_TOKEN_SECRET = 'LQ@f4PHe?TKF~5p4}?889sltUjQPWv2#'
+SECRET_KEY = env("SECRET_KEY", default="unsafe-secret-key")
+REFRESH_TOKEN_SECRET = env("REFRESH_TOKEN_SECRET", default="unsafe-refresh-secret-key")
 
-ACCESS_TOKEN_EXPIRES = 5  # 5 MINUTES
-REFRESH_TOKEN_EXPIRES = 14  # 14 DAYS
+ACCESS_TOKEN_EXPIRES = env("ACCESS_TOKEN_EXPIRES", default=5)
+REFRESH_TOKEN_EXPIRES = env("REFRESH_TOKEN_EXPIRES", default=14)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
+# DEBUG = True
 
 ALLOWED_HOSTS = ['yandex-gamification.std-884.ist.mospolytech.ru', '127.0.0.1']
 

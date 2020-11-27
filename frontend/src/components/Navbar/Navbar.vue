@@ -128,7 +128,8 @@ import OpenSvg from './icons/OpenSvg'
 import LogoSvg from '@/components/LogoSvg'
 
 import routesList from '@/router/routesList'
-import { AUTH_LOGOUT } from '@/store/actions/tokens'
+import { mapActions } from 'vuex'
+import { AUTH_LOGOUT } from '@/store/action-types/tokens'
 
 export default {
     components: {
@@ -273,6 +274,7 @@ export default {
         },
     },
     methods: {
+        ...mapActions('tokens', [AUTH_LOGOUT]),
         showTextFunc() {
             this.showText = true
         },
@@ -284,7 +286,7 @@ export default {
             }
         },
         logOut() {
-            this.$store.dispatch(AUTH_LOGOUT).then(() => {
+            this.AUTH_LOGOUT().then(() => {
                 this.$router.push(routesList.authPage.children.loginPage.path)
             })
         },

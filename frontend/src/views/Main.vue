@@ -14,7 +14,8 @@ import Navbar from '@/components/Navbar/Navbar'
 import { stats } from '@/mocks/headerStats'
 
 import routesList from '@/router/routesList'
-import { AUTH_LOGOUT } from '@/store/actions/tokens'
+import { mapActions } from 'vuex'
+import { AUTH_LOGOUT } from '@/store/action-types/tokens'
 
 export default {
     name: 'Main',
@@ -25,9 +26,12 @@ export default {
         }
     },
     onIdle() {
-        this.$store.dispatch(AUTH_LOGOUT).then(() => {
+        this.AUTH_LOGOUT().then(() => {
             this.$router.push(routesList.authPage.children.loginPage.path)
         })
+    },
+    methods: {
+        ...mapActions('tokens', [AUTH_LOGOUT]),
     },
 }
 </script>

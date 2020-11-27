@@ -34,7 +34,7 @@
             </div>
             <button type="submit" class="login-form__button">
                 <Spinner
-                    v-if="$store.state.tokens.status === 'loading'"
+                    v-if="tokenStatus === 'loading'"
                     :size="20"
                     :line-bg-color="'#b1b2b7'"
                     :line-fg-color="'#ffffff'"
@@ -48,7 +48,8 @@
 <script>
 import LogoSvg from '@/components/LogoSvg'
 import routesList from '@/router/routesList'
-import { AUTH_REQUEST } from '@/store/actions/tokens'
+import { mapActions, mapState } from 'vuex'
+import { AUTH_REQUEST } from '@/store/action-types/tokens'
 import Spinner from 'vue-simple-spinner'
 
 export default {
@@ -62,10 +63,16 @@ export default {
             password: '',
         }
     },
+    computed: {
+        ...mapState({
+            tokenStatus: state => state.tokens.tokenStatus,
+        }),
+    },
     methods: {
+        ...mapActions('tokens', [AUTH_REQUEST]),
         async login() {
             try {
-                await this.$store.dispatch(AUTH_REQUEST, {
+                await this.AUTH_REQUEST({
                     username: this.username,
                     password: this.password,
                 })

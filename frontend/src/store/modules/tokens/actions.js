@@ -8,61 +8,10 @@ import {
     AUTH_LOGOUT,
     AUTH_REFRESH_ERROR,
     FIRST_AUTH_REQUEST_SUCCESS,
-} from '@/store/actions/tokens'
+} from '@/store/action-types/tokens'
 import { getCookie, deleteCookie } from '@/utils/cookies'
 
-export const namespaced = false
-
-export const state = {
-    accessToken: null,
-    csrfToken: getCookie('csrftoken'),
-    status: '',
-    firstRequestSuccess: false,
-}
-
-export const getters = {
-    isAuthenticated: state => state.csrfToken !== null,
-    authStatus: state => state.status,
-    firstRequestSuccess: state => state.firstRequestSuccess,
-}
-
-export const mutations = {
-    [AUTH_REQUEST]: state => {
-        state.status = 'loading'
-    },
-    [FIRST_AUTH_REQUEST_SUCCESS]: state => {
-        state.firstRequestSuccess = true
-    },
-    [AUTH_REFRESH_REQUEST]: state => {
-        state.status = 'refreshing'
-    },
-    [AUTH_SUCCESS]: (state, { accessToken, csrfToken }) => {
-        state.status = 'success'
-        state.accessToken = accessToken
-        state.csrfToken = csrfToken
-    },
-    [AUTH_REFRESH_SUCCESS]: (state, { accessToken }) => {
-        state.status = 'success'
-        state.accessToken = accessToken
-    },
-    [AUTH_ERROR]: state => {
-        state.status = 'error'
-    },
-    [AUTH_REFRESH_ERROR]: state => {
-        state.status = 'error'
-        state.accessToken = null
-        state.csrfToken = null
-        state.firstRequestSuccess = false
-    },
-    [AUTH_LOGOUT]: state => {
-        state.status = ''
-        state.accessToken = null
-        state.csrfToken = null
-        state.firstRequestSuccess = false
-    },
-}
-
-export const actions = {
+const actions = {
     [AUTH_REQUEST]: async ({ commit }, userCredentials) => {
         try {
             commit(AUTH_REQUEST)
@@ -123,3 +72,5 @@ export const actions = {
         }
     },
 }
+
+export default actions
