@@ -43,7 +43,7 @@ $ .\venv\Scripts\activate (для Linux: source ./venv/bin/activate)
 $ pip install -r requirements.txt
 ```
 
-####В папке core переименуйте файл .env.example в .env
+#### В папке core переименуйте файл .env.example в .env
 
  
  Установите все необходимые миграции, убедитесь, что был создан файл db.sqlite3
