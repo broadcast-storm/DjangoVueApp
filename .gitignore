@@ -6,9 +6,12 @@ __pycache__/
 venv/
 *.sqlite3
 media/**.*
-logs/**.*
+logs/*.log
 
 # local env files
+core/.env
+frontend/.env.production
+frontend/.env.development
 .env.local
 .env.*.local
 

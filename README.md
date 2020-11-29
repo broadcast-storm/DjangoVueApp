@@ -11,14 +11,21 @@
 | Тип пользователя | Логин   | Пароль                |
 | ---------------- | ------- | --------------------- |
 | Админ            | YGAdmin | VeryStrongPassword123 |
+| Пользователь     | YGUser  | VeryStrongPassword123 |
 
 # Установка
 
 Для запуска на ПК должны быть установлены:
 [Node.js](https://nodejs.org/);
 [Yarn](https://yarnpkg.com/);
-[Vue-CLI](https://cli.vuejs.org/guide/installation.html)
-[Python 3.8](https://www.python.org/downloads/)
+[Vue-CLI](https://cli.vuejs.org/guide/installation.html);
+[Python 3.8](https://www.python.org/downloads/);
+[Git](https://git-scm.com/);
+
+Склонируйте репозиторий
+```sh
+$ git clone https://github.com/nikita220800/DjangoVueApp.git
+```
 
 ### 1) Настройка Django
 
@@ -37,6 +44,9 @@ $ .\venv\Scripts\activate (для Linux: source ./venv/bin/activate)
 $ pip install -r requirements.txt
 ```
 
+#### В папке core скопируйте файл .env.example в .env
+
+ 
 Установите все необходимые миграции, убедитесь, что был создан файл db.sqlite3
 
 ```sh
@@ -63,6 +73,15 @@ $ python manage.py runserver
 ```sh
 $ cd ./frontend/
 $ yarn install
+```
+
+Создайте файлы .env.production и .env.development и введите эти значения
+
+```sh
+Для development
+API_BASE_URL=http://127.0.0.1:8000
+Для production
+API_BASE_URL=ссылка на рабочую версию
 ```
 
 Убедитесь, что в редакторе (если у вас VS Code) установлены:

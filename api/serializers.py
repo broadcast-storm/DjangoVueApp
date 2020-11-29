@@ -17,13 +17,12 @@ class DivisionSerializer(serializers.ModelSerializer):
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ['id', 'username', 'password', 'email', "name", "surname", "patronymic",
+        fields = ['id', 'username', 'email', "name", "surname", "patronymic",
                   "jobPosition", "userType", "division",
                   "description", "photo", "level",
                   "money", "health", "energy",
                   "quality", "productivity",
-                  "competitionCount", "winCompetitionCount",
-                  "date_joined", "last_login"]
+                  "competitionCount", "winCompetitionCount"]
 
 
 class StatisticsSerializer(serializers.ModelSerializer):

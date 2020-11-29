@@ -1,7 +1,6 @@
 export const namespaced = false
 
 export const state = {
-    token: '',
     user: {
         name: 'Александра',
         surname: 'Пушкина',
