@@ -18,6 +18,20 @@ const routesList = {
     shopPage: {
         path: '/shop',
         header: 'Магазин',
+        children: {
+            shopItems: {
+                path: '',
+                header: 'Магазин',
+            },
+            shopItem: {
+                path: 'item/:id',
+                header: 'Магазин',
+            },
+            shopCart: {
+                path: 'cart',
+                header: 'Магазин',
+            },
+        },
     },
     raitingPage: {
         path: '/raiting',
