@@ -72,9 +72,6 @@ const routes = [
                         },
                     },
                 ],
-                meta: {
-                    requiersAuthentication: true,
-                },
             },
             {
                 path: routesList.statisticsPage.path,
