@@ -180,6 +180,7 @@ import LightningSvg from '@/assets/icons/lightning.svg'
 import ProgressBar from '@/components/ProgressBar.vue'
 import Task from '@/components/Task.vue'
 import { mapGetters } from 'vuex'
+import { AXIOS_YG_API } from '@/axiosConfig'
 
 export default {
     name: 'Profile',
@@ -224,7 +225,10 @@ export default {
             }
         },
     },
-    mounted() {
+    async mounted() {
+        const response = await AXIOS_YG_API.get('/api/teams/')
+        console.log(response)
+
         this.$nextTick(() => {
             window.addEventListener('resize', this.onResize)
         })

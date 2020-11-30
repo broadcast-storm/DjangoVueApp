@@ -173,7 +173,6 @@ class WeeklyTaskAdmin(admin.ModelAdmin):
     filter_horizontal = ()
 
 
-
 class QuestionAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         return super().get_queryset(request).prefetch_related('tags')
@@ -198,6 +197,7 @@ class QuestionAdmin(admin.ModelAdmin):
     filter_horizontal = ()
     readonly_fields = ('created_at', 'updated_at')
 
+
 class QuestionThemeAdmin(admin.ModelAdmin):
     list_display = ('title', 'description')
     search_fields = ('title',)
@@ -208,6 +208,7 @@ class QuestionThemeAdmin(admin.ModelAdmin):
         )
     }),)
     filter_horizontal = ()
+
 
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(Task, TaskAdmin)

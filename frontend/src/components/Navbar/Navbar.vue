@@ -82,7 +82,7 @@
             </div>
         </nav>
 
-        <div class="exit-btn">
+        <div class="exit-btn" @click="logOut">
             <icon-base
                 :width="25"
                 :height="25"
@@ -128,6 +128,8 @@ import OpenSvg from './icons/OpenSvg'
 import LogoSvg from '@/components/LogoSvg'
 
 import routesList from '@/router/routesList'
+import { mapActions } from 'vuex'
+import { AUTH_LOGOUT } from '@/store/action-types/tokens'
 
 export default {
     components: {
@@ -272,6 +274,7 @@ export default {
         },
     },
     methods: {
+        ...mapActions('tokens', [AUTH_LOGOUT]),
         showTextFunc() {
             this.showText = true
         },
@@ -281,6 +284,11 @@ export default {
             else {
                 setTimeout(this.showTextFunc, 300)
             }
+        },
+        logOut() {
+            this.AUTH_LOGOUT().then(() => {
+                this.$router.push(routesList.authPage.children.loginPage.path)
+            })
         },
     },
 }

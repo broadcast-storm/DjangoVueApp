@@ -12,6 +12,11 @@
 import Header from '@/components/Header'
 import Navbar from '@/components/Navbar/Navbar'
 import { stats } from '@/mocks/headerStats'
+
+import routesList from '@/router/routesList'
+import { mapActions } from 'vuex'
+import { AUTH_LOGOUT } from '@/store/action-types/tokens'
+
 export default {
     name: 'Main',
     components: { Header, Navbar },
@@ -19,6 +24,14 @@ export default {
         return {
             stats,
         }
+    },
+    onIdle() {
+        this.AUTH_LOGOUT().then(() => {
+            this.$router.push(routesList.authPage.children.loginPage.path)
+        })
+    },
+    methods: {
+        ...mapActions('tokens', [AUTH_LOGOUT]),
     },
 }
 </script>
@@ -28,7 +41,6 @@ export default {
     box-sizing: content-box;
     width: 100%;
     min-width: 1023px;
-    // min-height: 1100px;
     background-color: $basic-grey;
     &__content {
         margin-left: 90px;
