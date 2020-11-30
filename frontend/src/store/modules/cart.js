@@ -2,7 +2,6 @@ export const namespaced = false
 
 export const state = {
     cart: [],
-    status: false,
 }
 
 export const getters = {
@@ -16,8 +15,5 @@ export const mutations = {
     },
     clearCart(state) {
         state.cart = []
-    },
-    changeStatus(state) {
-        state.status = true
     },
 }

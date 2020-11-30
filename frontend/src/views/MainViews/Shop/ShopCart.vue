@@ -75,10 +75,14 @@ export default {
         CoinSvg,
         Arrow,
     },
+    data() {
+        return {
+            status: false,
+        }
+    },
     computed: {
         ...mapGetters(['getItems']),
         ...mapGetters(['getCart']),
-        ...mapGetters(['getCartStatus']),
         items: function() {
             let items = Object.assign([], this.$store.getters.getItems)
             let cart = Object.assign([], this.$store.getters.getCart)
@@ -86,9 +90,6 @@ export default {
         },
         cart: function() {
             return Object.assign([], this.$store.getters.getCart)
-        },
-        status: function() {
-            return this.$store.getters.getCartStatus
         },
         cartSumm: function() {
             let summ = 0
@@ -100,12 +101,11 @@ export default {
     },
     methods: {
         ...mapMutations(['clearCart']),
-        ...mapMutations(['changeStatus']),
         clearCar: function() {
             this.$store.commit('clearCart')
         },
         buy: function() {
-            this.$store.commit('changeStatus')
+            this.status = true
         },
     },
 }
