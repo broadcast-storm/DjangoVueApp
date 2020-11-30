@@ -29,15 +29,14 @@ export default {
     data() {
         return {
             user: Object.assign({}, this.$store.getters.getUserData),
-            items: Object.assign([], this.$store.getters.getItems),
         }
     },
     computed: {
         ...mapGetters(['getUserData']),
-        ...mapGetters(['getItems']),
-        ...mapGetters(['getCart']),
+        ...mapGetters('cart',['getCart']),
         cart: function() {
-            return Object.assign([], this.$store.getters.getCart)
+            console.log(this)
+            return this.getCart
         },
     },
 }

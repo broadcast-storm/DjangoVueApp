@@ -81,15 +81,15 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['getItems']),
-        ...mapGetters(['getCart']),
+        ...mapGetters('items', ['getItems']),
+        ...mapGetters('cart', ['getCart']),
         items: function() {
-            let items = Object.assign([], this.$store.getters.getItems)
-            let cart = Object.assign([], this.$store.getters.getCart)
+            let items = this.getItems
+            let cart = this.getCart
             return items.filter(a => cart.filter(b => b.id == a.id).length != 0)
         },
         cart: function() {
-            return Object.assign([], this.$store.getters.getCart)
+            return this.getCart
         },
         cartSumm: function() {
             let summ = 0
@@ -102,7 +102,7 @@ export default {
     methods: {
         ...mapMutations(['clearCart']),
         clearCar: function() {
-            this.$store.commit('clearCart')
+            this.$store.commit('cart/clearCart')
         },
         buy: function() {
             this.status = true

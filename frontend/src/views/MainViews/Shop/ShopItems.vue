@@ -120,14 +120,13 @@ export default {
     },
     data() {
         return {
-            items: Object.assign([], this.$store.getters.getItems),
             sort: 'ascendingValue',
             instruments: false,
         }
     },
     computed: {
-        ...mapGetters(['getItems']),
-        ...mapGetters(['getCart']),
+        ...mapGetters('items',['getItems']),
+        ...mapGetters('cart',['getCart']),
         orderedItems: function() {
             let c = this.items
             switch (this.sort) {
@@ -165,13 +164,16 @@ export default {
             return c
         },
         cart: function() {
-            return Object.assign([], this.$store.getters.getCart)
+            return this.getCart
+        },
+        items: function() {
+            return this.getItems
         },
     },
     methods: {
         ...mapMutations(['addToCart']),
         addToCart: function(itemId) {
-            this.$store.commit('addToCart', { id: itemId })
+            this.$store.commit('cart/addToCart', { id: itemId })
         },
         getLink: function(itemId) {
             return '/shop/item/' + itemId

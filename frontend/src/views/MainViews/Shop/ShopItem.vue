@@ -30,7 +30,6 @@
                     <button
                         v-if="cart.filter(a => a.id == item.id).length != 0"
                         class="item-cart item-cart_added"
-                        @click="addToCart(item.id)"
                     >
                         <CheckMark class="item-cart_icon" /><span
                             class="item-cart_text"
@@ -60,24 +59,20 @@ export default {
         ShopState,
     },
     props: ['id'],
-    data() {
-        return {
-            item: Object.assign([], this.$store.getters.getItems).filter(
-                itemId => itemId.id == this.id
-            )[0],
-        }
-    },
     computed: {
-        ...mapGetters(['getItems']),
-        ...mapGetters(['getCart']),
+        ...mapGetters('items', ['getItems']),
+        ...mapGetters('cart', ['getCart']),
         cart: function() {
-            return Object.assign([], this.$store.getters.getCart)
+            return this.getCart
+        },
+        item: function() {
+            return this.getItems.filter(itemId => itemId.id == this.id)[0]
         },
     },
     methods: {
         ...mapMutations(['addToCart']),
         addToCart: function(itemId) {
-            this.$store.commit('addToCart', { id: itemId })
+            this.$store.commit('cart/addToCart', { id: itemId })
         },
     },
 }

@@ -3,8 +3,10 @@ import Vuex from 'vuex'
 
 import * as auth from '@/store/modules/auth.js'
 import * as tasks from '@/store/modules/tasks.js'
-import * as items from '@/store/modules/items.js'
-import * as cart from '@/store/modules/cart.js'
+import items from '@/store/modules/items'
+import cart from '@/store/modules/cart'
+import tokens from '@/store/modules/tokens'
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -13,5 +15,7 @@ export default new Vuex.Store({
         tasks,
         items,
         cart,
+        tokens,
     },
 })
+

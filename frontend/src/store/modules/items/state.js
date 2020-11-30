@@ -1,6 +1,4 @@
-export const namespaced = false
-
-export const state = {
+const state = {
     items: [
         {
             id: 1,
@@ -50,6 +48,4 @@ export const state = {
     ],
 }
 
-export const getters = {
-    getItems: state => state.items,
-}
+export default state
