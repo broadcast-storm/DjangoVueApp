@@ -3,6 +3,7 @@
 
 | Файл                                             | Комментарии                                    |
 | ------------------------------------------------ | ---------------------------------------------- |
+| [Лэндинг проекта](http://yandex-gamification-landing.std-884.ist.mospolytech.ru)                            | Лэндинг проекта |
 | [SETUP.md](../SETUP.md)                             | Информация по развёртыванию и запуску проекта. |
 | [Описание API](http://yandex-gamification.std-884.ist.mospolytech.ru/swagger/)                       | Описание API (Swagger)                     |
 | [structureDB.png](structureDB.png) | Структура базы данных.                         |
