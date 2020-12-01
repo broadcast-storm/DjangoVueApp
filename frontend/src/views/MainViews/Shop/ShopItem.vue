@@ -58,7 +58,12 @@ export default {
         CheckMark,
         ShopState,
     },
-    props: ['id'],
+    props: {
+        id: {
+            default: 0,
+            type: Number,
+        },
+    },
     computed: {
         ...mapGetters('items', ['getItems']),
         ...mapGetters('cart', ['getCart']),

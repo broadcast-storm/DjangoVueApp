@@ -33,9 +33,8 @@ export default {
     },
     computed: {
         ...mapGetters(['getUserData']),
-        ...mapGetters('cart',['getCart']),
+        ...mapGetters('cart', ['getCart']),
         cart: function() {
-            console.log(this)
             return this.getCart
         },
     },

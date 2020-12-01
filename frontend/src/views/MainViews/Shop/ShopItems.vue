@@ -125,8 +125,8 @@ export default {
         }
     },
     computed: {
-        ...mapGetters('items',['getItems']),
-        ...mapGetters('cart',['getCart']),
+        ...mapGetters('items', ['getItems']),
+        ...mapGetters('cart', ['getCart']),
         orderedItems: function() {
             let c = this.items
             switch (this.sort) {
