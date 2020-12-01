@@ -8,6 +8,9 @@
 
 - [Поздняков Н. И.](pozdnyakov.md)
 - [Суровицкий М. Д.](surovickii.md)
+- [Тишкина А. Ф.](tishkina.md)
+- [Юркин И. М.](urkin.md)
+- [Комков Д. Э.](komkov.md)
 
 ## Отчёт
 
