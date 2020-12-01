@@ -56,8 +56,35 @@ const routes = [
             {
                 path: routesList.shopPage.path,
                 components: {
-                    'main-router': () => import('@/views/MainViews/Shop.vue'),
+                    'main-router': () =>
+                        import('@/views/MainViews/Shop/Shop.vue'),
                 },
+                children: [
+                    {
+                        path: routesList.shopPage.children.shopItems.path,
+                        components: {
+                            'shop-router': () =>
+                                import('@/views/MainViews/Shop/ShopItems.vue'),
+                        },
+                    },
+                    {
+                        path: routesList.shopPage.children.shopItem.path,
+                        components: {
+                            'shop-router': () =>
+                                import('@/views/MainViews/Shop/ShopItem.vue'),
+                        },
+                        props: {
+                            'shop-router': true,
+                        },
+                    },
+                    {
+                        path: routesList.shopPage.children.shopCart.path,
+                        components: {
+                            'shop-router': () =>
+                                import('@/views/MainViews/Shop/ShopCart.vue'),
+                        },
+                    },
+                ],
                 meta: {
                     requiersAuthentication: true,
                 },
