@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Яндекс Геймификация</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+     -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="manifest" href="favicon/site.webmanifest">
+    <link rel="mask-icon" href="favicon/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+
+    <meta name="theme-color" content="#ffffff">
+    <meta name="description" content="Яндекс Геймификация - это система нематериальной мотивации для сотрудников  СПП (ООК и ВКЦ)">
+</head>
+<body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+        <a class="navbar-brand" href="#"><img src="./img/logo.png"  height="30" class="d-inline-block align-top" alt="" loading="lazy">
+            Яндекс <span class="birus-color">Геймификация</span> </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="#aboutProject">О проекте</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#Tasks">Задачи</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#developers">Разработчики</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#technologies">Технологии</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      
+      
+      
+      <main role="main">
+
+        <div class="position-relative overflow-hidden p-3 p-md-5 text-center top-header" id="aboutProject">
+            <div class="col-md-6 p-lg-5">
+              <h1 class="display-4 font-weight-normal mb-5">Яндекс <span class="birus-color gamification">Геймификация</span> </h1>
+              <a class="btn btn-secondary btn-lg birus-btn" href="http://yandex-gamification.std-884.ist.mospolytech.ru" target="_blank">На сайт</a>
+              <a class="btn btn-secondary btn-lg" href="https://github.com/nikita220800/DjangoVueApp" target="_blank">На GitHub</a>
+            </div>
+          </div>
+          
+        <div class="container">
+
+            <div class="jumbotron about-project">
+                <h2 class="display-4">О проекте</h2>
+                <p class="lead"><strong class="birus-color">Яндекс Геймификация</strong>   - это система нематериальной мотивации для сотрудников  СПП (ООК и ВКЦ).
+                  Система построена с использованием игрового мышления и динамики игр для вовлечения сотрудников в рабочий процесс</p>
+                  <p class="lead"><strong class="birus-color">Основная цель</strong> - это постановка задач сотрудникам, которые ставятся в формате квестов различной длительности и сложности.
+                    Главной целью сотрудников становится победа в личном и командном зачете (так  как квесты будут как командные, так и личные).
+                    Тем самым должны повыситься вовлеченность в рабочий процесс отдельного сотрудника и моральный дух всего коллектива.</p>
+
+            </div>
+          
+      
+        <div class="description">
+          
+      
+          <h3 class="display-4 text-center mb-5" id="Tasks">Задачи</h3>
+          <div class="row" >
+            <div class="col-lg-4">
+              <div class="task-img">
+                <img src="./img/tasks/bd.jpg" alt="">
+              </div>
+              <h2>Разработка структуры базы данных</h2>
+              <p>Создание схемы базы данных, описание моделей в Django и их сериализация </p>
+            </div>
+            <div class="col-lg-4">
+              <div class="task-img">
+                <img src="./img/tasks/django.jpg" alt="">
+              </div>
+              <h2>Backend на Django + Django Rest Framework</h2>
+              <p>Настройка Админ панели, API Route'ов, авторизации пользователей по JWT токенам</p>
+            </div>
+            <div class="col-lg-4">
+              <div class="task-img">
+                <img src="./img/tasks/roles.png" alt="">
+              </div>
+              <h2>Роли пользователей</h2>
+              <p>Распределить функциональные возможности UI для разных ролей (админ, обычный пользователь)</p>
+            </div>
+            <div class="col-lg-4">
+              <div class="task-img">
+                <img src="./img/tasks/vue.png" alt="">
+              </div>
+              <h2>Frontend часть на Vue.js</h2>
+             <p>Верстка страниц, разделение их на составляющие компоненты, настройка state в Vuex и навигации в Vue Router</p>
+            </div>
+            <div class="col-lg-4">
+              <div class="task-img">
+                <img src="./img/tasks/mobile.jpg" alt="">
+              </div>
+              <h2>Мобильное приложение</h2>
+              <p>Разработка мобильного приложения с ограниченным функционалом для Android</p>
+            </div>
+            <div class="col-lg-4">
+              <div class="task-img">
+                <img src="./img/tasks/server.jpg" alt="">
+              </div>
+              <h2>Запуск проекта на сервере</h2>
+             <p>Деплой проекта на сервер fit.mospolytech</p>
+            </div>
+          </div>
+      
+          <hr class="featurette-divider" id="developers">
+      
+          <h2 class="display-4" >Разработчики</h2>
+
+          <div id="carouselExampleCaptions" class="carousel slide custom-carousel" data-ride="carousel">
+            
+            <ol class="carousel-indicators">
+              <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
+              <li data-target="#carouselExampleCaptions" data-slide-to="1"></li>
+              <li data-target="#carouselExampleCaptions" data-slide-to="2"></li>
+              <li data-target="#carouselExampleCaptions" data-slide-to="3"></li>
+              <li data-target="#carouselExampleCaptions" data-slide-to="4"></li>
+            </ol>
+
+            <div class="carousel-inner">
+              <div class="carousel-item active" height="300px">
+                <div class="carousel-caption d-md-block">
+                  <div class="custom-container">
+                      <div class="card custom-item" style="width: 18rem;">
+                        <div class="custom-img-container"><img src="./img/developers/pozdnyakov.jpg" class="card-img-top custom-img" alt=""></div>
+                        <div class="card-body">
+                          <h5 class="card-title">Никита Поздняков</h5>
+                          <p class="card-text">Frontend + Backend разработчик</p>
+                          <a href="https://github.com/nikita220800" class="btn btn-primary birus-btn" target="_blank" rel="noopener noreferrer">Профиль в GitHub</a>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="carousel-item" height="300px">
+                <div class="carousel-caption d-md-block">
+                  <div class="custom-container">
+                      <div class="card custom-item" style="width: 18rem;">
+                        <div class="custom-img-container"><img src="./img/developers/no-photo.jpg" class="card-img-top custom-img" alt=""></div>
+                        <div class="card-body">
+                          <h5 class="card-title">Михаил Суровицкий</h5>
+                          <p class="card-text">Backend разработчик</p>
+                          <a href="https://github.com/zakhep66" class="btn btn-primary birus-btn" target="_blank" rel="noopener noreferrer">Профиль в GitHub</a>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="carousel-item" height="300px">
+                <div class="carousel-caption d-md-block">
+                  <div class="custom-container">
+                      <div class="card custom-item" style="width: 18rem;">
+                        <div class="custom-img-container"><img src="./img/developers/no-photo.jpg" class="card-img-top custom-img" alt=""></div>
+                        <div class="card-body">
+                          <h5 class="card-title">Алина Тишкина</h5>
+                          <p class="card-text">Frontend разработчик</p>
+                          <a href="https://github.com/alinka09" class="btn btn-primary birus-btn" target="_blank" rel="noopener noreferrer">Профиль в GitHub</a>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="carousel-item" height="300px">
+                <div class="carousel-caption d-md-block">
+                  <div class="custom-container">
+                      <div class="card custom-item" style="width: 18rem;">
+                        <div class="custom-img-container"><img src="./img/developers/no-photo.jpg" class="card-img-top custom-img" alt=""></div>
+                        <div class="card-body">
+                          <h5 class="card-title">Иван Юркин</h5>
+                          <p class="card-text">Frontend разработчик</p>
+                          <a href="https://github.com/urkin-dev" class="btn btn-primary birus-btn" target="_blank" rel="noopener noreferrer">Профиль в GitHub</a>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="carousel-item" height="300px">
+                <div class="carousel-caption d-md-block">
+                  <div class="custom-container">
+                      <div class="card custom-item" style="width: 18rem;">
+                        <div class="custom-img-container"><img src="./img/developers/no-photo.jpg" class="card-img-top custom-img" alt=""></div>
+                        <div class="card-body">
+                          <h5 class="card-title">Дмитрий Комков</h5>
+                          <p class="card-text">Frontend разработчик</p>
+                          <a href="https://github.com/SCHLB21" class="btn btn-primary birus-btn" target="_blank" rel="noopener noreferrer">Профиль в GitHub</a>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+
+
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+
+          <hr class="featurette-divider" id="technologies">
+
+          <h2 class="display-4">Используемые технологии</h2>
+          <div class="album py-5">
+        
+              <div class="row">
+
+                <div class="col-md-4">
+                  <div class="card mb-4 shadow-sm technology">
+                    <a href="https://www.djangoproject.com" target="_blank" rel="noopener noreferrer" class="tech-link">
+                      <img src="./img/technologies/django.jpg" alt="">
+                  </a>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="card mb-4 shadow-sm technology">
+                    <a href="https://www.django-rest-framework.org" target="_blank" rel="noopener noreferrer" class="tech-link">
+                      <img src="./img/technologies/drf.jpg" alt="">
+                  </a>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="card mb-4 shadow-sm technology">
+                    <a href="https://ru.vuejs.org" target="_blank" rel="noopener noreferrer" class="tech-link">
+                      <img src="./img/technologies/vue.jpg" alt="">
+                  </a>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+        </div>
+
+      </div>
+      <footer class=" py-5 mt-5">
+        <div class="container">
+        <div class=" row">
+          <div class="col-md-6 text-center">
+            <img src="./img/polytech.png" alt="Лого Политеха" height="80px">
+          </div>
+          <div class="col-md-6 text-center">
+            <img src="./img/yandex.png" alt="Лого Яндекса" height="80px">
+
+          </div>
+        </div>
+      </div>
+      <small class="d-block mt-5 text-center">&copy; 2020</small>
+      </footer> 
+      </main>
+
+      <script src="./js/jquery-3.5.1.slim.min.js"></script>
+      <script src="./js/bootstrap.bundle.min.js"></script>
+      
+      
+<!--       
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script> -->
+
+</body>
+</html>
