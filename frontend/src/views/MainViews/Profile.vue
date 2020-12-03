@@ -1,7 +1,8 @@
 <template>
     <div>
         <div class="profile-wrapper">
-            <div class="column-wrap wrap__profile">
+            {{ user }}
+            <!-- <div class="column-wrap wrap__profile">
                 <div ref="profile" class="profile">
                     <div class="profile__main-info">
                         <div class="profile__main-info__photo">
@@ -168,40 +169,40 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </template>
 
 <script>
-import CoinSvg from '@/assets/icons/coin.svg'
+/* import CoinSvg from '@/assets/icons/coin.svg'
 import HeartSvg from '@/assets/icons/heart.svg'
 import LightningSvg from '@/assets/icons/lightning.svg'
 import ProgressBar from '@/components/ProgressBar.vue'
-import Task from '@/components/Task.vue'
-import { mapGetters } from 'vuex'
-import { AXIOS_YG_API } from '@/axiosConfig'
+import Task from '@/components/Task.vue' */
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
     name: 'Profile',
     components: {
-        CoinSvg,
+        /* CoinSvg,
         HeartSvg,
         LightningSvg,
         ProgressBar,
-        Task,
+        Task, */
     },
     data() {
         return {
             commonHeight: '',
             windowWidth: window.innerWidth,
             screenMobile: window.innerWidth > 768 ? 'all' : 'tasks',
-            user: Object.assign({}, this.$store.getters.getUserData),
             tasks: Object.assign({}, this.$store.getters.getTasks),
         }
     },
     computed: {
-        ...mapGetters(['getUserData']),
+        user() {
+            return this.getUserData()
+        },
         date() {
             const date = this.getUserData.task.deadline
 
@@ -211,7 +212,7 @@ export default {
             days = days < 10 ? '0' + days : days
 
             return days + '.' + month + '.' + date.getFullYear()
-        },
+        }
     },
     watch: {
         windowWidth(newWidth) {
@@ -226,8 +227,7 @@ export default {
         },
     },
     async mounted() {
-        const response = await AXIOS_YG_API.get('/api/teams/')
-        console.log(response)
+        this.getProfileData()
 
         this.$nextTick(() => {
             window.addEventListener('resize', this.onResize)
@@ -238,6 +238,8 @@ export default {
         window.removeEventListener('resize', this.onResize)
     },
     methods: {
+        ...mapActions('profile', ['getProfileData']),
+        ...mapGetters('profile', ['getUserData']),
         changeScreenMobile: function(type) {
             this.screenMobile = type
         },
@@ -250,7 +252,7 @@ export default {
             if (this.windowWidth > 768) {
                 this.commonHeight = this.$refs.profile.clientHeight + 'px'
             }
-        },
+        }
     },
 }
 </script>
