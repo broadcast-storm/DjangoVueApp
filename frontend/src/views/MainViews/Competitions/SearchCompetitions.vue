@@ -6,8 +6,8 @@
                 <p>Поиск соперника</p>
             </div>
             <div class="search__input">
-                <input type="text" placeholder="" v-model="user" />
-                <p class="input__hint">Имя Фамилия</p>
+                <input v-model="user" type="text" placeholder="Имя Фамилия" />
+                <!-- <p class="input__hint">Имя Фамилия</p> -->
                 <SearchSvg class="input__svg" />
             </div>
         </div>
@@ -42,7 +42,7 @@
                     </div>
                 </div>
             </div>
-            <div v-on:click="openWindow()" class="competition-button">
+            <div class="competition-button" @click="openWindow()">
                 <p>Начать соревнование</p>
             </div>
         </div>
@@ -53,8 +53,8 @@
                 <div class="window-title">
                     <h2>Новое соревнование</h2>
                     <ExitSvg
-                        v-on:click="openWindow()"
                         class="window-exit__button"
+                        @click="openWindow()"
                     />
                 </div>
                 <div class="window-body">
@@ -75,11 +75,11 @@ import SearchSvg from '@/mocks/Vector.svg'
 import ExitSvg from '@/mocks/Exit.svg'
 
 export default {
+    name: 'Competitions',
     components: {
         SearchSvg,
         ExitSvg,
     },
-    name: 'Competitions',
     props: {},
     data() {
         return {

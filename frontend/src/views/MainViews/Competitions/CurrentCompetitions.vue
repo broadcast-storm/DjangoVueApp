@@ -80,8 +80,8 @@
 
 <script>
 export default {
-    components: {},
     name: 'Competitions',
+    components: {},
     props: {},
     data() {
         return {
