@@ -27,8 +27,37 @@ const routes = [
                 path: routesList.competitionsPage.path,
                 components: {
                     'main-router': () =>
-                        import('@/views/MainViews/Competitions.vue'),
+                        import(
+                            '@/views/MainViews/Competitions/Competitions.vue'
+                        ),
                 },
+                children: [
+                    {
+                        path:
+                            routesList.competitionsPage.children
+                                .SearchCompetitions.path,
+                        components: {
+                            'competition-router': () =>
+                                import(
+                                    '@/views/MainViews/Competitions/SearchCompetitions.vue'
+                                ),
+                        },
+                    },
+                    {
+                        path:
+                            routesList.competitionsPage.children
+                                .CurrentCompetitions.path,
+                        components: {
+                            'competition-router': () =>
+                                import(
+                                    '@/views/MainViews/Competitions/CurrentCompetitions.vue'
+                                ),
+                        },
+                        props: {
+                            'competition-router': true,
+                        },
+                    },
+                ],
                 meta: {
                     requiersAuthentication: true,
                 },
