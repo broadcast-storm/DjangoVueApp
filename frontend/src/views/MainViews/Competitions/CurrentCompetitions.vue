@@ -12,7 +12,7 @@
                 <div class="profile">
                     <div class="profile__image">
                         <img
-                            src="@/mocks/UserPhoto.jpg"
+                            src="@/assets/img/competitions/UserPhoto.jpg"
                             class="user-image"
                             alt=""
                         />
@@ -46,7 +46,7 @@
                 <div class="profile">
                     <div class="profile__image">
                         <img
-                            src="@/mocks/UserPhoto.jpg"
+                            src="@/assets/img/competitions/UserPhoto.jpg"
                             class="user-image"
                             alt=""
                         />
@@ -99,6 +99,29 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@font-face {
+font-family: 'HelveticaNeueCyr';
+src: url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-Light.woff') format('woff'),
+url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-Medium.woff') format('woff'),
+url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-UltraLightItalic.woff') format('woff'),
+url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-Black.woff') format('woff'),
+url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-BlackItalic.woff') format('woff'),
+url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-Bold.woff') format('woff'),
+url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-BoldItalic.woff') format('woff'),
+url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-Heavy.woff') format('woff'),
+url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-HeavyItalic.woff') format('woff'),
+url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-Italic.woff') format('woff'),
+url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-Light.woff') format('woff'),
+url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-LightItalic.woff') format('woff'),
+url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-Medium.woff') format('woff'),
+url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-MediumItalic.woff') format('woff'),
+url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-Roman.woff') format('woff'),
+url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-Thin.woff') format('woff'),
+url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-ThinItalic.woff') format('woff'),
+url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-UltraLight.woff') format('woff'),
+
+
+}
 .competition-wrapper {
     display: flex;
     flex-direction: column;
@@ -107,6 +130,9 @@ export default {
     width: 100%;
     overflow-y: auto;
     height: calc(100vh - 90px);
+}
+.search__input {
+    width: 650px;
 }
 .search__input input {
     border: 0;
@@ -117,10 +143,48 @@ export default {
 }
 .search__item {
     color: #545969;
+    font-family: HelveticaNeueCyr;
+    font-style: normal;
+    font-weight: 550;
+    font-size: 18px;
+    line-height: 18px;
+    color: #545969;
 }
 .search__input input:focus ~ .input__hint {
     opacity: 0;
     transition: 0.3s;
+}
+.search__input input::-webkit-input-placeholder {
+    font-family: HelveticaNeueCyr;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 18px;
+    color: #d8dcea;
+}
+.search__input input::-moz-placeholder {
+    font-family: HelveticaNeueCyr;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 18px;
+    color: #d8dcea;
+}
+.search__input input:-moz-placeholder {
+    font-family: HelveticaNeueCyr;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 18px;
+    color: #d8dcea;
+}
+.search__input input:-ms-input-placeholder {
+    font-family: HelveticaNeueCyr;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 18px;
+    color: #d8dcea;
 }
 .competition__search,
 .competition-profile {
@@ -141,7 +205,8 @@ export default {
 .input__svg {
     position: absolute;
     z-index: 1;
-    right: calc(100% - 51%);
+    top: 0;
+    right: 0;
     width: 23px;
 }
 .input__svg:hover {
@@ -172,14 +237,28 @@ export default {
     min-height: 50%;
 }
 .information__description p {
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
     color: #1a2740;
 }
 .information__name h3 {
+    font-family: HelveticaNeueCyr;
+    font-style: normal;
+    font-weight: 550;
+    font-size: 24px;
+    line-height: 24px;
     color: #545969;
-    font-weight: bold;
 }
 .information__name p {
-    color: #7d849a;
+    font-family: HelveticaNeueCyr;
+    font-style: normal;
+    font-weight: 550;
+    font-size: 18px;
+    line-height: 18px;
+    margin-top: 10px;
+    color: #7D849A;
 }
 .competition-button {
     display: flex;
@@ -191,12 +270,17 @@ export default {
     width: 449px;
     height: 39px;
     margin-top: 20px;
-}
-.competition-button p {
     color: white;
-    font-weight: bold;
+    font-size: 24px;
+}
+button {
+    border: 0;
+    outline: none;
 }
 .competition-button:hover {
+    cursor: pointer;
+}
+button:hover {
     cursor: pointer;
 }
 .competition-window {
@@ -209,6 +293,7 @@ export default {
     background-color: rgba(0, 0, 0, 0.65);
     width: 100%;
     height: 100%;
+    z-index: 999999;
 }
 .window {
     display: flex;
@@ -255,10 +340,8 @@ export default {
     border-radius: 8px;
     width: 249px;
     height: 34px;
-}
-.window-button p {
-    color: white;
     font-size: 24px;
+    color: white;
 }
 .desctiption-bold {
     font-weight: bold;
