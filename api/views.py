@@ -113,10 +113,18 @@ def refresh_token(request):
     return Response({'access_token': access_token})
 
 
-# моя бяка
-def createCompetition(request):
-    
-# /моя бяка
+
+# Привязка страниц
+
+def competition():
+    return 
+
+def nameFunction():
+    return 
+
+
+# /Привязка страниц
+
 
 
 class StatisticsViewSet(viewsets.ModelViewSet):
