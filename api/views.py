@@ -13,7 +13,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from .serializers import JobPositionSerializer, DivisionSerializer, \
     UserProfileSerializer, StatisticsSerializer, TaskSerializer, TaskUserStatusSerializer, WeeklyTaskSerializer, \
     TeamSerializer
-from .models import JobPosition, Division, Statistics, UserProfile, Task, WeeklyTask, TaskUserStatus, Team
+from .models import JobPosition, Division, Statistics, UserProfile, Task, WeeklyTask, TaskUserStatus, Team, Competition
 
 
 class JobPositionViewSet(viewsets.ModelViewSet):
@@ -111,6 +111,12 @@ def refresh_token(request):
 
     access_token = generate_access_token(user)
     return Response({'access_token': access_token})
+
+
+# моя бяка
+def createCompetition(request):
+    
+# /моя бяка
 
 
 class StatisticsViewSet(viewsets.ModelViewSet):

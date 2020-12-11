@@ -11,7 +11,7 @@ from taggit.managers import TaggableManager
 
 class JobPosition(models.Model):
     title = models.CharField(max_length=120, verbose_name="Название должности", unique=True)
-    description = models.CharField(max_length=1000, verbose_name="Описание трудовых обязанностей")
+    description = models.TextField(verbose_name="Описание трудовых обязанностей")
 
     class Meta:
         verbose_name = "должность"
@@ -23,7 +23,7 @@ class JobPosition(models.Model):
 
 class Division(models.Model):
     title = models.CharField(max_length=120, verbose_name="Подразделение", unique=True)
-    description = models.CharField(max_length=1000, verbose_name="Описание подразделения сотрудников")
+    description = models.TextField(verbose_name="Описание подразделения сотрудников")
 
     class Meta:
         verbose_name = "подразделение"
@@ -73,7 +73,7 @@ class UserProfileManager(BaseUserManager):
 class UserProfile(AbstractBaseUser):
     ADMIN = 'admin'
     EXPERT = 'expert'
-    EMPLOYEE = 'employee'
+    EMPLOYEE = 'employee' # maybe u wanted to write employer?
     GAMEMASTER = 'gamemaster'
     USER_TYPE_CHOICES = (
         (ADMIN, 'Администратор'),
@@ -179,7 +179,7 @@ class Team(models.Model):
     # IDs
 
     title = models.CharField(max_length=120, verbose_name="Название команды")
-    description = models.CharField(max_length=1000, verbose_name="Описание команды")
+    description = models.TextField(verbose_name="Описание команды")
     maxUsersCount = models.IntegerField(default=5, verbose_name="Максимальное кол-во участников")
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -250,7 +250,7 @@ class WeeklyTask(models.Model):
                                   default=EASY, verbose_name="Сложность")
     taskType = models.CharField(max_length=20, choices=TASK_TYPE_CHOICES, default=DAILY, verbose_name="Тип задания")
     title = models.CharField(max_length=200, unique=True, verbose_name="Название задания")
-    description = models.CharField(max_length=1000, verbose_name="Описание задания")
+    description = models.TextField(verbose_name="Описание задания")
     subTasksCount = models.IntegerField(default=0, verbose_name="Кол-во доп заданий")
     isTeamTask = models.BooleanField(default=False, verbose_name="Групповое задание")
     tags = TaggableManager()
@@ -335,7 +335,7 @@ class Task(models.Model):
                                   default=EASY, verbose_name="Сложность")
     taskType = models.CharField(max_length=20, choices=TASK_TYPE_CHOICES, default=DAILY, verbose_name="Тип задания")
     title = models.CharField(max_length=200, unique=True, verbose_name="Название задания")
-    description = models.CharField(max_length=1000, verbose_name="Описание задания")
+    description = models.TextField(verbose_name="Описание задания")
     subTasksCount = models.IntegerField(default=0, verbose_name="Кол-во доп заданий")
     isTeamTask = models.BooleanField(default=False, verbose_name="Групповое задание")
     tags = TaggableManager()
@@ -408,7 +408,7 @@ class MainQuest(models.Model):
     difficulty = models.CharField(max_length=20, choices=DIFFICULTY_TYPE_CHOICES,
                                   default=EASY, verbose_name="Сложность")
     title = models.CharField(max_length=120)
-    description = models.CharField(max_length=1000)
+    description = models.TextField()
     deadline = models.IntegerField(default=0)
     accessLevel = models.IntegerField(default=0)
     tasksCount = models.IntegerField(default=0)
@@ -525,7 +525,7 @@ class Achievement(models.Model):
     # IDs
 
     title = models.CharField(max_length=120, verbose_name="Название ачивки")
-    description = models.CharField(max_length=1000, verbose_name="Описание ачивки")
+    description = models.TextField(verbose_name="Описание ачивки")
     image = models.ImageField(verbose_name="Картинка ачивки")
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -628,7 +628,7 @@ class AchieveRequirenmentStatus(models.Model):
 
 class QuestionTheme(models.Model):
     title = models.CharField(max_length=120, verbose_name="Название тематики")
-    description = models.CharField(max_length=1000, verbose_name="Описание тематики")
+    description = models.TextField(verbose_name="Описание тематики")
 
     def __str__(self):
         return str(self.title)
@@ -670,7 +670,7 @@ class Question(models.Model):
                                   default=ONE_CHOICE, verbose_name="Тип ответа")
 
     title = models.CharField(max_length=120, verbose_name="Вопрос")
-    description = models.CharField(max_length=1000, verbose_name="Описание вопроса", blank=True, null=True)
+    description = models.TextField(verbose_name="Описание вопроса", blank=True, null=True)
     image = models.ImageField(verbose_name="Картинка для вопроса", blank=True, null=True)
     tags = TaggableManager()
 
@@ -693,7 +693,7 @@ class Answer(models.Model):
     # IDs
 
     text = models.CharField(max_length=120, verbose_name="Ответ", )
-    description = models.CharField(max_length=1000, verbose_name="Доп описание ответа", blank=True, null=True)
+    description = models.TextField(verbose_name="Доп описание ответа", blank=True, null=True)
     image = models.ImageField(verbose_name="Картинка, дополняющая ответ", blank=True, null=True)
     isCorrect = models.BooleanField(default=False, verbose_name="Правильный ответ")
 
@@ -714,7 +714,7 @@ class Test(models.Model):
     # IDs
 
     title = models.CharField(max_length=120, verbose_name="Название теста")
-    description = models.CharField(max_length=1000, verbose_name="Описание теста")
+    description = models.TextField(verbose_name="Описание теста")
     pointsToComplete = models.IntegerField(default=10, verbose_name="Кол-во баллов для зачета")
 
     canLeave = models.BooleanField(default=True, verbose_name="Можно покидать страницу теста")
@@ -896,7 +896,7 @@ class RequirementsToComplete(models.Model):
 
 class ProductCategory(models.Model):
     title = models.CharField(max_length=120, verbose_name="Название товара")
-    description = models.CharField(max_length=1000, verbose_name="Описание товара")
+    description = models.TextField(verbose_name="Описание товара")
 
     def __str__(self):
         return str(self.title)
@@ -914,7 +914,7 @@ class Product(models.Model):
     # IDs
 
     title = models.CharField(max_length=120, verbose_name="Название товара")
-    description = models.CharField(max_length=1000, verbose_name="Описание товара")
+    description = models.TextField(verbose_name="Описание товара")
     count = models.IntegerField(default=0, verbose_name="Кол-во товара")
     photo = models.ImageField(verbose_name="Фото товара")
 

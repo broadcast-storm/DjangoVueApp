@@ -10,16 +10,6 @@ const routesList = {
     competitionsPage: {
         path: '/competitions',
         header: 'Соревнования',
-        children: {
-            SearchCompetitions: {
-                path: '',
-                header: 'Соревнования',
-            },
-            CurrentCompetitions: {
-                path: 'versus',
-                header: 'Соревнования',
-            },
-        },
     },
     statisticsPage: {
         path: '/statistics',
