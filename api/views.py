@@ -113,6 +113,18 @@ def refresh_token(request):
     return Response({'access_token': access_token})
 
 
+# Привязка страниц
+
+def compitition():
+    return 
+
+def nameFunction():
+    
+
+
+# /Привязка страниц
+
+
 class StatisticsViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     serializer_class = StatisticsSerializer
