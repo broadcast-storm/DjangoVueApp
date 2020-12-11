@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import JobPositionViewSet, DivisionViewSet, UserProfileViewSet, StatisticsViewSet, \
-    TaskViewSet, WeeklyTaskViewSet, TeamsViewSet, login, refresh_token, logout, compitition, 
+                   TaskViewSet, WeeklyTaskViewSet, TeamsViewSet, login, refresh_token, logout, competition, 
 
 router = DefaultRouter()
 router.register(r'job-positions', JobPositionViewSet)
@@ -18,6 +18,6 @@ urlpatterns = [
     path('refresh-token', refresh_token, name='refresh-token'),
     path('logout', logout, name='logout'),
     path('competition', competition, name = 'competition'),
-    path('competition/currentcompetitions', currentcompetitions, name = 'currentcompetitions')
+    # path('competition/currentcompetitions', currentcompetitions, name = 'currentcompetitions')
     # path('searchcompetitions')
 ]

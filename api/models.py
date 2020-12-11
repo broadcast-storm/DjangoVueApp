@@ -73,7 +73,7 @@ class UserProfileManager(BaseUserManager):
 class UserProfile(AbstractBaseUser):
     ADMIN = 'admin'
     EXPERT = 'expert'
-    EMPLOYEE = 'employee'
+    EMPLOYEE = 'employee' # maybe u wanted to write employer?
     GAMEMASTER = 'gamemaster'
     USER_TYPE_CHOICES = (
         (ADMIN, 'Администратор'),
