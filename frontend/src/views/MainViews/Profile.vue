@@ -1,8 +1,7 @@
 <template>
     <div>
         <div class="profile-wrapper">
-            {{ user }}
-            <!-- <div class="column-wrap wrap__profile">
+            <div class="column-wrap wrap__profile">
                 <div ref="profile" class="profile">
                     <div class="profile__main-info">
                         <div class="profile__main-info__photo">
@@ -20,9 +19,9 @@
                                 </span>
                             </h2>
                             <p class="text__department">
-                                {{ user.department }}
+                                {{ user.division }}
                             </p>
-                            <p class="text__bio">{{ user.bio }}</p>
+                            <p class="text__bio">{{ user.description }}</p>
                             <p class="text__level">
                                 Текущий уровень
                                 <span class="text__level__count">
@@ -36,19 +35,19 @@
                         <div class="profile__stats-item">
                             <CoinSvg class="profile__stats-icon" />
                             <span class="profile__stats-value coins">{{
-                                user.stats['coins']
+                                user.money
                             }}</span>
                         </div>
                         <div class="profile__stats-item">
                             <LightningSvg class="profile__stats-icon" />
                             <span class="profile__stats-value lightnings">{{
-                                user.stats['lightnings']
+                                user.energy
                             }}</span>
                         </div>
                         <div class="profile__stats-item">
                             <HeartSvg class="profile__stats-icon" />
                             <span class="profile__stats-value hearts">{{
-                                user.stats['hearts']
+                                user.health
                             }}</span>
                         </div>
                     </div>
@@ -56,19 +55,19 @@
                         <div class="profile__task">
                             <p class="profile__task-title">Основной квест:</p>
                             <h3 class="profile__task-name">
-                                {{ user.task.taskname }}
+                                Название основного квеста
                             </h3>
                             <ProgressBar
-                                :percent="user.task.progress"
+                                :percent="50"
                                 class="progress-bar"
                             />
                             <p class="profile__task-deadline">
                                 <span class="progress">
                                     <span class="gray-txt">Прогресс:</span
-                                    >{{ user.task.progress }}%
+                                    >50%
                                 </span>
                                 <span class="gray-txt">Срок:</span> до
-                                {{ date }}
+                                21.01.2021
                             </p>
                         </div>
                         <table class="profile__props">
@@ -169,41 +168,41 @@
                         </div>
                     </div>
                 </div>
-            </div> -->
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-/* import CoinSvg from '@/assets/icons/coin.svg'
+import CoinSvg from '@/assets/icons/coin.svg'
 import HeartSvg from '@/assets/icons/heart.svg'
 import LightningSvg from '@/assets/icons/lightning.svg'
 import ProgressBar from '@/components/ProgressBar.vue'
-import Task from '@/components/Task.vue' */
+import Task from '@/components/Task.vue'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
     name: 'Profile',
     components: {
-        /* CoinSvg,
+        CoinSvg,
         HeartSvg,
         LightningSvg,
         ProgressBar,
-        Task, */
+        Task,
     },
     data() {
         return {
             commonHeight: '',
             windowWidth: window.innerWidth,
             screenMobile: window.innerWidth > 768 ? 'all' : 'tasks',
-            tasks: Object.assign({}, this.$store.getters.getTasks),
+            tasks: Object.assign({}, {}),
         }
     },
     computed: {
         user() {
             return this.getUserData()
         },
-        date() {
+        /* date() {
             const date = this.getUserData.task.deadline
 
             let month = date.getMonth() + 1
@@ -212,7 +211,7 @@ export default {
             days = days < 10 ? '0' + days : days
 
             return days + '.' + month + '.' + date.getFullYear()
-        },
+        }, */
     },
     watch: {
         windowWidth(newWidth) {
@@ -307,7 +306,7 @@ export default {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 25px 20px 0 20px;
+            padding: 25px 20px 30px 20px;
 
             &__main-info {
                 display: flex;
