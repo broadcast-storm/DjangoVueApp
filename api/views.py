@@ -72,6 +72,7 @@ def login(request):
 
     return response
 
+
 @api_view(['POST'])
 @permission_classes([AllowAny])
 @ensure_csrf_cookie
@@ -80,6 +81,7 @@ def logout(request):
     response.delete_cookie('refreshtoken')
 
     return response
+
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -113,18 +115,17 @@ def refresh_token(request):
     return Response({'access_token': access_token})
 
 
-
 # Привязка страниц
 
 def competition():
-    return 
+    return
+
 
 def nameFunction():
-    return 
+    return
 
 
 # /Привязка страниц
-
 
 
 class StatisticsViewSet(viewsets.ModelViewSet):
