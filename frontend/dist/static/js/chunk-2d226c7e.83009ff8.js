@@ -1,2 +1,0 @@
-(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d226c7e"],{e9b6:function(e,n,t){"use strict";t.r(n);var c=function(){var e=this,n=e.$createElement,t=e._self._c||n;return t("div",[e._v("Контент Соревнований")])},o=[],s={name:"Competitions",props:{}},i=s,p=t("2877"),r=Object(p["a"])(i,c,o,!1,null,"61b24586",null);n["default"]=r.exports}}]);
-//# sourceMappingURL=chunk-2d226c7e.83009ff8.js.map
