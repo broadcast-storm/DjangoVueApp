@@ -19,9 +19,10 @@ const mutations = {
     [AUTH_REFRESH_REQUEST]: state => {
         state.tokenStatus = 'refreshing'
     },
-    [AUTH_SUCCESS]: (state, { accessToken, csrfToken }) => {
+    [AUTH_SUCCESS]: (state, { accessToken, user, csrfToken }) => {
         state.tokenStatus = 'success'
         state.accessToken = accessToken
+        state.user = user
         state.csrfToken = csrfToken
     },
     [AUTH_REFRESH_SUCCESS]: (state, { accessToken }) => {

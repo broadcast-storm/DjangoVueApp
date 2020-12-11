@@ -1,5 +1,5 @@
 const getters = {
-    getUserData: state => state.userData
+    getUserTasks: state => state.taskData,
 }
 
 export default getters

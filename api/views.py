@@ -53,6 +53,7 @@ def login(request):
         raise exceptions.AuthenticationFailed('wrong password')
 
     serialized_user = UserProfileSerializer(user).data
+    # serialized_user['division'] = str(user.division)
 
     new_access_token = generate_access_token(user)
     new_refresh_token = generate_refresh_token(user)

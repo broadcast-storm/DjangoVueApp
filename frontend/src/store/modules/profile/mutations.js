@@ -1,10 +1,7 @@
 const mutations = {
-    SET_USER_DATA: (state, { user }) => {
-        state.userData = user
-    } ,
-    /* SET_USER_TASKS: (state, { tasks }) => {
-        state.tasks = tasks
-    }, */
+    SET_USER_TASKS: (state, { tasks }) => {
+        state.tasksData = tasks
+    },
 }
 
 export default mutations

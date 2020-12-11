@@ -24,6 +24,7 @@ const actions = {
             })
             commit(AUTH_SUCCESS, {
                 accessToken: response.data.access_token,
+                user: response.data.user,
                 csrfToken: getCookie('csrftoken'),
             })
             commit(FIRST_AUTH_REQUEST_SUCCESS)
@@ -42,7 +43,7 @@ const actions = {
     [AUTH_REFRESH_REQUEST]: async ({ commit, state }) => {
         try {
             commit(AUTH_REFRESH_REQUEST)
-            const response = await AXIOS_YG_API.post('/api/refresh-token')
+            const response = await AXIOS_YG_API.post('/api/refresh-token/')
             commit(AUTH_REFRESH_SUCCESS, {
                 accessToken: response.data.access_token,
             })

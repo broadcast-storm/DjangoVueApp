@@ -15,6 +15,8 @@ class DivisionSerializer(serializers.ModelSerializer):
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    division    = serializers.SlugRelatedField(slug_field='title', queryset=Division.objects.all())
+    jobPosition = serializers.SlugRelatedField(slug_field='title', queryset=JobPosition.objects.all())
     class Meta:
         model = UserProfile
         fields = ['id', 'username', 'email', "name", "surname", "patronymic",

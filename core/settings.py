@@ -35,7 +35,7 @@ REFRESH_TOKEN_EXPIRES = env("REFRESH_TOKEN_EXPIRES", default=14)
 DEBUG = env('DEBUG')
 # DEBUG = True
 
-ALLOWED_HOSTS = ['yandex-gamification.std-884.ist.mospolytech.ru', '127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 

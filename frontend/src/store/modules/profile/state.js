@@ -1,5 +1,4 @@
 const state = {
-    userData: {},
     tasksData: [],
 }
 

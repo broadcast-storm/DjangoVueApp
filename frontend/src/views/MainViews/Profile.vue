@@ -212,7 +212,7 @@ export default {
             days = days < 10 ? '0' + days : days
 
             return days + '.' + month + '.' + date.getFullYear()
-        }
+        },
     },
     watch: {
         windowWidth(newWidth) {
@@ -239,7 +239,7 @@ export default {
     },
     methods: {
         ...mapActions('profile', ['getProfileData']),
-        ...mapGetters('profile', ['getUserData']),
+        ...mapGetters('tokens', ['getUserData']),
         changeScreenMobile: function(type) {
             this.screenMobile = type
         },
@@ -252,7 +252,7 @@ export default {
             if (this.windowWidth > 768) {
                 this.commonHeight = this.$refs.profile.clientHeight + 'px'
             }
-        }
+        },
     },
 }
 </script>
