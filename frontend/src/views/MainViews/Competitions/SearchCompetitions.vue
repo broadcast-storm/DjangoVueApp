@@ -66,7 +66,6 @@
                 <div class="window-body">
                     <p>Введите название соревнования</p>
                     <input
-                        class="window-body__input"
                         type="text"
                         class="window__input"
                     />
@@ -348,6 +347,7 @@ url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-UltraLight.woff') format(
 		&:hover {
     	cursor: pointer;
 		}
+	}
 }
 .window-body {
 	  display: flex;

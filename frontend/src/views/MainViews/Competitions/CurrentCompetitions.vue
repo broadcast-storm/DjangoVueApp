@@ -359,6 +359,7 @@ export default {
 		&:hover {
     	cursor: pointer;
 		}
+	}
 }
 .window-body {
 	  display: flex;
