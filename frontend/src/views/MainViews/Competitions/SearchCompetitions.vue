@@ -6,7 +6,12 @@
                 <p>Поиск соперника</p>
             </div>
             <div class="search__input">
-                <input type="text" placeholder="Имя и Фамилия" v-model="user" />
+                <input
+                    class="input__item"
+                    type="text"
+                    placeholder="Имя и Фамилия"
+                    v-model="user"
+                />
                 <SearchSvg class="input__svg" />
             </div>
         </div>
@@ -23,18 +28,20 @@
                 </div>
                 <div class="profile__information">
                     <div class="information__name">
-                        <h3>Джонатан Смирнов</h3>
-                        <p>состоит в команде Пирожков</p>
+                        <h3 class="information__title">Джонатан Смирнов</h3>
+                        <p class="information__subtitle">
+                            состоит в команде Пирожков
+                        </p>
                     </div>
                     <div class="information__description">
-                        <p>
+                        <p class="information__indicator">
                             Продуктивность
                             <span class="desctiption-bold">85%</span>
                         </p>
-                        <p>
+                        <p class="information__indicator">
                             Качество <span class="desctiption-bold">85%</span>
                         </p>
-                        <p>
+                        <p class="information__indicator">
                             Текущий уровень
                             <span class="desctiption-bold">85%</span>
                         </p>
@@ -58,11 +65,13 @@
                 </div>
                 <div class="window-body">
                     <p>Введите название соревнования</p>
-                    <input type="text" class="window__input" />
+                    <input
+                        class="window-body__input"
+                        type="text"
+                        class="window__input"
+                    />
                 </div>
-                <button class="window-button">
-                    Создать
-                </button>
+                <button class="window-button">Создать</button>
             </div>
         </div>
         <!-- КОНЕЦ СОРЕВНОВАНИЯ -->
@@ -88,7 +97,7 @@ export default {
         }
     },
     methods: {
-        openWindow: function() {
+        openWindow: function () {
             this.status = !this.status
         },
     },
@@ -117,10 +126,9 @@ url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-Thin.woff') format('woff'
 url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-ThinItalic.woff') format('woff'),
 url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-UltraLight.woff') format('woff'),
 
-
 }
 .competition-wrapper {
-    display: flex;
+	  display: flex;
     flex-direction: column;
     margin-top: 90px;
     flex-wrap: wrap;
@@ -128,137 +136,166 @@ url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-UltraLight.woff') format(
     overflow-y: auto;
     height: calc(100vh - 90px);
 }
-.search__input {
-    width: 650px;
+.competition-header {
+	  margin-left: 20px;
+    margin-top: 40px;
 }
-.search__input input {
-    border: 0;
-    width: 650px;
-    height: 33px;
-    padding-left: 30px;
-    outline: none;
-}
-.search__item {
+.header {
+		&__text {
+		display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 10vh;
     color: #545969;
-    font-family: HelveticaNeueCyr;
-    font-style: normal;
-    font-weight: 550;
-    font-size: 18px;
-    line-height: 18px;
-    color: #545969;
+		}
 }
-.search__input input:focus ~ .input__hint {
-    opacity: 0;
-    transition: 0.3s;
+.competition-content {
+	  display: flex;
+    align-items: center;
+    justify-content: space-between;
+		width: 85%;
+		margin-left: 20px;
+    margin-top: 40px;
 }
-.search__input input::-webkit-input-placeholder {
-    font-family: HelveticaNeueCyr;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 18px;
-    line-height: 18px;
-    color: #d8dcea;
+.content {
+		&__block {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			width: 502px;
+			height: 287px;
+			border: 1px solid #545969;
+		}
+
+		&__split {
+			font-weight: bold;
+			font-size: 48px;
+			color: #545969;
+		}
 }
-.search__input input::-moz-placeholder {
-    font-family: HelveticaNeueCyr;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 18px;
-    line-height: 18px;
-    color: #d8dcea;
+.profile {
+	display: flex;
+
+	&__information {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+		margin-left: 20px;
+	}
 }
-.search__input input:-moz-placeholder {
-    font-family: HelveticaNeueCyr;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 18px;
-    line-height: 18px;
-    color: #d8dcea;
+.user-image {
+	width: 171px;
 }
-.search__input input:-ms-input-placeholder {
-    font-family: HelveticaNeueCyr;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 18px;
-    line-height: 18px;
-    color: #d8dcea;
+.information {
+		&__description {
+			display: flex;
+			flex-direction: column;
+			justify-content: space-around;
+			min-height: 50%;
+		}
+		&__title {
+			font-family: HelveticaNeueCyr;
+			font-style: normal;
+			font-weight: 550;
+			font-size: 24px;
+			line-height: 24px;
+			color: #545969;
+		}
+		&__subtitle {
+			font-family: HelveticaNeueCyr;
+			font-style: normal;
+			font-weight: 550;
+			font-size: 18px;
+			line-height: 18px;
+			margin-top: 10px;
+			color: #7d849a;
+		}
+		&__indicator {
+			font-family: Helvetica;
+			font-style: normal;
+			font-weight: normal;
+			font-size: 18px;
+			color: #1a2740;
+		}
 }
-.competition__search,
+.desctiption-bold {
+	  font-weight: bold;
+    color: #1a2740;
+}
+.competition {
+		&__search {
+			margin-left: 100px;
+    	margin-top: 20px;
+		}
+}
+.search {
+
+		&__item {
+			color: #545969;
+			font-family: HelveticaNeueCyr;
+			font-style: normal;
+			font-weight: 550;
+			font-size: 18px;
+			line-height: 18px;
+			color: #545969;
+		}
+
+		&__input {
+			width: 650px;
+			position: relative;
+			margin-top: 12px;
+		}
+}
+.input {
+		&__item {
+			font-family: HelveticaNeueCyr;
+			font-style: normal;
+			font-weight: normal;
+			font-size: 18px;
+			line-height: 18px;
+			color: #d8dcea;
+			border: 0;
+			width: 650px;
+			height: 33px;
+			padding-left: 30px;
+			outline: none;
+			&:hover {
+				cursor: pointer;
+			}
+			&:focus ~ .input__hint {
+    		opacity: 0;
+    		transition: 0.3s;
+			}
+		}
+		&__svg {
+			position: absolute;
+			z-index: 1;
+			top: 0;
+			right: 0;
+			width: 23px;
+			&:hover {
+    		cursor: pointer;
+			}
+		}
+		&__hint {
+			position: absolute;
+			z-index: 1;
+			top: 8.25px;
+			left: 30px;
+			opacity: 0.21;
+		}
+}
 .competition-profile {
-    margin-left: 100px;
-    margin-top: 20px;
-}
-.search__input {
-    position: relative;
-    margin-top: 12px;
-}
-.input__hint {
-    position: absolute;
-    z-index: 1;
-    top: 8.25px;
-    left: 30px;
-    opacity: 0.21;
-}
-.input__svg {
-    position: absolute;
-    z-index: 1;
-    top: 0;
-    right: 0;
-    width: 23px;
-}
-.input__svg:hover {
-    cursor: pointer;
-}
-.competition-profile {
-    display: flex;
+	  display: flex;
     flex-direction: column;
     margin-top: 40px;
     flex-wrap: wrap;
+	  margin-left: 100px;
+    margin-top: 20px;
 }
-.profile {
-    display: flex;
-}
-.user-image {
-    width: 171px;
-}
-.profile__information {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    margin-left: 20px;
-}
-.information__description {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    min-height: 50%;
-}
-.information__description p {
-    font-family: Helvetica;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 18px;
-    color: #1a2740;
-}
-.information__name h3 {
-    font-family: HelveticaNeueCyr;
-    font-style: normal;
-    font-weight: 550;
-    font-size: 24px;
-    line-height: 24px;
-    color: #545969;
-}
-.information__name p {
-    font-family: HelveticaNeueCyr;
-    font-style: normal;
-    margin-top: 10px;
-    font-weight: 550;
-    font-size: 18px;
-    line-height: 18px;
-    color: #7D849A;
-}
+
 .competition-button {
-    display: flex;
+	  display: flex;
     justify-content: center;
     align-items: center;
     background: #26bcc2;
@@ -270,18 +307,11 @@ url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-UltraLight.woff') format(
     color: white;
     font-size: 24px;
 }
-button {
-    border: 0;
-    outline: none;
-}
 .competition-button:hover {
     cursor: pointer;
 }
-button:hover {
-    cursor: pointer;
-}
 .competition-window {
-    display: flex;
+	  display: flex;
     justify-content: center;
     align-items: center;
     position: absolute;
@@ -293,7 +323,7 @@ button:hover {
     z-index: 999999;
 }
 .window {
-    display: flex;
+	  display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
@@ -301,35 +331,36 @@ button:hover {
     background: #d8dcea;
     width: 480px;
     height: 296px;
-}
-.window__input {
-    width: 446px;
-    height: 33px;
-}
-.window-exit__button {
-    width: 12px;
-}
-.window-exit__button:hover {
-    cursor: pointer;
+		&__input {
+			width: 446px;
+    	height: 33px;
+		}
 }
 .window-title {
-    display: flex;
+	  display: flex;
     justify-content: space-between;
     align-items: center;
     width: 95%;
 }
+.window-exit {
+		&__button {
+			width: 12px;
+		&:hover {
+    	cursor: pointer;
+		}
+}
 .window-body {
-    display: flex;
+	  display: flex;
     flex-direction: column;
     justify-content: space-around;
-    height: 30%;
-}
-.window-body input {
-    border: 0;
-    outline: none;
+		height: 30%;
+		&__input {
+			border: 0;
+			outline: none;
+		}
 }
 .window-button {
-    display: flex;
+	  display: flex;
     justify-content: center;
     align-items: center;
     background: #26bcc2;
@@ -338,44 +369,11 @@ button:hover {
     width: 249px;
     height: 34px;
     font-size: 24px;
-    color: white;
-}
-.desctiption-bold {
-    font-weight: bold;
-    color: #1a2740;
-}
-
-// SPLIT
-
-.competition-header,
-.competition-content {
-    margin-left: 20px;
-    margin-top: 40px;
-}
-.competition-content {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 85%;
-}
-.header__text {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-height: 10vh;
-    color: #545969;
-}
-.content__block {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 502px;
-    height: 287px;
-    border: 1px solid #545969;
-}
-.content__split {
-    font-weight: bold;
-    font-size: 48px;
-    color: #545969;
+		color: white;
+		border: 0;
+		outline: none;
+		&:hover {
+		  cursor: pointer;
+		}
 }
 </style>
