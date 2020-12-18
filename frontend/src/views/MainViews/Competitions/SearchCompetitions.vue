@@ -59,8 +59,8 @@
                 <div class="window-title">
                     <h2>Новое соревнование</h2>
                     <ExitSvg
-                        v-on:click="openWindow()"
                         class="window-exit__button"
+                        @click="openWindow()"
                     />
                 </div>
                 <div class="window-body">
@@ -83,11 +83,11 @@ import SearchSvg from '@/assets/icons/search.svg'
 import ExitSvg from '@/assets/icons/exit.svg'
 
 export default {
+    name: 'Competitions',
     components: {
         SearchSvg,
         ExitSvg,
     },
-    name: 'Competitions',
     props: {},
     data() {
         return {
