@@ -26,10 +26,14 @@ export default {
         ExitSvg,
     },
     name: 'Modal',
-    props: {},
+    props: {
+        status: {
+            default: false,
+            type: Boolean,
+        },
+    },
     data() {
         return {
-            status: false,
             test_page: false,
             user: '',
         }
@@ -67,6 +71,7 @@ export default {
     &__input {
         width: 446px;
         height: 33px;
+        padding-left: 20px;
     }
 }
 .window-title {
