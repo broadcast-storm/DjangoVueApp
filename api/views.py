@@ -13,7 +13,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from .serializers import JobPositionSerializer, DivisionSerializer, \
     UserProfileSerializer, StatisticsSerializer, TaskSerializer, TaskUserStatusSerializer, WeeklyTaskSerializer, \
     TeamSerializer
-from .models import JobPosition, Division, Statistics, UserProfile, Task, WeeklyTask, TaskUserStatus, Team
+from .models import JobPosition, Division, Statistics, UserProfile, Task, WeeklyTask, TaskUserStatus, Team, Competition
 
 
 class JobPositionViewSet(viewsets.ModelViewSet):
@@ -72,6 +72,7 @@ def login(request):
 
     return response
 
+
 @api_view(['POST'])
 @permission_classes([AllowAny])
 @ensure_csrf_cookie
@@ -80,6 +81,7 @@ def logout(request):
     response.delete_cookie('refreshtoken')
 
     return response
+
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -111,6 +113,19 @@ def refresh_token(request):
 
     access_token = generate_access_token(user)
     return Response({'access_token': access_token})
+
+
+# Привязка страниц
+
+def competition():
+    return
+
+
+def nameFunction():
+    return
+
+
+# /Привязка страниц
 
 
 class StatisticsViewSet(viewsets.ModelViewSet):

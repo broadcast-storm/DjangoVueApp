@@ -63,12 +63,12 @@ import SearchSvg from '@/assets/icons/search.svg'
 import ModalCompetitions from '@/components/ModalCompetitions'
 
 export default {
+    name: 'Competitions',
     components: {
         SearchSvg,
         ModalCompetitions,
         //ExitSvg,
     },
-    name: 'Competitions',
     props: {},
     data() {
         return {
