@@ -53,38 +53,20 @@
             </button>
         </div>
         <!-- КОНЕЦ ПОИСКА -->
-        <!-- НАЧАЛО ОКНО ДЛЯ СОЗДАНИЯ СОРЕВНОВАНИЯ -->
-        <div v-if="status" class="competition-window">
-            <div class="window">
-                <div class="window-title">
-                    <h2>Новое соревнование</h2>
-                    <ExitSvg
-                        v-on:click="openWindow()"
-                        class="window-exit__button"
-                    />
-                </div>
-                <div class="window-body">
-                    <p>Введите название соревнования</p>
-                    <input
-                        type="text"
-                        class="window__input"
-                    />
-                </div>
-                <button class="window-button">Создать</button>
-            </div>
-        </div>
-        <!-- КОНЕЦ СОРЕВНОВАНИЯ -->
+				<ModalCompetitions />
     </div>
 </template>
 
 <script>
 import SearchSvg from '@/assets/icons/search.svg'
-import ExitSvg from '@/assets/icons/exit.svg'
+//import ExitSvg from '@/assets/icons/exit.svg'
+import ModalCompetitions from '@/components/ModalCompetitions'
 
 export default {
     components: {
-        SearchSvg,
-        ExitSvg,
+				SearchSvg,
+				ModalCompetitions,
+        //ExitSvg,
     },
     name: 'Competitions',
     props: {},
@@ -104,28 +86,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@font-face {
-font-family: 'HelveticaNeueCyr';
-src: url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-Light.woff') format('woff'),
-url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-Medium.woff') format('woff'),
-url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-UltraLightItalic.woff') format('woff'),
-url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-Black.woff') format('woff'),
-url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-BlackItalic.woff') format('woff'),
-url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-Bold.woff') format('woff'),
-url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-BoldItalic.woff') format('woff'),
-url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-Heavy.woff') format('woff'),
-url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-HeavyItalic.woff') format('woff'),
-url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-Italic.woff') format('woff'),
-url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-Light.woff') format('woff'),
-url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-LightItalic.woff') format('woff'),
-url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-Medium.woff') format('woff'),
-url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-MediumItalic.woff') format('woff'),
-url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-Roman.woff') format('woff'),
-url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-Thin.woff') format('woff'),
-url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-ThinItalic.woff') format('woff'),
-url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-UltraLight.woff') format('woff'),
-
-}
 .competition-wrapper {
 	  display: flex;
     flex-direction: column;
@@ -193,7 +153,7 @@ url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-UltraLight.woff') format(
 			min-height: 50%;
 		}
 		&__title {
-			font-family: HelveticaNeueCyr;
+			//font-family: HelveticaNeueCyr;
 			font-style: normal;
 			font-weight: 550;
 			font-size: 24px;
@@ -201,7 +161,7 @@ url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-UltraLight.woff') format(
 			color: #545969;
 		}
 		&__subtitle {
-			font-family: HelveticaNeueCyr;
+			//font-family: HelveticaNeueCyr;
 			font-style: normal;
 			font-weight: 550;
 			font-size: 18px;
@@ -210,7 +170,7 @@ url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-UltraLight.woff') format(
 			color: #7d849a;
 		}
 		&__indicator {
-			font-family: Helvetica;
+			//font-family: Helvetica;
 			font-style: normal;
 			font-weight: normal;
 			font-size: 18px;
@@ -231,7 +191,7 @@ url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-UltraLight.woff') format(
 
 		&__item {
 			color: #545969;
-			font-family: HelveticaNeueCyr;
+			//font-family: HelveticaNeueCyr;
 			font-style: normal;
 			font-weight: 550;
 			font-size: 18px;
@@ -247,7 +207,7 @@ url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-UltraLight.woff') format(
 }
 .input {
 		&__item {
-			font-family: HelveticaNeueCyr;
+			//font-family: HelveticaNeueCyr;
 			font-style: normal;
 			font-weight: normal;
 			font-size: 18px;

@@ -99,45 +99,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@font-face {
-    font-family: 'HelveticaNeueCyr';
-    src: url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-Light.woff')
-            format('woff'),
-        url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-Medium.woff')
-            format('woff'),
-        url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-UltraLightItalic.woff')
-            format('woff'),
-        url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-Black.woff')
-            format('woff'),
-        url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-BlackItalic.woff')
-            format('woff'),
-        url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-Bold.woff')
-            format('woff'),
-        url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-BoldItalic.woff')
-            format('woff'),
-        url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-Heavy.woff')
-            format('woff'),
-        url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-HeavyItalic.woff')
-            format('woff'),
-        url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-Italic.woff')
-            format('woff'),
-        url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-Light.woff')
-            format('woff'),
-        url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-LightItalic.woff')
-            format('woff'),
-        url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-Medium.woff')
-            format('woff'),
-        url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-MediumItalic.woff')
-            format('woff'),
-        url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-Roman.woff')
-            format('woff'),
-        url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-Thin.woff')
-            format('woff'),
-        url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-ThinItalic.woff')
-            format('woff'),
-        url('~@/assets/fonts/HelveticaNeueCyr/HelveticaNeueCyr-UltraLight.woff')
-            format('woff');
-}
 .competition-wrapper {
 	  display: flex;
     flex-direction: column;
@@ -205,7 +166,7 @@ export default {
 			min-height: 50%;
 		}
 		&__title {
-			font-family: HelveticaNeueCyr;
+			//font-family: HelveticaNeueCyr;
 			font-style: normal;
 			font-weight: 550;
 			font-size: 24px;
@@ -213,7 +174,7 @@ export default {
 			color: #545969;
 		}
 		&__subtitle {
-			font-family: HelveticaNeueCyr;
+			//font-family: HelveticaNeueCyr;
 			font-style: normal;
 			font-weight: 550;
 			font-size: 18px;
@@ -222,7 +183,7 @@ export default {
 			color: #7d849a;
 		}
 		&__indicator {
-			font-family: Helvetica;
+			//font-family: Helvetica;
 			font-style: normal;
 			font-weight: normal;
 			font-size: 18px;
@@ -243,7 +204,7 @@ export default {
 
 		&__item {
 			color: #545969;
-			font-family: HelveticaNeueCyr;
+			//font-family: HelveticaNeueCyr;
 			font-style: normal;
 			font-weight: 550;
 			font-size: 18px;
@@ -259,7 +220,7 @@ export default {
 }
 .input {
 		&__item {
-			font-family: HelveticaNeueCyr;
+			//font-family: HelveticaNeueCyr;
 			font-style: normal;
 			font-weight: normal;
 			font-size: 18px;
