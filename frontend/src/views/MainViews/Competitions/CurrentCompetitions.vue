@@ -19,8 +19,12 @@
                     </div>
                     <div class="profile__information">
                         <div class="information__name">
-                            <h3 class="information__title">Александра Пушкина</h3>
-                            <p class="information__subtitle">состоит в команде ВКЦэхи</p>
+                            <h3 class="information__title">
+                                Александра Пушкина
+                            </h3>
+                            <p class="information__subtitle">
+                                состоит в команде ВКЦэхи
+                            </p>
                         </div>
                         <div class="information__description">
                             <p class="information__indicator">
@@ -54,7 +58,9 @@
                     <div class="profile__information">
                         <div class="information__name">
                             <h3 class="information__title">Джонатан Смирнов</h3>
-                            <p class="information__subtitle">состоит в команде Пирожков</p>
+                            <p class="information__subtitle">
+                                состоит в команде Пирожков
+                            </p>
                         </div>
                         <div class="information__description">
                             <p class="information__indicator">
@@ -100,7 +106,7 @@ export default {
 
 <style lang="scss" scoped>
 .competition-wrapper {
-	  display: flex;
+    display: flex;
     flex-direction: column;
     margin-top: 90px;
     flex-wrap: wrap;
@@ -109,165 +115,164 @@ export default {
     height: calc(100vh - 90px);
 }
 .competition-header {
-	  margin-left: 20px;
+    margin-left: 20px;
     margin-top: 40px;
 }
 .header {
-		&__text {
-		display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-height: 10vh;
-    color: #545969;
-		}
+    &__text {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 10vh;
+        color: #545969;
+    }
 }
 .competition-content {
-	  display: flex;
+    display: flex;
     align-items: center;
     justify-content: space-between;
-		width: 85%;
-		margin-left: 20px;
+    width: 85%;
+    margin-left: 20px;
     margin-top: 40px;
 }
 .content {
-		&__block {
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			width: 502px;
-			height: 287px;
-			border: 1px solid #545969;
-		}
+    &__block {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 502px;
+        height: 287px;
+        border: 1px solid #545969;
+    }
 
-		&__split {
-			font-weight: bold;
-			font-size: 48px;
-			color: #545969;
-		}
+    &__split {
+        font-weight: bold;
+        font-size: 48px;
+        color: #545969;
+    }
 }
 .profile {
-	display: flex;
+    display: flex;
 
-	&__information {
-		display: flex;
-		flex-direction: column;
-		justify-content: space-around;
-		margin-left: 20px;
-	}
+    &__information {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        margin-left: 20px;
+    }
 }
 .user-image {
-	width: 171px;
+    width: 171px;
 }
 .information {
-		&__description {
-			display: flex;
-			flex-direction: column;
-			justify-content: space-around;
-			min-height: 50%;
-		}
-		&__title {
-			//font-family: HelveticaNeueCyr;
-			font-style: normal;
-			font-weight: 550;
-			font-size: 24px;
-			line-height: 24px;
-			color: #545969;
-		}
-		&__subtitle {
-			//font-family: HelveticaNeueCyr;
-			font-style: normal;
-			font-weight: 550;
-			font-size: 18px;
-			line-height: 18px;
-			margin-top: 10px;
-			color: #7d849a;
-		}
-		&__indicator {
-			//font-family: Helvetica;
-			font-style: normal;
-			font-weight: normal;
-			font-size: 18px;
-			color: #1a2740;
-		}
+    &__description {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        min-height: 50%;
+    }
+    &__title {
+        //font-family: HelveticaNeueCyr;
+        font-style: normal;
+        font-weight: 550;
+        font-size: 24px;
+        line-height: 24px;
+        color: #545969;
+    }
+    &__subtitle {
+        //font-family: HelveticaNeueCyr;
+        font-style: normal;
+        font-weight: 550;
+        font-size: 18px;
+        line-height: 18px;
+        margin-top: 10px;
+        color: #7d849a;
+    }
+    &__indicator {
+        //font-family: Helvetica;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 18px;
+        color: #1a2740;
+    }
 }
 .desctiption-bold {
-	  font-weight: bold;
+    font-weight: bold;
     color: #1a2740;
 }
 .competition {
-		&__search {
-			margin-left: 100px;
-    	margin-top: 20px;
-		}
+    &__search {
+        margin-left: 100px;
+        margin-top: 20px;
+    }
 }
 .search {
+    &__item {
+        color: #545969;
+        //font-family: HelveticaNeueCyr;
+        font-style: normal;
+        font-weight: 550;
+        font-size: 18px;
+        line-height: 18px;
+        color: #545969;
+    }
 
-		&__item {
-			color: #545969;
-			//font-family: HelveticaNeueCyr;
-			font-style: normal;
-			font-weight: 550;
-			font-size: 18px;
-			line-height: 18px;
-			color: #545969;
-		}
-
-		&__input {
-			width: 650px;
-			position: relative;
-			margin-top: 12px;
-		}
+    &__input {
+        width: 650px;
+        position: relative;
+        margin-top: 12px;
+    }
 }
 .input {
-		&__item {
-			//font-family: HelveticaNeueCyr;
-			font-style: normal;
-			font-weight: normal;
-			font-size: 18px;
-			line-height: 18px;
-			color: #d8dcea;
-			border: 0;
-			width: 650px;
-			height: 33px;
-			padding-left: 30px;
-			outline: none;
-			&:hover {
-				cursor: pointer;
-			}
-			&:focus ~ .input__hint {
-    		opacity: 0;
-    		transition: 0.3s;
-			}
-		}
-		&__svg {
-			position: absolute;
-			z-index: 1;
-			top: 0;
-			right: 0;
-			width: 23px;
-			&:hover {
-    		cursor: pointer;
-			}
-		}
-		&__hint {
-			position: absolute;
-			z-index: 1;
-			top: 8.25px;
-			left: 30px;
-			opacity: 0.21;
-		}
+    &__item {
+        //font-family: HelveticaNeueCyr;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 18px;
+        line-height: 18px;
+        color: #d8dcea;
+        border: 0;
+        width: 650px;
+        height: 33px;
+        padding-left: 30px;
+        outline: none;
+        &:hover {
+            cursor: pointer;
+        }
+        &:focus ~ .input__hint {
+            opacity: 0;
+            transition: 0.3s;
+        }
+    }
+    &__svg {
+        position: absolute;
+        z-index: 1;
+        top: 0;
+        right: 0;
+        width: 23px;
+        &:hover {
+            cursor: pointer;
+        }
+    }
+    &__hint {
+        position: absolute;
+        z-index: 1;
+        top: 8.25px;
+        left: 30px;
+        opacity: 0.21;
+    }
 }
 .competition-profile {
-	  display: flex;
+    display: flex;
     flex-direction: column;
     margin-top: 40px;
     flex-wrap: wrap;
-	  margin-left: 100px;
+    margin-left: 100px;
     margin-top: 20px;
 }
 
 .competition-button {
-	  display: flex;
+    display: flex;
     justify-content: center;
     align-items: center;
     background: #26bcc2;
@@ -283,7 +288,7 @@ export default {
     cursor: pointer;
 }
 .competition-window {
-	  display: flex;
+    display: flex;
     justify-content: center;
     align-items: center;
     position: absolute;
@@ -295,7 +300,7 @@ export default {
     z-index: 999999;
 }
 .window {
-	  display: flex;
+    display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
@@ -303,37 +308,37 @@ export default {
     background: #d8dcea;
     width: 480px;
     height: 296px;
-		&__input {
-			width: 446px;
-    	height: 33px;
-		}
+    &__input {
+        width: 446px;
+        height: 33px;
+    }
 }
 .window-title {
-	  display: flex;
+    display: flex;
     justify-content: space-between;
     align-items: center;
     width: 95%;
 }
 .window-exit {
-		&__button {
-			width: 12px;
-		&:hover {
-    	cursor: pointer;
-		}
-	}
+    &__button {
+        width: 12px;
+        &:hover {
+            cursor: pointer;
+        }
+    }
 }
 .window-body {
-	  display: flex;
+    display: flex;
     flex-direction: column;
     justify-content: space-around;
-		height: 30%;
-		&__input {
-			border: 0;
-			outline: none;
-		}
+    height: 30%;
+    &__input {
+        border: 0;
+        outline: none;
+    }
 }
 .window-button {
-	  display: flex;
+    display: flex;
     justify-content: center;
     align-items: center;
     background: #26bcc2;
@@ -342,11 +347,11 @@ export default {
     width: 249px;
     height: 34px;
     font-size: 24px;
-		color: white;
-		border: 0;
-		outline: none;
-		&:hover {
-		  cursor: pointer;
-		}
+    color: white;
+    border: 0;
+    outline: none;
+    &:hover {
+        cursor: pointer;
+    }
 }
 </style>

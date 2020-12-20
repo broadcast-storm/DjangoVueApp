@@ -4,10 +4,7 @@
         <div class="window">
             <div class="window-title">
                 <h2>Новое соревнование</h2>
-                <ExitSvg
-                    v-on:click="openWindow()"
-                    class="window-exit__button"
-                />
+                <ExitSvg class="window-exit__button" @click="openWindow()" />
             </div>
             <div class="window-body">
                 <p>Введите название соревнования</p>
@@ -22,10 +19,10 @@
 <script>
 import ExitSvg from '@/assets/icons/exit.svg'
 export default {
+    name: 'Modal',
     components: {
         ExitSvg,
     },
-    name: 'Modal',
     props: {
         status: {
             default: false,
@@ -39,7 +36,7 @@ export default {
         }
     },
     methods: {
-        openWindow: function () {
+        openWindow: function() {
             this.status = !this.status
         },
     },

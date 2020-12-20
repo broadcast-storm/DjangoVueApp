@@ -7,10 +7,10 @@
             </div>
             <div class="search__input">
                 <input
+                    v-model="user"
                     class="input__item"
                     type="text"
                     placeholder="Имя и Фамилия"
-                    v-model="user"
                 />
                 <SearchSvg class="input__svg" />
             </div>
@@ -48,7 +48,7 @@
                     </div>
                 </div>
             </div>
-            <button v-on:click="openWindow()" class="competition-button">
+            <button class="competition-button" @click="openWindow()">
                 Начать соревнование
             </button>
         </div>
@@ -78,7 +78,7 @@ export default {
         }
     },
     methods: {
-        openWindow: function () {
+        openWindow: function() {
             this.status = !this.status
         },
     },
