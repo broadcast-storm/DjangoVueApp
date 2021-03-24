@@ -50,6 +50,16 @@ const routesList = {
     testsPage: {
         path: '/tests',
         header: 'Тесты',
+        children: {
+            testsList: {
+                path: '',
+                header: 'Список тестов',
+            },
+            testPage: {
+                path: 'test/:id',
+                header: 'Тест',
+            },
+        },
     },
     authPage: {
         path: '/auth',
