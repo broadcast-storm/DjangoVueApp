@@ -26,24 +26,24 @@ export default {
         ...mapGetters('tokens', ['isAuthenticated']),
     },
     watch: {
-        // firstRequestSuccess(newValue, oldValue) {
-        //     console.log(newValue, oldValue)
-        //     var self = this
-        //     var timeToRefresh =
-        //         parseInt(process.env.VUE_APP_ACCESS_TOKEN_EXPIRES) * 60 * 1000 -
-        //         30 * 1000
-        //     if (newValue && !oldValue) {
-        //         console.log(`user signed in`)
-        //         self.timerId = setTimeout(async function tick() {
-        //             await self.AUTH_REFRESH_REQUEST()
-        //             console.log(`refresh access token`)
-        //             self.timerId = setTimeout(tick, timeToRefresh)
-        //         }, timeToRefresh)
-        //     }
-        //     if (!newValue && oldValue) {
-        //         clearTimeout(this.timerId)
-        //     }
-        // },
+        firstRequestSuccess(newValue, oldValue) {
+            console.log(newValue, oldValue)
+            var self = this
+            var timeToRefresh =
+                parseInt(process.env.VUE_APP_ACCESS_TOKEN_EXPIRES) * 60 * 1000 -
+                30 * 1000
+            if (newValue && !oldValue) {
+                console.log(`user signed in`)
+                self.timerId = setTimeout(async function tick() {
+                    await self.AUTH_REFRESH_REQUEST()
+                    console.log(`refresh access token`)
+                    self.timerId = setTimeout(tick, timeToRefresh)
+                }, timeToRefresh)
+            }
+            if (!newValue && oldValue) {
+                clearTimeout(this.timerId)
+            }
+        },
     },
     async mounted() {
         await this.refreshTokenOnMount()
