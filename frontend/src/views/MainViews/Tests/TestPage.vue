@@ -1,41 +1,75 @@
 <template>
     <div class="tests-wrapper">
-        <!-- <div class="test">
+        <div v-if="testStatus" class="test">
             <div class="test__progress">
-                <button class="progress-close"><Close /></button>
-                <progress class="progress-bar" value="1" max="20"></progress>
+                <router-link class="progress-close" to="/tests"
+                    ><Close
+                /></router-link>
+                <progress
+                    class="progress-bar"
+                    :value="currentQuestionNumber + 1"
+                    :max="test.questions.length"
+                ></progress>
             </div>
-            <h2 class="test__name">Название теста</h2>
-            <h3 class="test__question-number">Вопрос 1</h3>
+            <h2 class="test__name">{{ test.name }}</h2>
+            <h3 class="test__question-number">
+                Вопрос {{ currentQuestionNumber + 1 }}
+            </h3>
             <p class="test__question-description">
-                Если случайная величина распределена по биномиальному закону, то
-                эта случайная величина является случайной величиной… типа
+                {{ test.questions[currentQuestionNumber].question }}
             </p>
-            <div class="test__answer-options">
-                <button class="answer-option active">Дискретного</button
-                ><button class="answer-option">Непрерывного</button
-                ><button class="answer-option">Номинального</button
-                ><button class="answer-option">Порядкового</button>
+            <div
+                v-for="option in test.questions[currentQuestionNumber].options"
+                :key="option"
+                class="test__answer-options"
+            >
+                <button
+                    class="answer-option"
+                    :class="{ active: selectedValue == option }"
+                    @click="selectOption(option)"
+                >
+                    {{ option }}
+                </button>
             </div>
-            <button class="test__next active">Дальше</button>
-        </div> -->
-        <div class="test-passed">
+            <button
+                v-if="currentQuestionNumber < test.questions.length - 1"
+                class="test__next active"
+                :disabled="!selectedValue"
+                @click="nextQuestion()"
+            >
+                Дальше
+            </button>
+            <button
+                v-else
+                class="test__next active"
+                :disabled="!selectedValue"
+                @click="endTest()"
+            >
+                Завершить тест
+            </button>
+        </div>
+        <div v-else class="test-passed">
             <Medal class="test-passed__medal" />
             <h2 class="test-passed__headline">Тест пройден</h2>
             <div class="test-passed__statistic">
                 <div class="statistic__rights-answers">
-                    <Complete class="rights-answers__icon" />18 из 20
+                    <Complete class="rights-answers__icon" />{{
+                        rightAnswers
+                    }}
+                    из {{ test.questions.length }}
                 </div>
                 <div class="statistic__time">
-                    <Time class="time__icon" />15:52
+                    <Time class="time__icon" />{{ leadTime }}
                 </div>
             </div>
             <div class="test-passed__reward">
                 <div class="reward__coins">
-                    <CoinSvg class="coins__icon" />10 000
+                    <CoinSvg class="coins__icon" />{{ reward.coins }}
                 </div>
                 <div class="reward__lightning">
-                    <LightningSvg class="lightning__icon" />50 000
+                    <LightningSvg class="lightning__icon" />{{
+                        reward.lightnings
+                    }}
                 </div>
             </div>
             <router-link class="test-passed__back" to="/tests"
@@ -46,15 +80,18 @@
 </template>
 
 <script>
-// import Close from '@/assets/icons/tests/close.svg'
+// icons
+import Close from '@/assets/icons/tests/close.svg'
 import Medal from '@/assets/icons/tests/medal.svg'
 import LightningSvg from '@/assets/icons/lightning.svg'
 import CoinSvg from '@/assets/icons/coin.svg'
 import Complete from '@/assets/icons/tests/complete.svg'
 import Time from '@/assets/icons/tests/time.svg'
+
+import { mapGetters } from 'vuex'
 export default {
     components: {
-        // Close,
+        Close,
         Medal,
         LightningSvg,
         CoinSvg,
@@ -65,6 +102,74 @@ export default {
         id: {
             default: '0',
             type: String,
+        },
+    },
+    data() {
+        return {
+            testStatus: true,
+            startTime: new Date(),
+            leadTime: '',
+            selectedValue: null,
+            currentQuestionNumber: 0,
+            rightAnswers: 0,
+            reward: {},
+        }
+    },
+    computed: {
+        ...mapGetters('tests', ['getTests']),
+        test: function() {
+            return this.getTests.filter(
+                test => test.id === parseInt(this.id, 10)
+            )[0]
+        },
+        numberQuestions: function() {
+            return this.test.questions.length
+        },
+    },
+    methods: {
+        selectOption: function(option) {
+            if (this.selectedValue === option) {
+                this.selectedValue = null
+            } else {
+                this.selectedValue = option
+            }
+        },
+        nextQuestion: function() {
+            if (
+                this.test.questions[this.currentQuestionNumber].answer ===
+                this.selectedValue
+            ) {
+                this.rightAnswers += 1
+            }
+            this.currentQuestionNumber += 1
+            this.selectedValue = null
+            console.log(this.rightAnswers)
+        },
+        endTest: function() {
+            if (
+                this.test.questions[this.currentQuestionNumber].answer ===
+                this.selectedValue
+            ) {
+                this.rightAnswers += 1
+            }
+            this.testStatus = false
+            let endTime = new Date()
+            let ms = endTime - this.startTime
+            let toDate = new Date(ms)
+            this.leadTime =
+                toDate.getUTCMinutes() + ':' + toDate.getUTCSeconds()
+            let coins = Math.round(
+                this.test.reward.coins *
+                    (this.rightAnswers / this.test.questions.length)
+            )
+            let lightnings = Math.round(
+                this.test.reward.lightnings *
+                    (this.rightAnswers / this.test.questions.length)
+            )
+            this.reward = {
+                coins: coins,
+                lightnings: lightnings,
+            }
         },
     },
 }

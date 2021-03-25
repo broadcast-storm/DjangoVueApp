@@ -3,7 +3,7 @@
         <h2 class="tests__headline">
             Доступные тесты
         </h2>
-        <div class="tests__list" v-for="test in tests" :key="test.id">
+        <div v-for="test in tests" :key="test.id" class="tests__list">
             <div class="test">
                 <h3 class="test-headline">
                     {{ test.name }}
