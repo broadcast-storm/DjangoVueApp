@@ -1,11 +1,66 @@
 <template>
     <div class="tests-wrapper">
-        ssss
+        <!-- <div class="test">
+            <div class="test__progress">
+                <button class="progress-close"><Close /></button>
+                <progress class="progress-bar" value="1" max="20"></progress>
+            </div>
+            <h2 class="test__name">Название теста</h2>
+            <h3 class="test__question-number">Вопрос 1</h3>
+            <p class="test__question-description">
+                Если случайная величина распределена по биномиальному закону, то
+                эта случайная величина является случайной величиной… типа
+            </p>
+            <div class="test__answer-options">
+                <button class="answer-option active">Дискретного</button
+                ><button class="answer-option">Непрерывного</button
+                ><button class="answer-option">Номинального</button
+                ><button class="answer-option">Порядкового</button>
+            </div>
+            <button class="test__next active">Дальше</button>
+        </div> -->
+        <div class="test-passed">
+            <Medal class="test-passed__medal" />
+            <h2 class="test-passed__headline">Тест пройден</h2>
+            <div class="test-passed__statistic">
+                <div class="statistic__rights-answers">
+                    <Complete class="rights-answers__icon" />18 из 20
+                </div>
+                <div class="statistic__time">
+                    <Time class="time__icon" />15:52
+                </div>
+            </div>
+            <div class="test-passed__reward">
+                <div class="reward__coins">
+                    <CoinSvg class="coins__icon" />10 000
+                </div>
+                <div class="reward__lightning">
+                    <LightningSvg class="lightning__icon" />50 000
+                </div>
+            </div>
+            <router-link class="test-passed__back" to="/tests"
+                >К списку тестов</router-link
+            >
+        </div>
     </div>
 </template>
 
 <script>
+// import Close from '@/assets/icons/tests/close.svg'
+import Medal from '@/assets/icons/tests/medal.svg'
+import LightningSvg from '@/assets/icons/lightning.svg'
+import CoinSvg from '@/assets/icons/coin.svg'
+import Complete from '@/assets/icons/tests/complete.svg'
+import Time from '@/assets/icons/tests/time.svg'
 export default {
+    components: {
+        // Close,
+        Medal,
+        LightningSvg,
+        CoinSvg,
+        Complete,
+        Time,
+    },
     props: {
         id: {
             default: '0',
@@ -22,10 +77,211 @@ export default {
 .tests-wrapper {
     display: flex;
     flex-direction: row;
+    justify-content: center;
     margin-top: 90px;
     height: calc(100vh - 90px);
-    flex-wrap: wrap;
     width: 100%;
     overflow-y: auto;
+    .test {
+        display: flex;
+        flex-direction: column;
+        background: #ffffff;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        justify-content: space-between;
+        align-items: center;
+        padding: 24px 154px 50px 154px;
+        margin-top: 68px;
+        width: 975px;
+        height: 663px;
+        &__progress {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            width: 100%;
+            .progress {
+                &-close {
+                    width: 23.35px;
+                    height: 19px;
+                    background: transparent;
+                    border: none;
+                    outline: none;
+                    cursor: pointer;
+                    margin-right: 6px;
+                }
+                &-bar {
+                    height: 17px;
+                    display: block;
+                    appearance: none;
+                    -webkit-appearance: none;
+                    border-radius: 10px;
+                    width: 100%;
+                    &::-webkit-progress-bar {
+                        background-color: #d8dcea;
+                        border-radius: 10px;
+                    }
+                    &::-webkit-progress-value {
+                        background: #26bcc2;
+                        border-radius: 10px;
+                    }
+                }
+            }
+        }
+        &__name {
+            font-size: 24px;
+            line-height: 33px;
+            color: #000;
+        }
+        &__question-number {
+            font-size: 24px;
+            line-height: 33px;
+            color: #545969;
+        }
+        &__question-description {
+            font-size: 18px;
+            line-height: 25px;
+            text-align: center;
+            color: #1a2740;
+            width: 425px;
+            margin-bottom: 46px;
+        }
+        &__answer-options {
+            display: flex;
+            flex-direction: column;
+            .answer-option {
+                &.active {
+                    background: #fff;
+                    border: 2px solid #26bcc2;
+                    border-bottom: 4px solid #26bcc2;
+                }
+                background: #d8dcea;
+                border: 2px solid #abb2c7;
+                border-bottom: 4px solid #abb2c7;
+                box-sizing: border-box;
+                border-radius: 10px;
+                outline: none;
+                margin-bottom: 21px;
+                font-size: 14px;
+                line-height: 19px;
+                color: #1a2740;
+                width: 312px;
+                height: 41px;
+                cursor: pointer;
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+        }
+        &__next {
+            box-sizing: border-box;
+            background: #89dce0;
+            border-radius: 10px;
+            border: none;
+            border: 2px solid #26bcc2;
+            border-bottom: 4px solid #26bcc2;
+            outline: none;
+            font-size: 14px;
+            line-height: 19px;
+            color: #1a2740;
+            width: 312px;
+            height: 41px;
+            cursor: pointer;
+            &:disabled {
+                border: none;
+                outline: none;
+                background: #abb2c7;
+                color: #545969;
+                cursor: unset;
+            }
+        }
+    }
+    .test-passed {
+        margin-top: 118px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        &__medal {
+            width: 151px;
+            height: 151px;
+        }
+        &__headline {
+            margin-top: 14px;
+            margin-bottom: 37px;
+            font-size: 24px;
+            line-height: 33px;
+            color: #545969;
+        }
+        &__statistic {
+            display: flex;
+            flex-direction: row;
+            font-size: 18px;
+            line-height: 25px;
+            color: #545969;
+            margin-bottom: 27px;
+            .statistic {
+                &__rights-answers {
+                    display: flex;
+                    align-items: center;
+                    .rights-answers__icon {
+                        width: 24px;
+                        height: 24px;
+                    }
+                }
+                &__time {
+                    display: flex;
+                    align-items: center;
+                    margin-left: 23px;
+                    .time__icon {
+                        width: 21.64px;
+                        height: 24.59;
+                    }
+                }
+            }
+        }
+        &__reward {
+            display: flex;
+            flex-direction: row;
+            font-size: 18px;
+            line-height: 16px;
+            .reward__coins {
+                display: flex;
+                align-items: center;
+                color: #f2af49;
+                .coins__icon {
+                    height: 24px;
+                    width: 24px;
+                }
+            }
+            .reward__lightning {
+                display: flex;
+                align-items: center;
+                color: #50af8d;
+                margin-left: 23px;
+                .lightning__icon {
+                    width: 14.62px;
+                    height: 24px;
+                }
+            }
+        }
+        &__back {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+            background: #89dce0;
+            border-radius: 10px;
+            border: none;
+            border: 2px solid #26bcc2;
+            border-bottom: 4px solid #26bcc2;
+            outline: none;
+            font-size: 14px;
+            line-height: 19px;
+            color: #1a2740;
+            width: 312px;
+            height: 41px;
+            margin-top: 85px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+    }
 }
 </style>
