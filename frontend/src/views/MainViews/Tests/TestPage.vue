@@ -89,6 +89,7 @@ import Complete from '@/assets/icons/tests/complete.svg'
 import Time from '@/assets/icons/tests/time.svg'
 
 import { mapGetters } from 'vuex'
+import { mapMutations } from 'vuex'
 export default {
     components: {
         Close,
@@ -127,6 +128,7 @@ export default {
         },
     },
     methods: {
+        ...mapMutations(['accrueReward']),
         selectOption: function(option) {
             if (this.selectedValue === option) {
                 this.selectedValue = null
@@ -143,7 +145,6 @@ export default {
             }
             this.currentQuestionNumber += 1
             this.selectedValue = null
-            console.log(this.rightAnswers)
         },
         endTest: function() {
             if (
@@ -170,6 +171,7 @@ export default {
                 coins: coins,
                 lightnings: lightnings,
             }
+            this.$store.commit('accrueReward', this.reward)
         },
     },
 }
