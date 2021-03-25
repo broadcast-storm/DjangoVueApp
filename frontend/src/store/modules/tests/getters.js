@@ -1,5 +1,5 @@
 const getters = {
-    getItems: state => state.tests,
+    getTests: state => state.tests,
 }
 
 export default getters

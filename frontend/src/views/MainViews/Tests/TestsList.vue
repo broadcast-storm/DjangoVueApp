@@ -3,36 +3,14 @@
         <h2 class="tests__headline">
             Доступные тесты
         </h2>
-        <div class="tests__list">
+        <div class="tests__list" v-for="test in tests" :key="test.id">
             <div class="test">
-                <h3 class="test-headline">Очень длинное название теста</h3>
+                <h3 class="test-headline">
+                    {{ test.name }}
+                </h3>
                 <div class="test-wrap">
-                    <span class="test-description"
-                        >Этот тест позволяет проверить ваши способности к
-                        выполнению арифметических действий</span
-                    ><router-link class="test-begin" to="/tests/test/1">
-                        Начать<Arrow class="arrow" />
-                    </router-link>
-                </div>
-            </div>
-            <div class="test">
-                <h3 class="test-headline">Очень длинное название теста</h3>
-                <div class="test-wrap">
-                    <span class="test-description"
-                        >Этот тест позволяет проверить ваши способности к
-                        выполнению арифметических действий</span
-                    ><router-link class="test-begin" to="/tests/test/1">
-                        Начать<Arrow class="arrow" />
-                    </router-link>
-                </div>
-            </div>
-            <div class="test">
-                <h3 class="test-headline">Очень длинное название теста</h3>
-                <div class="test-wrap">
-                    <span class="test-description"
-                        >Этот тест позволяет проверить ваши способности к
-                        выполнению арифметических действий</span
-                    ><router-link class="test-begin" to="/tests/test/1">
+                    <span class="test-description">{{ test.description }}</span
+                    ><router-link class="test-begin" :to="getLink(test.id)">
                         Начать<Arrow class="arrow" />
                     </router-link>
                 </div>
@@ -43,9 +21,24 @@
 
 <script>
 import Arrow from '@/assets/icons/arrow-rigth.svg'
+import { mapGetters } from 'vuex'
 export default {
     components: {
         Arrow,
+    },
+    data() {
+        return {}
+    },
+    computed: {
+        ...mapGetters('tests', ['getTests']),
+        tests: function() {
+            return this.getTests
+        },
+    },
+    methods: {
+        getLink: function(itemId) {
+            return '/tests/test/' + itemId
+        },
     },
 }
 </script>
