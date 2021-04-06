@@ -1,6 +1,6 @@
 <template>
     <div>
-        Контент тестов
+        <router-view name="tests-router" />
     </div>
 </template>
 

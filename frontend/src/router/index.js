@@ -131,8 +131,28 @@ const routes = [
             {
                 path: routesList.testsPage.path,
                 components: {
-                    'main-router': () => import('@/views/MainViews/Tests.vue'),
+                    'main-router': () =>
+                        import('@/views/MainViews/Tests/Tests.vue'),
                 },
+                children: [
+                    {
+                        path: routesList.testsPage.children.testsList.path,
+                        components: {
+                            'tests-router': () =>
+                                import('@/views/MainViews/Tests/TestsList.vue'),
+                        },
+                    },
+                    {
+                        path: routesList.testsPage.children.testPage.path,
+                        components: {
+                            'tests-router': () =>
+                                import('@/views/MainViews/Tests/TestPage.vue'),
+                        },
+                        props: {
+                            'tests-router': true,
+                        },
+                    },
+                ],
                 meta: {
                     requiersAuthentication: true,
                 },

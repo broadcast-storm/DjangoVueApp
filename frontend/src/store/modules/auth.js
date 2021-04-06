@@ -113,3 +113,10 @@ export const state = {
 export const getters = {
     getUserData: state => state.user,
 }
+
+export const mutations = {
+    accrueReward(state, reward) {
+        state.user.stats.coins += reward.coins
+        state.user.stats.lightnings += reward.lightnings
+    },
+}
