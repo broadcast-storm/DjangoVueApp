@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import UserProfile, Task, WeeklyTask, Division, JobPosition, Team, Question, QuestionTheme
+from .models import UserProfile, Task, WeeklyTask, Division, JobPosition, Team, Question, QuestionTheme, Test, TestBlock
 from django.urls import resolve
 
 
@@ -209,11 +209,73 @@ class QuestionThemeAdmin(admin.ModelAdmin):
     }),)
     filter_horizontal = ()
 
+# class TestUserInline(admin.StackedInline):
+#     extra = 0
+#     max_num = 10
+#     model = Test.users.through
+#     fields = (
+#         ('user',
+#          'status',),
+#         ('rightAnswersCount',
+#          'completeTime',
+#          'points',
+#          'hasLeftTest',)
+#     )
+#     readonly_fields = ('rightAnswersCount', 'completeTime')
+
+class TestBlockInline(admin.StackedInline):
+    extra = 0
+    # max_num = 10
+    model = TestBlock
+
+    # def get_questions(self, obj):
+    #         return "\n".join([a.title for a in obj.question_set.all()])
+            
+    fieldsets = (
+        (None, {
+            'fields': (
+            ('questionTheme',
+            'questionsCount',
+            'blockWeight',),
+            ('created_at',
+            'updated_at',))
+        }),
+        ('Вопросы', {
+            'classes': ('collapse',),
+            'fields': ['questions',]
+        }),
+    )
+    readonly_fields = ('created_at', 'updated_at')
+
+class TestAdmin(admin.ModelAdmin):
+    inlines = [TestBlockInline,]
+
+    list_display = ('title', 'description')
+    search_fields = ('title',)
+    fieldsets = ((None, {
+        'fields': (
+            'title',
+            'description',
+            'pointsToComplete',
+            'canLeave',
+            'canSkip',
+            'showAnswers',
+            'isInterview',
+            'canSeeSpentTime',
+            'canSeeTestClosing'
+
+        )
+    }),)
+
+    filter_horizontal = ()
+    readonly_fields = ('created_at', 'updated_at')
+
 
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(Task, TaskAdmin)
 admin.site.register(QuestionTheme, QuestionThemeAdmin)
 admin.site.register(Question, QuestionAdmin)
+admin.site.register(Test, TestAdmin)
 admin.site.register(Team, TeamAdmin)
 admin.site.register(Division, DivisionAdmin)
 admin.site.register(JobPosition, JobPositionAdmin)

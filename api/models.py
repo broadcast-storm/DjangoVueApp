@@ -792,8 +792,8 @@ class TestUser(models.Model):
         return str(self.id)
 
     class Meta:
-        verbose_name = "тестовый блок"
-        verbose_name_plural = "тестовые блоки"
+        verbose_name = "пользователь"
+        verbose_name_plural = "пользователи"
 
 
 class TestUserAnswer(models.Model):
