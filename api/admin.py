@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import UserProfile, Task, WeeklyTask, Division, JobPosition, Team, Question, QuestionTheme
+from .models import UserProfile, Task, WeeklyTask, Division, JobPosition, Team, Question, QuestionTheme, Achievement, RequirenmentToGetAchieve
 from django.urls import resolve
+from django.utils.safestring import mark_safe
 
 
 # Register your models here.
@@ -210,6 +211,26 @@ class QuestionThemeAdmin(admin.ModelAdmin):
     filter_horizontal = ()
 
 
+
+class RequirenmentToGetAchieveInline(admin.TabularInline):
+    model = RequirenmentToGetAchieve
+
+
+class AchievementAdmin(admin.ModelAdmin):
+    list_display = ('title', 'description', 'get_image')
+
+    inlines = (RequirenmentToGetAchieveInline,)
+
+    def get_image(self, obj):
+        if obj.image:
+            return mark_safe(f'<img src="{obj.image.url}" width="75">')
+        else:
+            return 'Фото не установлено'
+
+    get_image.short_description = 'Фото'
+
+
+admin.site.register(Achievement, AchievementAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(Task, TaskAdmin)
 admin.site.register(QuestionTheme, QuestionThemeAdmin)
