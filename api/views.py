@@ -12,8 +12,8 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from .serializers import JobPositionSerializer, DivisionSerializer, \
     UserProfileSerializer, StatisticsSerializer, TaskSerializer, TaskUserStatusSerializer, WeeklyTaskSerializer, \
-    TeamSerializer
-from .models import JobPosition, Division, Statistics, UserProfile, Task, WeeklyTask, TaskUserStatus, Team, Competition
+    TeamSerializer, ProductSerializer
+from .models import JobPosition, Division, Statistics, UserProfile, Task, WeeklyTask, TaskUserStatus, Team, Competition, Product
 
 
 class JobPositionViewSet(viewsets.ModelViewSet):
@@ -32,6 +32,12 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     serializer_class = UserProfileSerializer
     queryset = UserProfile.objects.all()
+
+
+class ProductViewSet(viewsets.ModelViewSet):
+    permission_classes = (AllowAny,)
+    serializer_class = ProductSerializer
+    queryset = Product.objects.all().filter(count__gt=0)
 
 
 @api_view(['POST'])

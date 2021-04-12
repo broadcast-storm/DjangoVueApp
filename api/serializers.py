@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import JobPosition, Division, UserProfile, Statistics, Task, TaskUserStatus, Team
+from .models import JobPosition, Division, UserProfile, Statistics, Task, TaskUserStatus, Team, Product
 
 
 class JobPositionSerializer(serializers.ModelSerializer):
@@ -62,3 +62,10 @@ class TaskUserStatusSerializer(serializers.ModelSerializer):
         fields = ['task', 'user',
                   'subTasksCount', 'subTasksCompletedCount', 'status'
                                                              'started_at', 'done_at']
+
+
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ['title', 'description',
+                  'count', 'photo', 'created_at', 'updated_at', 'productCategory']
