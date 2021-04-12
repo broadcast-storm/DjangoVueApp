@@ -40,10 +40,13 @@ class TaskSerializer(serializers.ModelSerializer):
                   "money", "health", "energy",
                   'created_at', 'updated_at', 'tags']
 
+
 class TeamSerializer(serializers.ModelSerializer):
     class Meta:
         model = Team
-        fields = ['users', 'division', 'title', 'description', 'maxUsersCount', 'created_at', 'updated_at']
+        fields = ['users', 'division', 'title', 'description',
+                  'maxUsersCount', 'created_at', 'updated_at']
+
 
 class WeeklyTaskSerializer(serializers.ModelSerializer):
     class Meta:
