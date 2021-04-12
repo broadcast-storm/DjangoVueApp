@@ -36,12 +36,14 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 
 
 class ProductViewSet(viewsets.ModelViewSet):
+    # For prod use IsAuthenticated . AllowAny using for Debug
     permission_classes = (AllowAny,)
     serializer_class = ProductSerializer
     queryset = Product.objects.all().filter(count__gt=0)
 
 
 @api_view(['GET'])
+# For prod use IsAuthenticated . AllowAny using for Debug
 @permission_classes([AllowAny])
 @ensure_csrf_cookie
 def shop(request):
