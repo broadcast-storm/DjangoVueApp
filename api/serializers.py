@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import JobPosition, Division, UserProfile, Statistics, Task, TaskUserStatus, Team, Product
+from .models import JobPosition, Division, UserProfile, Statistics, Task, TaskUserStatus, Team, Product, RequirementsToBuyProduct
 
 
 class JobPositionSerializer(serializers.ModelSerializer):
@@ -65,7 +65,23 @@ class TaskUserStatusSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Product
-        fields = ['title', 'description',
-                  'count', 'photo', 'created_at', 'updated_at', 'productCategory']
+        fields = '__all__'
+
+
+class RequirementsToBuyProductSerializer(serializers.ModelSerializer):
+    product = ProductSerializer()
+
+    class Meta:
+        model = RequirementsToBuyProduct
+        fields = '__all__'
+
+
+# class ShopSerializer(serializers.ModelSerializer):
+#     product = ProductSerializer(read_only=True)
+
+#     class Meta:
+#         model = RequirementsToBuyProduct
+#         fields = ['album_name', 'artist', 'tracks']

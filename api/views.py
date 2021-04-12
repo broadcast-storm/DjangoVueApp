@@ -12,8 +12,9 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from .serializers import JobPositionSerializer, DivisionSerializer, \
     UserProfileSerializer, StatisticsSerializer, TaskSerializer, TaskUserStatusSerializer, WeeklyTaskSerializer, \
-    TeamSerializer, ProductSerializer
-from .models import JobPosition, Division, Statistics, UserProfile, Task, WeeklyTask, TaskUserStatus, Team, Competition, Product
+    TeamSerializer, ProductSerializer, RequirementsToBuyProductSerializer
+from .models import JobPosition, Division, Statistics, UserProfile, Task, WeeklyTask, TaskUserStatus, Team, Competition, Product, RequirementsToBuyProduct
+from django.http import HttpResponse, JsonResponse
 
 
 class JobPositionViewSet(viewsets.ModelViewSet):
@@ -38,6 +39,20 @@ class ProductViewSet(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
     serializer_class = ProductSerializer
     queryset = Product.objects.all().filter(count__gt=0)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+@ensure_csrf_cookie
+def shop(request):
+    """
+    List all code snippets, or create a new snippet.
+    """
+    if request.method == 'GET':
+        # product = Product.objects.all().filter(count__gt=0)
+        product = RequirementsToBuyProduct.objects.all().prefetch_related('product')
+        serializer = RequirementsToBuyProductSerializer(product, many=True)
+        return JsonResponse(serializer.data, safe=False)
 
 
 @api_view(['POST'])
