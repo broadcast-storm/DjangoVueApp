@@ -1,7 +1,8 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import JobPositionViewSet, DivisionViewSet, UserProfileViewSet, StatisticsViewSet, \
-    TaskViewSet, WeeklyTaskViewSet, TeamsViewSet, login, refresh_token, logout, competition, ProductViewSet, shop
+    TaskViewSet, WeeklyTaskViewSet, TeamsViewSet, login, refresh_token, logout, competition, ProductViewSet, shop, \
+    TestsViewSet
 
 router = DefaultRouter()
 router.register(r'job-positions', JobPositionViewSet)
@@ -12,6 +13,7 @@ router.register(r'teams', TeamsViewSet)
 router.register(r'tasks', TaskViewSet)
 router.register(r'weekly-tasks', WeeklyTaskViewSet)
 router.register(r'products', ProductViewSet)
+router.register(r'tests', TestsViewSet)
 
 urlpatterns = [
     path("", include(router.urls)),

@@ -12,8 +12,8 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from .serializers import JobPositionSerializer, DivisionSerializer, \
     UserProfileSerializer, StatisticsSerializer, TaskSerializer, TaskUserStatusSerializer, WeeklyTaskSerializer, \
-    TeamSerializer, ProductSerializer, RequirementsToBuyProductSerializer
-from .models import JobPosition, Division, Statistics, UserProfile, Task, WeeklyTask, TaskUserStatus, Team, Competition, Product, RequirementsToBuyProduct
+    TeamSerializer, ProductSerializer, RequirementsToBuyProductSerializer, TestsSerializer
+from .models import JobPosition, Division, Statistics, UserProfile, Task, WeeklyTask, TaskUserStatus, Team, Competition, Product, RequirementsToBuyProduct, Test
 from django.http import HttpResponse, JsonResponse
 
 
@@ -30,7 +30,7 @@ class DivisionViewSet(viewsets.ModelViewSet):
 
 
 class UserProfileViewSet(viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
     serializer_class = UserProfileSerializer
     queryset = UserProfile.objects.all()
 
@@ -40,6 +40,12 @@ class ProductViewSet(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
     serializer_class = ProductSerializer
     queryset = Product.objects.all().filter(count__gt=0)
+
+
+class TestsViewSet(viewsets.ModelViewSet):
+    permission_classes = (AllowAny,)
+    serializer_class = TestsSerializer
+    queryset = Test.objects.all()
 
 
 @api_view(['GET'])
