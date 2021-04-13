@@ -51,9 +51,8 @@ def shop(request):
     List all code snippets, or create a new snippet.
     """
     if request.method == 'GET':
-        # product = Product.objects.all().filter(count__gt=0)
-        product = RequirementsToBuyProduct.objects.all().prefetch_related('product')
-        serializer = RequirementsToBuyProductSerializer(product, many=True)
+        products = RequirementsToBuyProduct.objects.all().prefetch_related('product')
+        serializer = RequirementsToBuyProductSerializer(products, many=True)
         return JsonResponse(serializer.data, safe=False)
 
 
