@@ -167,7 +167,8 @@ REST_FRAMEWORK = {
 }
 
 CRONJOBS = [
-    ('*/5 * * * *', 'core.cron.my_scheduled_job')
+    ('* 23 * * *', 'django.core.management.call_command',
+     ['flushexpiredtokens'])
 ]
 
 # Static files (CSS, JavaScript, Images)
