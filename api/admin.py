@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import UserProfile, Task, WeeklyTask, Division, JobPosition, Team, Question, QuestionTheme, Test, TestBlock
+from django.db import models
 from django.urls import resolve
 
 
@@ -209,27 +210,24 @@ class QuestionThemeAdmin(admin.ModelAdmin):
     }),)
     filter_horizontal = ()
 
-# class TestUserInline(admin.StackedInline):
-#     extra = 0
-#     max_num = 10
-#     model = Test.users.through
-#     fields = (
-#         ('user',
-#          'status',),
-#         ('rightAnswersCount',
-#          'completeTime',
-#          'points',
-#          'hasLeftTest',)
-#     )
-#     readonly_fields = ('rightAnswersCount', 'completeTime')
+class TestUserInline(admin.StackedInline):
+    extra = 0
+    # max_num = 10
+    model = Test.users.through
+    fields = (
+        ('user',
+         'status',),
+        ('rightAnswersCount',
+         'completeTime',
+         'points',
+         'hasLeftTest',)
+    )
+    readonly_fields = ('rightAnswersCount', 'completeTime')
 
 class TestBlockInline(admin.StackedInline):
     extra = 0
     # max_num = 10
     model = TestBlock
-
-    # def get_questions(self, obj):
-    #         return "\n".join([a.title for a in obj.question_set.all()])
             
     fieldsets = (
         (None, {
@@ -242,15 +240,16 @@ class TestBlockInline(admin.StackedInline):
         }),
         ('Вопросы', {
             'classes': ('collapse',),
-            'fields': ['questions',]
+            'fields': ('questions',),
         }),
     )
     readonly_fields = ('created_at', 'updated_at')
 
 class TestAdmin(admin.ModelAdmin):
-    inlines = [TestBlockInline,]
+    inlines = [TestBlockInline,TestUserInline]
 
     list_display = ('title', 'description')
+    
     search_fields = ('title',)
     fieldsets = ((None, {
         'fields': (
@@ -262,8 +261,7 @@ class TestAdmin(admin.ModelAdmin):
             'showAnswers',
             'isInterview',
             'canSeeSpentTime',
-            'canSeeTestClosing'
-
+            'canSeeTestClosing',
         )
     }),)
 

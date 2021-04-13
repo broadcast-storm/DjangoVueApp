@@ -737,11 +737,23 @@ class Test(models.Model):
 
 
 class TestBlock(models.Model):
+
+    def get_all_questions(self):
+        questions_arr = []
+        for quest in Question.objects.all():
+            questions_arr.append([quest.id, quest.title])
+        return questions_arr
+
+    def get_current_question(self):
+        return self.questions
+    # , default=property(get_current_question)
+
     # IDs
 
     questionTheme = models.ForeignKey(QuestionTheme, on_delete=models.CASCADE, verbose_name="Тематика", )
     test = models.ForeignKey(Test, on_delete=models.CASCADE, verbose_name="Тест", )
-    questions = models.ManyToManyField(Question, verbose_name="Вопросы", )
+    # questions = models.ManyToManyField(Question, through='TestBlockQuestion', through_fields=('testBlock', 'questions'), )
+    questions = models.ManyToManyField(Question, verbose_name="Вопрос 1", choices=[[quest.id, quest.title] for quest in Question.objects.all()])
 
     # IDs
 
@@ -758,6 +770,21 @@ class TestBlock(models.Model):
         verbose_name = "тестовый блок"
         verbose_name_plural = "тестовые блоки"
 
+
+# class TestBlockQuestion(models.Model):
+#     # IDs
+
+#     testBlock = models.ForeignKey(TestBlock, on_delete=models.CASCADE, verbose_name="TestBlock", )
+#     questions = models.ForeignKey(Question, on_delete=models.CASCADE,)
+
+#     # IDs
+
+#     def __str__(self):
+#         return str(self.id)
+
+#     class Meta:
+#         verbose_name = "тестовый вопрос"
+#         verbose_name_plural = "тестовые вопросы"
 
 class TestUser(models.Model):
     STARTED = 'started'
@@ -779,7 +806,7 @@ class TestUser(models.Model):
     # IDs
 
     status = models.CharField(max_length=20, choices=STATUS_TYPE_CHOICES,
-                              default=STARTED, verbose_name="Сложность")
+                              default=STARTED, verbose_name="Статус")
     rightAnswersCount = models.IntegerField(default=0, verbose_name="Кол-во правильных ответов")
     completeTime = models.DateTimeField(blank=True, null=True, verbose_name="Время выполнения")
     points = models.IntegerField(default=0, verbose_name="Кол-во набранных баллов")
