@@ -1,5 +1,5 @@
 const getters = {
-    isAuthenticated: state => state.csrfToken !== null,
+    isAuthenticated: state => state.refreshToken !== null,
 }
 
 export default getters
