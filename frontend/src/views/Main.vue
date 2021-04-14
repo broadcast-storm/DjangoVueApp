@@ -11,7 +11,7 @@
 <script>
 import Header from '@/components/Header'
 import Navbar from '@/components/Navbar/Navbar'
-import { stats } from '@/mocks/headerStats'
+import { mapGetters } from 'vuex'
 
 import routesList from '@/router/routesList'
 import { mapActions } from 'vuex'
@@ -21,14 +21,18 @@ export default {
     name: 'Main',
     components: { Header, Navbar },
     data() {
-        return {
-            stats,
-        }
+        return {}
     },
     onIdle() {
         this.AUTH_LOGOUT().then(() => {
             this.$router.push(routesList.authPage.children.loginPage.path)
         })
+    },
+    computed: {
+        ...mapGetters(['getUserData']),
+        stats: function() {
+            return this.getUserData.stats
+        },
     },
     methods: {
         ...mapActions('tokens', [AUTH_LOGOUT]),

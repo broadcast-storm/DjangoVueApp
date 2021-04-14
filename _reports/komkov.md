@@ -9,3 +9,6 @@
 | Изучение Django      |   8   |
 | Изучение Vuex      |   8   |
 | Изучение Vue router       |   8   |
+| Изучение Python       |   8   |
+| Изучение Django Rest Framework       |   8   |
+| Создание страницы тестов      |   8   |
