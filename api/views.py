@@ -12,8 +12,10 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from .serializers import JobPositionSerializer, DivisionSerializer, \
     UserProfileSerializer, StatisticsSerializer, TaskSerializer, TaskUserStatusSerializer, WeeklyTaskSerializer, \
-    TeamSerializer, ProductSerializer, RequirementsToBuyProductSerializer, TestsSerializer
-from .models import JobPosition, Division, Statistics, UserProfile, Task, WeeklyTask, TaskUserStatus, Team, Competition, Product, RequirementsToBuyProduct, Test
+    TeamSerializer, ProductSerializer, RequirementsToBuyProductSerializer, TestsSerializer, QuestionsSerializer, \
+    AnswersSerializer, TestBlockSerializer
+from .models import JobPosition, Division, Statistics, UserProfile, Task, WeeklyTask, TaskUserStatus, Team, \
+    Competition, Product, RequirementsToBuyProduct, Test, Question, Answer, TestBlock
 from django.http import HttpResponse, JsonResponse
 
 
@@ -46,6 +48,24 @@ class TestsViewSet(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
     serializer_class = TestsSerializer
     queryset = Test.objects.all()
+
+
+class TestBlockViewSet(viewsets.ModelViewSet):
+    permission_classes = (AllowAny,)
+    serializer_class = TestBlockSerializer
+    queryset = TestBlock.objects.all()
+
+
+class QuestionsViewSet(viewsets.ModelViewSet):
+    permission_classes = (AllowAny,)
+    serializer_class = QuestionsSerializer
+    queryset = Question.objects.all()
+
+
+class AnswersViewSet(viewsets.ModelViewSet):
+    permission_classes = (AllowAny,)
+    serializer_class = AnswersSerializer
+    queryset = Answer.objects.all()
 
 
 @api_view(['GET'])
