@@ -16,7 +16,6 @@ router.register(r'products', ProductViewSet)
 router.register(r'tests', TestsViewSet)
 router.register(r'questions', QuestionsViewSet)
 router.register(r'answers', AnswersViewSet)
-router.register(r'answers', AnswersViewSet)
 router.register(r'test-block', TestBlockViewSet)
 
 urlpatterns = [
