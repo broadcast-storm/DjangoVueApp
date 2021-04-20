@@ -17,6 +17,7 @@ frontend/.env.production
 frontend/.env.development
 .env.local
 .env.*.local
+api/migrations
 
 # Log files
 npm-debug.log*

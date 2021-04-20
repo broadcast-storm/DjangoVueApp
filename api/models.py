@@ -555,7 +555,7 @@ class Competition(models.Model):
     levelCriterion = models.IntegerField(
         default=0, verbose_name="Требуемый уровень")
     qualityCriterion = models.FloatField(
-        default=0.0, verbose_name="Треюуемое качество")
+        default=0.0, verbose_name="Требуемое качество")
     productivityCriterion = models.FloatField(
         default=0.0, verbose_name="Требуемая продуктивность")
 
@@ -1059,13 +1059,15 @@ class RequirementsToBuyProduct(models.Model):
     # IDs
 
     level = models.IntegerField(default=0, verbose_name="Требуемый уровень")
-    quality = models.FloatField(default=0.0, verbose_name="Требуемое качество")
-    productivity = models.FloatField(
-        default=0.0, verbose_name="Требуемая продуктивность")
+    # quality = models.FloatField(default=0.0, verbose_name="Требуемое качество")
+    # productivity = models.FloatField(
+    #     default=0.0, verbose_name="Требуемая продуктивность")
+    # Данные атрибуты не успользуются при работе на стороне клиента
 
     money = models.IntegerField(default=0, verbose_name="Кол-во Валюты")
-    health = models.IntegerField(default=0, verbose_name="Кол-во HP")
-    energy = models.IntegerField(default=0, verbose_name="Кол-во Энергии")
+    # health = models.IntegerField(default=0, verbose_name="Кол-во HP")
+    # energy = models.IntegerField(default=0, verbose_name="Кол-во Энергии")
+    # Данные атрибуты не успользуются при работе на стороне клиента
 
     def __str__(self):
         return str(self.id)
