@@ -735,26 +735,15 @@ class Test(models.Model):
         verbose_name = "тест"
         verbose_name_plural = "тесты"
 
-
 class TestBlock(models.Model):
-
-    def get_all_questions(self):
-        questions_arr = []
-        for quest in Question.objects.all():
-            questions_arr.append([quest.id, quest.title])
-        return questions_arr
-
-    def get_current_question(self):
-        return self.questions
-    # , default=property(get_current_question)
 
     # IDs
 
-    questionTheme = models.ForeignKey(QuestionTheme, on_delete=models.CASCADE, verbose_name="Тематика", )
-    test = models.ForeignKey(Test, on_delete=models.CASCADE, verbose_name="Тест", )
-    # questions = models.ManyToManyField(Question, through='TestBlockQuestion', through_fields=('testBlock', 'questions'), )
-    questions = models.ManyToManyField(Question, verbose_name="Вопрос 1", choices=[[quest.id, quest.title] for quest in Question.objects.all()])
+    questionTheme = models.ForeignKey(QuestionTheme, on_delete=models.CASCADE, verbose_name="Тематика")
 
+    test = models.ForeignKey(Test, on_delete=models.CASCADE, verbose_name="Тест", )
+    questions = models.ManyToManyField(Question, verbose_name="",default=None)
+    
     # IDs
 
     questionsCount = models.IntegerField(default=3, verbose_name="Кол-во вопросов")
@@ -769,22 +758,6 @@ class TestBlock(models.Model):
     class Meta:
         verbose_name = "тестовый блок"
         verbose_name_plural = "тестовые блоки"
-
-
-# class TestBlockQuestion(models.Model):
-#     # IDs
-
-#     testBlock = models.ForeignKey(TestBlock, on_delete=models.CASCADE, verbose_name="TestBlock", )
-#     questions = models.ForeignKey(Question, on_delete=models.CASCADE,)
-
-#     # IDs
-
-#     def __str__(self):
-#         return str(self.id)
-
-#     class Meta:
-#         verbose_name = "тестовый вопрос"
-#         verbose_name_plural = "тестовые вопросы"
 
 class TestUser(models.Model):
     STARTED = 'started'

@@ -1,7 +1,9 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import Group, User
+from django.contrib.auth.admin import GroupAdmin, UserAdmin
 from .models import UserProfile, Task, WeeklyTask, Division, JobPosition, Team, Question, QuestionTheme, Test, TestBlock
 from django.db import models
+from django import forms
 from django.urls import resolve
 
 
@@ -224,10 +226,33 @@ class TestUserInline(admin.StackedInline):
     )
     readonly_fields = ('rightAnswersCount', 'completeTime')
 
+class TestBlockInlineForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(TestBlockInlineForm, self).__init__(*args, **kwargs)
+        if 'instance' in kwargs:
+            self.errors #Без этого почему-то не работает вызов ошибки "Выберите вопросы по теме"
+            self.fields['questions'].queryset=Question.objects.filter(questionTheme=QuestionTheme.objects.get(id=self['questionTheme'].value()))
+            self.fields['questions'].help_text = 'Пользуйтесь Ctrl (Command) и Shift. Чтобы отобразились вопросы другой тематики, поменяйте тематику и попробуйте сохранить.'
+            # Можно заменить виджет, например, на multiwidget
+
+    def clean_questions(self):
+        data = self.cleaned_data['questions']
+        data_theme = self.cleaned_data['questionTheme']
+
+        for quest in data:
+            if quest.questionTheme != data_theme:
+                raise forms.ValidationError('Выберите вопросы по теме')
+        
+        return data
+
+    class Meta:
+        model = TestBlock
+        fields = '__all__'
+
 class TestBlockInline(admin.StackedInline):
     extra = 0
-    # max_num = 10
     model = TestBlock
+    form = TestBlockInlineForm
             
     fieldsets = (
         (None, {
@@ -268,13 +293,40 @@ class TestAdmin(admin.ModelAdmin):
     filter_horizontal = ()
     readonly_fields = ('created_at', 'updated_at')
 
+class MyAdminSite(admin.AdminSite):
+    # Text to put at the end of each page's <title>.
+    site_title = 'Яндекс.Геймификация Админ'
+
+    # Text to put in each page's <h1> (and above login form).
+    site_header = 'Яндекс.Геймификация Админ'
+
+    # Text to put at the top of the admin index page.
+    index_title = 'Панель администрирования'
+
+    def get_app_list(self, request):
+        """
+        Return a sorted list of all the installed apps that have been
+        registered in this site.
+        """
+        app_dict = self._build_app_dict(request)
+
+        app_list = sorted(app_dict.values(), key=lambda x: x['name'].lower())
+        return app_list
+
+admin.site = MyAdminSite()
+
+admin.site.register(WeeklyTask, WeeklyTaskAdmin)
+admin.site.register(Task, TaskAdmin)
+
+admin.site.register(Test, TestAdmin)
+admin.site.register(Question, QuestionAdmin)
+admin.site.register(QuestionTheme, QuestionThemeAdmin)
 
 admin.site.register(UserProfile, UserProfileAdmin)
-admin.site.register(Task, TaskAdmin)
-admin.site.register(QuestionTheme, QuestionThemeAdmin)
-admin.site.register(Question, QuestionAdmin)
-admin.site.register(Test, TestAdmin)
-admin.site.register(Team, TeamAdmin)
 admin.site.register(Division, DivisionAdmin)
 admin.site.register(JobPosition, JobPositionAdmin)
-admin.site.register(WeeklyTask, WeeklyTaskAdmin)
+admin.site.register(Team, TeamAdmin)
+
+# Дублируют UserProfile
+# admin.site.register(Group, GroupAdmin)
+# admin.site.register(User, UserAdmin)
