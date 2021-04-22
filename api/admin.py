@@ -1,12 +1,9 @@
 from django.contrib import admin
-<<<<<<< HEAD
 from django.contrib.auth.models import Group, User
 from django.contrib.auth.admin import GroupAdmin, UserAdmin
 from .models import UserProfile, Task, WeeklyTask, Division, JobPosition, Team, Question, QuestionTheme, Test, TestBlock, Achievement, RequirenmentToGetAchieve
 from django.db import models
 from django import forms
-=======
->>>>>>> admin_achievments
 from django.urls import resolve
 from django.utils.safestring import mark_safe
 
@@ -274,7 +271,6 @@ class TestBlockInline(admin.StackedInline):
     )
     readonly_fields = ('created_at', 'updated_at')
 
-<<<<<<< HEAD
 class TestAdmin(admin.ModelAdmin):
     inlines = [TestBlockInline,TestUserInline]
 
@@ -318,7 +314,6 @@ class MyAdminSite(admin.AdminSite):
         app_list = sorted(app_dict.values(), key=lambda x: x['name'].lower())
         return app_list
 
-=======
 
 class RequirenmentToGetAchieveInline(admin.TabularInline):
     model = RequirenmentToGetAchieve
@@ -340,7 +335,6 @@ class AchievementAdmin(admin.ModelAdmin):
 admin.site = MyAdminSite()
 
 admin.site.register(Achievement, AchievementAdmin)
->>>>>>> admin_achievments
 
 admin.site.register(WeeklyTask, WeeklyTaskAdmin)
 admin.site.register(Task, TaskAdmin)
