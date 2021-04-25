@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import JobPosition, Division, UserProfile, Statistics, Task, TaskUserStatus, Team, Product, \
-    RequirementsToBuyProduct, Test, Question, Answer, TestBlock
+    RequirementsToBuyProduct, Test, Question, Answer, TestBlock, Achievement
 
 
 class JobPositionSerializer(serializers.ModelSerializer):
@@ -18,28 +18,19 @@ class DivisionSerializer(serializers.ModelSerializer):
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ['id', 'username', 'email', "name", "surname", "patronymic",
-                  "jobPosition", "userType", "division",
-                  "description", "photo", "level",
-                  "money", "health", "energy",
-                  "quality", "productivity",
-                  "competitionCount", "winCompetitionCount"]
+        fields = '__all__'
 
 
 class StatisticsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Statistics
-        fields = ['user', 'level', 'quality', 'productivity', 'completedTests', 'completedTasks',
-                  'completedQuests', 'achievements', 'competitions', 'competitionWins']
+        fields = '__all__'
 
 
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
-        fields = ['taskType', 'parent', 'weekly', 'division', 'tags',  'title', 'description', 'subTasksCount', 'isTeamTask',
-                  'accessLevel', 'deadline',
-                  "money", "health", "energy",
-                  'created_at', 'updated_at', 'tags']
+        fields = '__all__'
 
 
 class TeamSerializer(serializers.ModelSerializer):
@@ -52,9 +43,7 @@ class TeamSerializer(serializers.ModelSerializer):
 class WeeklyTaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
-        fields = ['division', 'difficulty', 'taskType', 'title', 'description', 'subTasksCount', 'isTeamTask',
-                  "money", "health", "energy",
-                  'created_at', 'updated_at', 'tags']
+        fields = '__all__'
 
 
 class TaskUserStatusSerializer(serializers.ModelSerializer):
@@ -114,3 +103,10 @@ class AnswersSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = RequirementsToBuyProduct
 #         fields = ['album_name', 'artist', 'tracks']
+
+
+class AchievementSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Achievement
+        fields = '__all__'

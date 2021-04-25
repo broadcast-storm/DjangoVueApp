@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import JobPositionViewSet, DivisionViewSet, UserProfileViewSet, StatisticsViewSet, \
     TaskViewSet, WeeklyTaskViewSet, TeamsViewSet, login, refresh_token, logout, competition, ProductViewSet, shop, \
-    TestsViewSet, QuestionsViewSet, AnswersViewSet, TestBlockViewSet
+    TestsViewSet, QuestionsViewSet, AnswersViewSet, TestBlockViewSet, AchievementViewSet
 
 router = DefaultRouter()
 router.register(r'job-positions', JobPositionViewSet)
@@ -17,6 +17,7 @@ router.register(r'tests', TestsViewSet)
 router.register(r'questions', QuestionsViewSet)
 router.register(r'answers', AnswersViewSet)
 router.register(r'test-block', TestBlockViewSet)
+router.register(r'achievement', AchievementViewSet)
 
 urlpatterns = [
     path("", include(router.urls)),
@@ -25,6 +26,8 @@ urlpatterns = [
     path('shop', shop, name='shop'),
     path('logout', logout, name='logout'),
     path('competition', competition, name='competition'),
+    # path('achievement', achievement, name='achievement'),
+
     # path('competition/currentcompetitions', currentcompetitions, name = 'currentcompetitions')
     # path('searchcompetitions')
 ]

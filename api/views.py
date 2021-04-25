@@ -13,9 +13,9 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from .serializers import JobPositionSerializer, DivisionSerializer, \
     UserProfileSerializer, StatisticsSerializer, TaskSerializer, TaskUserStatusSerializer, WeeklyTaskSerializer, \
     TeamSerializer, ProductSerializer, RequirementsToBuyProductSerializer, TestsSerializer, QuestionsSerializer, \
-    AnswersSerializer, TestBlockSerializer
+    AnswersSerializer, TestBlockSerializer, AchievementSerializer
 from .models import JobPosition, Division, Statistics, UserProfile, Task, WeeklyTask, TaskUserStatus, Team, \
-    Competition, Product, RequirementsToBuyProduct, Test, Question, Answer, TestBlock
+    Competition, Product, RequirementsToBuyProduct, Test, Question, Answer, TestBlock, Achievement
 from django.http import HttpResponse, JsonResponse
 
 
@@ -65,6 +65,12 @@ class QuestionsViewSet(viewsets.ModelViewSet):
 class AnswersViewSet(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
     serializer_class = AnswersSerializer
+    queryset = Answer.objects.all()
+
+
+class AchievementViewSet(viewsets.ModelViewSet):
+    permission_classes = (AllowAny,)
+    serializer_class = AchievementSerializer
     queryset = Answer.objects.all()
 
 
