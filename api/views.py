@@ -13,9 +13,9 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from .serializers import JobPositionSerializer, DivisionSerializer, \
     UserProfileSerializer, StatisticsSerializer, TaskSerializer, TaskUserStatusSerializer, WeeklyTaskSerializer, \
     TeamSerializer, ProductSerializer, RequirementsToBuyProductSerializer, TestsSerializer, QuestionsSerializer, \
-    AnswersSerializer, TestBlockSerializer, AchievementSerializer
+    AnswersSerializer, TestBlockSerializer, AchievementSerializer, RequirenmentToGetAchieveSerializer, AchieveRequirenmentStatusSerializer, AchievementUserStatusSerializer
 from .models import JobPosition, Division, Statistics, UserProfile, Task, WeeklyTask, TaskUserStatus, Team, \
-    Competition, Product, RequirementsToBuyProduct, Test, Question, Answer, TestBlock, Achievement
+    Competition, Product, RequirementsToBuyProduct, Test, Question, Answer, TestBlock, Achievement, RequirenmentToGetAchieve, AchieveRequirenmentStatus, AchievementUserStatus
 from django.http import HttpResponse, JsonResponse
 
 
@@ -71,7 +71,25 @@ class AnswersViewSet(viewsets.ModelViewSet):
 class AchievementViewSet(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
     serializer_class = AchievementSerializer
-    queryset = Answer.objects.all()
+    queryset = Achievement.objects.all()
+
+
+class RequirenmentToGetAchieveViewSet(viewsets.ModelViewSet):
+    permission_classes = (AllowAny,)
+    serializer_class = RequirenmentToGetAchieveSerializer
+    queryset = RequirenmentToGetAchieve.objects.all()
+
+
+class AchieveRequirenmentStatusViewSet(viewsets.ModelViewSet):
+    permission_classes = (AllowAny,)
+    serializer_class = AchieveRequirenmentStatusSerializer
+    queryset = AchieveRequirenmentStatus.objects.all()
+
+
+class AchievementUserStatusViewSet(viewsets.ModelViewSet):
+    permission_classes = (AllowAny,)
+    serializer_class = AchievementUserStatusSerializer
+    queryset = AchievementUserStatus.objects.all()
 
 
 @api_view(['GET'])

@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import JobPositionViewSet, DivisionViewSet, UserProfileViewSet, StatisticsViewSet, \
     TaskViewSet, WeeklyTaskViewSet, TeamsViewSet, login, refresh_token, logout, competition, ProductViewSet, shop, \
-    TestsViewSet, QuestionsViewSet, AnswersViewSet, TestBlockViewSet, AchievementViewSet
+    TestsViewSet, QuestionsViewSet, AnswersViewSet, TestBlockViewSet, AchievementViewSet, RequirenmentToGetAchieveViewSet, AchieveRequirenmentStatusViewSet, AchievementUserStatusViewSet
 
 router = DefaultRouter()
 router.register(r'job-positions', JobPositionViewSet)
@@ -18,6 +18,12 @@ router.register(r'questions', QuestionsViewSet)
 router.register(r'answers', AnswersViewSet)
 router.register(r'test-block', TestBlockViewSet)
 router.register(r'achievement', AchievementViewSet)
+router.register(r'requirenment-to-get-achieve',
+                RequirenmentToGetAchieveViewSet)
+router.register(r'achieve-requirenment-status',
+                AchieveRequirenmentStatusViewSet)
+router.register(r'achievement-user-status',
+                AchievementUserStatusViewSet)
 
 urlpatterns = [
     path("", include(router.urls)),
@@ -26,7 +32,6 @@ urlpatterns = [
     path('shop', shop, name='shop'),
     path('logout', logout, name='logout'),
     path('competition', competition, name='competition'),
-    # path('achievement', achievement, name='achievement'),
 
     # path('competition/currentcompetitions', currentcompetitions, name = 'currentcompetitions')
     # path('searchcompetitions')
