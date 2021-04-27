@@ -1,0 +1,282 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+main {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.statistics {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 350px;
+  margin-left: 26px;
+  background-color: #fff;
+  height: calc(100vh - 85px);
+  width: 50%;
+}
+
+.statistics .statistics_main {
+  margin-left: 20px;
+  margin-top: 38px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.statistics .statistics_main .statistics_main_item {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding-bottom: 10px;
+}
+
+.statistics .statistics_main .statistics_main_item h4 {
+  font-size: 24px;
+  color: #808080;
+}
+
+.statistics .statistics_main .statistics_main_item span {
+  font-size: 24px;
+  color: #1a2740;
+  padding-left: 24px;
+  font-weight: bolder;
+}
+
+.statistics .statistics_main .statistics_main_item:nth-of-type(3) {
+  padding-bottom: 20px;
+}
+
+.statistics .statistics_best {
+  margin-top: 40px;
+  margin-left: 20px;
+}
+
+.statistics .statistics_best .statistics_best_header {
+  margin-bottom: 20px;
+}
+
+.statistics .statistics_best .statistics_best_header h4 {
+  font-size: 24px;
+  color: #1a2740;
+}
+
+.statistics .statistics_best .statistics_best_header span {
+  font-size: 24px;
+  color: #808080;
+}
+
+.statistics .statistics_best .statistics_best_item {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding-bottom: 10px;
+}
+
+.statistics .statistics_best .statistics_best_item h4 {
+  font-size: 24px;
+  color: #808080;
+}
+
+.statistics .statistics_best .statistics_best_item span {
+  font-size: 24px;
+  color: #1a2740;
+  padding-left: 15px;
+  font-weight: bolder;
+}
+
+.achievements {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  height: calc(100vh - 85px);
+  overflow: auto;
+  width: 95%;
+}
+
+.achievements h3 {
+  font-size: 24px;
+  color: #545969;
+  padding-left: 50px;
+  padding-top: 29px;
+}
+
+.achievements .achievements_item {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  margin-left: 50px;
+  margin-right: 25px;
+  margin-top: 30px;
+  background-color: #fff;
+  -webkit-box-shadow: 0px 5px 5px -5px rgba(34, 60, 80, 0.69);
+          box-shadow: 0px 5px 5px -5px rgba(34, 60, 80, 0.69);
+  width: 600px;
+}
+
+.achievements .achievements_item .achievements_item_img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-left: 8px;
+  margin-top: 8px;
+  margin-right: 7px;
+}
+
+.achievements .achievements_item:nth-of-type(2n+1) .achievements_item_img {
+  background-color: #23adb2;
+}
+
+.achievements .achievements_item:nth-of-type(2n) .achievements_item_img {
+  background-color: #f7d9b9;
+}
+
+.achievements .achievements_item .achievements_item_content {
+  width: 550px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.achievements .achievements_item .achievements_item_content h4 {
+  font-size: 18px;
+  color: #1A2740;
+}
+
+.achievements .achievements_item .achievements_item_content h4:nth-of-type(1) {
+  padding-top: 9px;
+}
+
+.achievements .achievements_item .achievements_item_content h4:nth-of-type(2) {
+  padding-top: 15px;
+}
+
+.achievements .achievements_item .achievements_item_content p {
+  font-size: 16px;
+  color: #1A2740;
+  margin-right: 10px;
+}
+
+.achievements .achievements_item .achievements_item_content span {
+  font-size: 16px;
+  color: #b1b2b7;
+  margin-left: 350px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.achievements .achievements_item:nth-of-type(10) {
+  margin-bottom: 30px;
+}
+
+.indicators {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  height: calc(100vh - 85px);
+  overflow: auto;
+  width: 100%;
+}
+
+.indicators h3 {
+  font-size: 24px;
+  color: #545969;
+  padding-left: 50px;
+  padding-top: 29px;
+}
+
+.indicators .indicators_item {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  margin-left: 50px;
+  margin-right: 18px;
+  background-color: #fff;
+  margin-top: 30px;
+  -webkit-box-shadow: 0px 5px 5px -5px rgba(34, 60, 80, 0.69);
+          box-shadow: 0px 5px 5px -5px rgba(34, 60, 80, 0.69);
+  width: 580px;
+}
+
+.indicators .indicators_item h4 {
+  padding-left: 15px;
+  padding-top: 11px;
+  padding-bottom: 30px;
+  color: #1A2740;
+  font-size: 16px;
+}
+
+.indicators .indicators_item img {
+  width: 480px;
+  padding-left: 30px;
+}
+
+.indicators .indicators_item span {
+  font-size: 16px;
+  color: #b1b2b7;
+  margin-left: 500px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.indicators .indicators_item .quality_chart {
+  width: 480px;
+}
+
+.indicators .indicators_item:nth-of-type(4) {
+  margin-bottom: 30px;
+}
+/*# sourceMappingURL=style.css.map */

@@ -9,10 +9,13 @@
   },
   "dependencies": {
     "axios": "^0.20.0",
+    "chart.js": "^2.8.0",
+    "chartjs-plugin-datalabels": "^1.0.0",
     "core-js": "^3.6.5",
     "idle-vue": "^2.0.5",
     "node-sass": "^4.14.1",
     "vue": "^2.6.11",
+    "vue-chartjs": "^3.4.2",
     "vue-router": "^3.2.0",
     "vue-simple-spinner": "^1.2.10",
     "vuex": "^3.4.0"
