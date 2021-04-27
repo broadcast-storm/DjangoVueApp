@@ -56,6 +56,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'api.apps.ApiConfig',
     'taggit',
+    'django_cleanup',
+    'easy_thumbnails',
 ]
 
 MIDDLEWARE = [
@@ -231,3 +233,14 @@ LOGGING = {
         }
     }
 }
+
+THUMBNAILS_ALIASES = {
+    '': {
+        'default': {
+            'size': (96, 96),
+            'crop': 'scale',
+        },
+    },
+}
+
+THUMBNAILS_BASEDIR = 'thumbnails'
