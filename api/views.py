@@ -41,22 +41,26 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 # For prod use IsAuthenticated . AllowAny using for Debug
 @permission_classes([AllowAny])
 @ensure_csrf_cookie
-def update_user_money_energy(request, pk):
-    try:
-        user = UserProfile.objects.get(pk=pk)
-    except UserProfile.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
+def update_user_money_energy(request):
     if request.method == 'GET':
-        serializer = UserProfileSerializer(user)
+        serializer = UserProfileSerializer(id=request.user.id)
         return Response(serializer.data)
 
     if request.method == 'PUT':
-        serializer = UserProfileSerializer(user, request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        user = UserProfile.objects.get(id=request.user.id)
+        user.energy += request.data.get('energy')
+        user.money += request.data.get('money')
+        user.save()
+
+        return Response(data="Done")
+    #
+    # if request.method == 'PUT':
+    #     serializer = UserProfileSerializer(user, request.data)
+    #     if serializer.is_valid():
+    #         print(serializer.validated_data['password'])
+    #         serializer.save()
+    #         return Response(serializer.data)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ProductViewSet(viewsets.ModelViewSet):

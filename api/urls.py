@@ -30,7 +30,7 @@ urlpatterns = [
     path('login', login, name='login'),
     path('refresh-token', refresh_token, name='refresh-token'),
     path('shop', shop, name='shop'),
-    path('update-data/<int:pk>', update_user_money_energy, name='update-data'),
+    path('update-data', update_user_money_energy, name='update-data'),
     path('logout', logout, name='logout'),
     path('competition', competition, name='competition'),
 
