@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 
 import * as auth from '@/store/modules/auth.js'
 import * as tasks from '@/store/modules/tasks.js'
+import * as mainQuest from '@/store/modules/mainQuest.js'
 import items from '@/store/modules/items'
 import cart from '@/store/modules/cart'
 import tests from '@/store/modules/tests'
@@ -20,6 +21,7 @@ export default new Vuex.Store({
         cart,
         tokens,
         tests,
+        mainQuest,
         raiting,
         statistics,
     },
