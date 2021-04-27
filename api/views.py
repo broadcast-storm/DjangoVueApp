@@ -1,6 +1,6 @@
 import jwt
 import datetime
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import exceptions
@@ -35,6 +35,28 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
     serializer_class = UserProfileSerializer
     queryset = UserProfile.objects.all()
+
+
+@api_view(['GET', 'PUT'])
+# For prod use IsAuthenticated . AllowAny using for Debug
+@permission_classes([AllowAny])
+@ensure_csrf_cookie
+def update_user_money_energy(request, pk):
+    try:
+        user = UserProfile.objects.get(pk=pk)
+    except UserProfile.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = UserProfileSerializer(user)
+        return Response(serializer.data)
+
+    if request.method == 'PUT':
+        serializer = UserProfileSerializer(user, request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ProductViewSet(viewsets.ModelViewSet):

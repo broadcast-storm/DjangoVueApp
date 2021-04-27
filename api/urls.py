@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import JobPositionViewSet, DivisionViewSet, UserProfileViewSet, StatisticsViewSet, \
     TaskViewSet, WeeklyTaskViewSet, TeamsViewSet, login, refresh_token, logout, competition, ProductViewSet, shop, \
-    TestsViewSet, QuestionsViewSet, AnswersViewSet, TestBlockViewSet
+    TestsViewSet, QuestionsViewSet, AnswersViewSet, TestBlockViewSet, update_user_money_energy
 
 router = DefaultRouter()
 router.register(r'job-positions', JobPositionViewSet)
@@ -23,6 +23,7 @@ urlpatterns = [
     path('login', login, name='login'),
     path('refresh-token', refresh_token, name='refresh-token'),
     path('shop', shop, name='shop'),
+    path('update-data/<int:pk>', update_user_money_energy, name='update-data'),
     path('logout', logout, name='logout'),
     path('competition', competition, name='competition'),
     # path('competition/currentcompetitions', currentcompetitions, name = 'currentcompetitions')
