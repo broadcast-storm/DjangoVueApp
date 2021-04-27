@@ -1,8 +1,6 @@
-import { getCookie } from '@/utils/cookies'
-
 const state = {
     accessToken: null,
-    csrfToken: getCookie('csrftoken'),
+    refreshToken: localStorage.getItem('refresh_token'),
     tokenStatus: '',
     firstRequestSuccess: false,
 }

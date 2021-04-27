@@ -30,7 +30,7 @@ export default {
             var self = this
             var timeToRefresh =
                 parseInt(process.env.VUE_APP_ACCESS_TOKEN_EXPIRES) * 60 * 1000 -
-                30 * 1000
+                10 * 1000
             if (newValue && !oldValue) {
                 self.timerId = setTimeout(async function tick() {
                     await self.AUTH_REFRESH_REQUEST()
