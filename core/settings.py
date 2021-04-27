@@ -157,7 +157,7 @@ SWAGGER_SETTINGS = {
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'api.authentication.SafeJWTAuthentication',
-        'rest_framework.authentication.TokenAuthentication',  # For postman debug
+        # 'rest_framework.authentication.TokenAuthentication',  # For postman debug
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',  # make all endpoints private
