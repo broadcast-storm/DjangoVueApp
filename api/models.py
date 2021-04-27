@@ -1128,32 +1128,33 @@ class CategoryClothes(models.Model):
         verbose_name = "описание товара - одежды"
         verbose_name_plural = "описания товаров - одежды"
 
-    class Purchase(models.Model):
-        PENDING = 'pending'
-        PAID = 'paid'
-        EXPECTS = 'expects'
-        RECEIVED = 'received'
-        PURCHASE_STATUS_CHOICES = (
-            (PENDING, 'оформляется'),
-            (PAID, 'оплачен'),
-            (EXPECTS, 'оможно забрать'),
-            (RECEIVED, 'получен'),
-        )
-        # IDs
 
-        user = models.ForeignKey(
-            UserProfile, on_delete=models.CASCADE, verbose_name="Пользователь")
-        products = models.ManyToManyField(Product, verbose_name="Товары")
+class Purchase(models.Model):
+    PENDING = 'pending'
+    PAID = 'paid'
+    EXPECTS = 'expects'
+    RECEIVED = 'received'
+    PURCHASE_STATUS_CHOICES = (
+        (PENDING, 'оформляется'),
+        (PAID, 'оплачен'),
+        (EXPECTS, 'оможно забрать'),
+        (RECEIVED, 'получен'),
+    )
+    # IDs
 
-        # IDs
+    user = models.ForeignKey(
+        UserProfile, on_delete=models.CASCADE, verbose_name="Пользователь")
+    products = models.ManyToManyField(Product, verbose_name="Товары")
 
-        productCount = models.IntegerField(
-            default=0, verbose_name="Кол-во покупаемых товаров")
-        status = models.CharField(max_length=20, choices=PURCHASE_STATUS_CHOICES,
-                                  default=PENDING, verbose_name="Размер")
+    # IDs
 
-        def __str__(self):
-            return str(self.id)
+    productCount = models.IntegerField(
+        default=0, verbose_name="Кол-во покупаемых товаров")
+    status = models.CharField(max_length=20, choices=PURCHASE_STATUS_CHOICES,
+                              default=PENDING, verbose_name="Размер")
+
+    def __str__(self):
+        return str(self.id)
 
     class Meta:
         verbose_name = "покупка"

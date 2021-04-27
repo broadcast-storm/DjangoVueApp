@@ -13,9 +13,9 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from .serializers import JobPositionSerializer, DivisionSerializer, \
     UserProfileSerializer, StatisticsSerializer, TaskSerializer, TaskUserStatusSerializer, WeeklyTaskSerializer, \
     TeamSerializer, ProductSerializer, RequirementsToBuyProductSerializer, TestsSerializer, QuestionsSerializer, \
-    AnswersSerializer, TestBlockSerializer
+    AnswersSerializer, TestBlockSerializer, AchievementSerializer, RequirenmentToGetAchieveSerializer, AchieveRequirenmentStatusSerializer, AchievementUserStatusSerializer
 from .models import JobPosition, Division, Statistics, UserProfile, Task, WeeklyTask, TaskUserStatus, Team, \
-    Competition, Product, RequirementsToBuyProduct, Test, Question, Answer, TestBlock
+    Competition, Product, RequirementsToBuyProduct, Test, Question, Answer, TestBlock, Achievement, RequirenmentToGetAchieve, AchieveRequirenmentStatus, AchievementUserStatus, Purchase
 from django.http import HttpResponse, JsonResponse
 
 
@@ -90,7 +90,31 @@ class AnswersViewSet(viewsets.ModelViewSet):
     queryset = Answer.objects.all()
 
 
-@api_view(['GET'])
+class AchievementViewSet(viewsets.ModelViewSet):
+    permission_classes = (AllowAny,)
+    serializer_class = AchievementSerializer
+    queryset = Achievement.objects.all()
+
+
+class RequirenmentToGetAchieveViewSet(viewsets.ModelViewSet):
+    permission_classes = (AllowAny,)
+    serializer_class = RequirenmentToGetAchieveSerializer
+    queryset = RequirenmentToGetAchieve.objects.all()
+
+
+class AchieveRequirenmentStatusViewSet(viewsets.ModelViewSet):
+    permission_classes = (AllowAny,)
+    serializer_class = AchieveRequirenmentStatusSerializer
+    queryset = AchieveRequirenmentStatus.objects.all()
+
+
+class AchievementUserStatusViewSet(viewsets.ModelViewSet):
+    permission_classes = (AllowAny,)
+    serializer_class = AchievementUserStatusSerializer
+    queryset = AchievementUserStatus.objects.all()
+
+
+@api_view(['GET', 'PUT'])
 # For prod use IsAuthenticated . AllowAny using for Debug
 @permission_classes([AllowAny])
 @ensure_csrf_cookie
@@ -102,6 +126,31 @@ def shop(request):
         products = RequirementsToBuyProduct.objects.all().prefetch_related('product')
         serializer = RequirementsToBuyProductSerializer(products, many=True)
         return JsonResponse(serializer.data, safe=False)
+
+    # TODO controll transactios
+    if request.method == 'PUT':
+        summary_cost = 0
+        user = UserProfile.objects.get(id=request.user.id)
+        products_req = RequirementsToBuyProduct.objects.filter(
+            id__in=request.data.get('ids')).all().prefetch_related('product')
+        for product_req in products_req:
+            if product_req.product.count <= 0:
+                return Response(data="Product out of stock")
+            if product_req.level > user.level:
+                return Response(data="You need higher level")
+            summary_cost += product_req.money
+            if summary_cost > user.money:
+                return Response(data="You dont have money")
+        user.money -= summary_cost
+        user.save()
+        products = Product.objects.all()
+        p = Purchase(user=request.user)
+        p.save()
+        p.products.set(products)
+        for product in products:
+            product.count -= 1
+            product.save()
+        return Response(data="Done")
 
 
 @api_view(['POST'])

@@ -26,7 +26,8 @@ environ.Env.read_env()
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 SECRET_KEY = env("SECRET_KEY", default="unsafe-secret-key")
-REFRESH_TOKEN_SECRET = env("REFRESH_TOKEN_SECRET", default="unsafe-refresh-secret-key")
+REFRESH_TOKEN_SECRET = env("REFRESH_TOKEN_SECRET",
+                           default="unsafe-refresh-secret-key")
 
 ACCESS_TOKEN_EXPIRES = env("ACCESS_TOKEN_EXPIRES", default=5)
 REFRESH_TOKEN_EXPIRES = env("REFRESH_TOKEN_EXPIRES", default=14)
@@ -156,6 +157,7 @@ SWAGGER_SETTINGS = {
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'api.authentication.SafeJWTAuthentication',
+        # 'rest_framework.authentication.TokenAuthentication',  # For postman debug
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',  # make all endpoints private

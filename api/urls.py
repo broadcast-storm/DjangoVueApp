@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import JobPositionViewSet, DivisionViewSet, UserProfileViewSet, StatisticsViewSet, \
     TaskViewSet, WeeklyTaskViewSet, TeamsViewSet, login, refresh_token, logout, competition, ProductViewSet, shop, \
-    TestsViewSet, QuestionsViewSet, AnswersViewSet, TestBlockViewSet, update_user_money_energy
+    TestsViewSet, QuestionsViewSet, AnswersViewSet, TestBlockViewSet, AchievementViewSet, RequirenmentToGetAchieveViewSet, AchieveRequirenmentStatusViewSet, AchievementUserStatusViewSet, update_user_money_energy
 
 router = DefaultRouter()
 router.register(r'job-positions', JobPositionViewSet)
@@ -17,6 +17,13 @@ router.register(r'tests', TestsViewSet)
 router.register(r'questions', QuestionsViewSet)
 router.register(r'answers', AnswersViewSet)
 router.register(r'test-block', TestBlockViewSet)
+router.register(r'achievement', AchievementViewSet)
+router.register(r'requirenment-to-get-achieve',
+                RequirenmentToGetAchieveViewSet)
+router.register(r'achieve-requirenment-status',
+                AchieveRequirenmentStatusViewSet)
+router.register(r'achievement-user-status',
+                AchievementUserStatusViewSet)
 
 urlpatterns = [
     path("", include(router.urls)),
@@ -26,6 +33,7 @@ urlpatterns = [
     path('update-data/<int:pk>', update_user_money_energy, name='update-data'),
     path('logout', logout, name='logout'),
     path('competition', competition, name='competition'),
+
     # path('competition/currentcompetitions', currentcompetitions, name = 'currentcompetitions')
     # path('searchcompetitions')
 ]
