@@ -39,8 +39,16 @@ ALLOWED_HOSTS = ['yandex-gamification.std-884.ist.mospolytech.ru', '127.0.0.1']
 
 # Application definition
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.request',
+)
+
 INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',
+    #
+    # 'api.apps.SuitConfig',
+    #
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -52,6 +60,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'api.apps.ApiConfig',
     'taggit',
+    'admin_reorder',
     'django_cleanup',
     'easy_thumbnails',
 ]
@@ -66,6 +75,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'admin_reorder.middleware.ModelAdminReorder',
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -228,3 +238,28 @@ THUMBNAILS_ALIASES = {
 }
 
 THUMBNAILS_BASEDIR = 'thumbnails'
+
+ADMIN_REORDER = (
+    # Keep original label and models
+    'sites',
+
+    # Rename app
+    # {'app': 'api', 'label': 'ЯГеймификация'},
+
+    # # Reorder app models
+    {'app': 'api', 'label': 'Задания','models': ('api.Task', 'api.QuestionTheme', 'api.Question', 'api.WeeklyTask')},
+    {'app': 'api', 'label': 'Пользователи','models': ('api.Team', 'api.UserProfile')},
+    {'app': 'api', 'label': 'Поощрения','models': ('api.Achievement',)},
+    #
+    # # Exclude models
+    # {'app': 'auth', 'models': ('auth.User', )},
+    #
+    # # Cross-linked models
+    # {'app': 'auth', 'models': ('auth.User', 'sites.Site')},
+    #
+    # # models with custom name
+    # {'app': 'auth', 'models': (
+    #     'auth.Group',
+    #     {'model': 'auth.User', 'label': 'Staff'},
+    # )},
+)
