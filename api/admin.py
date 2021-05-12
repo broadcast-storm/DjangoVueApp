@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group, User
 from django.contrib.auth.admin import GroupAdmin, UserAdmin
-from .models import UserProfile, Task, WeeklyTask, Division, JobPosition, Team, Question, QuestionTheme, Test, TestBlock, Achievement, RequirenmentToGetAchieve
+from .models import UserProfile, Statistics, Task, WeeklyTask, Division, JobPosition, Team, Question, QuestionTheme, Test, TestBlock, Achievement, RequirenmentToGetAchieve
 from django.db import models
 from django import forms
 from django.urls import resolve
@@ -67,7 +67,7 @@ class JobPositionAdmin(admin.ModelAdmin):
 class UserProfileAdmin(UserAdmin):
     list_display = ('email', 'username', 'name', 'surname', 'last_login', 'userType')
     search_fields = ('email', 'name', 'surname')
-    readonly_fields = ('date_joined', 'last_login')
+    readonly_fields = ('date_joined', 'last_login', 'competitionCount', 'winCompetitionCount')
     filter_horizontal = ()
     fieldsets = ()
     list_filter = ('division', "jobPosition")
@@ -78,6 +78,8 @@ class UserProfileAdmin(UserAdmin):
               "description", "photo",
               ("money", "health", "energy"),
               ("level", "quality", "productivity"),
+            #   ("completedTests", "completedTasks", "completedQuests"),
+            #   ("achievements"),
               ("competitionCount", "winCompetitionCount"),
               "last_login", "date_joined")
 
@@ -104,6 +106,7 @@ class TaskAdmin(admin.ModelAdmin):
 
     def tag_list(self, obj):
         return u", ".join(o.name for o in obj.tags.all())
+    tag_list.short_description = "Теги"
 
     inlines = [SubTask]
     list_display = ('title', 'taskType', 'subTasksCount', 'parent', 'weekly', 'isTeamTask', 'tag_list')
@@ -155,6 +158,7 @@ class WeeklyTaskAdmin(admin.ModelAdmin):
 
     def tag_list(self, obj):
         return u", ".join(o.name for o in obj.tags.all())
+    tag_list.short_description = "Теги"
 
     list_display = ('title', 'taskType', 'subTasksCount', 'isTeamTask', 'tag_list')
     list_filter = ('tags',)
@@ -183,6 +187,7 @@ class QuestionAdmin(admin.ModelAdmin):
 
     def tag_list(self, obj):
         return u", ".join(o.name for o in obj.tags.all())
+    tag_list.short_description = "Теги"
 
     list_display = ('title', 'description', 'questionTheme', 'tag_list')
     search_fields = ('title',)
@@ -198,6 +203,7 @@ class QuestionAdmin(admin.ModelAdmin):
 
         )
     }),)
+    list_filter = ('tags',)
     filter_horizontal = ()
     readonly_fields = ('created_at', 'updated_at')
 
@@ -245,7 +251,6 @@ class TestBlockInline(admin.StackedInline):
         (None, {
             'fields': (
             ('questionTheme',
-            'questionsCount',
             'blockWeight',),
             ('created_at',
             'updated_at',))

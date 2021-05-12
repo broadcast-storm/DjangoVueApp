@@ -124,6 +124,17 @@ class UserProfile(AbstractBaseUser):
     competitionCount = models.IntegerField(default=0, verbose_name="Кол-во соревнований")
     winCompetitionCount = models.IntegerField(default=0, verbose_name="Кол-во выиграных соревнований")
 
+    # def completedTests(self, instance):
+    #     self.statistics.completedTests
+    # def completedTasks(self, instance):
+    #     self.statistics.completedTasks
+    # def completedQuests(self, instance):
+    #     self.statistics.completedQuests
+    # def achievements(self, instance):
+    #     self.statistics.achievements
+
+    # completedTests = property(completedTests)
+
     class Meta:
         verbose_name = "пользователь"
         verbose_name_plural = "пользователи"
@@ -145,7 +156,7 @@ class UserProfile(AbstractBaseUser):
 class Statistics(models.Model):
     # IDs
 
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, verbose_name="Пользователь")
+    user = models.OneToOneField(UserProfile, on_delete=models.CASCADE, verbose_name="Пользователь", related_name="statistics")
 
     # IDs
 
