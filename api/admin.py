@@ -213,20 +213,6 @@ class QuestionThemeAdmin(admin.ModelAdmin):
     }),)
     filter_horizontal = ()
 
-class TestUserInline(admin.StackedInline):
-    extra = 0
-    # max_num = 10
-    model = Test.users.through
-    fields = (
-        ('user',
-         'status',),
-        ('rightAnswersCount',
-         'completeTime',
-         'points',
-         'hasLeftTest',)
-    )
-    readonly_fields = ('rightAnswersCount', 'completeTime')
-
 class TestBlockInlineForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(TestBlockInlineForm, self).__init__(*args, **kwargs)
@@ -272,7 +258,7 @@ class TestBlockInline(admin.StackedInline):
     readonly_fields = ('created_at', 'updated_at')
 
 class TestAdmin(admin.ModelAdmin):
-    inlines = [TestBlockInline,TestUserInline]
+    inlines = [TestBlockInline,]
 
     list_display = ('title', 'description')
     
@@ -285,7 +271,6 @@ class TestAdmin(admin.ModelAdmin):
             'canLeave',
             'canSkip',
             'showAnswers',
-            'isInterview',
             'canSeeSpentTime',
             'canSeeTestClosing',
         )
