@@ -13,8 +13,8 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from .serializers import JobPositionSerializer, DivisionSerializer, \
     UserProfileSerializer, StatisticsSerializer, TaskSerializer, TaskUserStatusSerializer, WeeklyTaskSerializer, \
     TeamSerializer, ProductSerializer, RequirementsToBuyProductSerializer, TestsSerializer, QuestionsSerializer, \
-    AnswersSerializer, TestBlockSerializer, AchievementSerializer, RequirenmentToGetAchieveSerializer, AchieveRequirenmentStatusSerializer, AchievementUserStatusSerializer
-from .models import JobPosition, Division, Statistics, UserProfile, Task, WeeklyTask, TaskUserStatus, Team, \
+    AnswersSerializer, TestBlockSerializer, AchievementSerializer, RequirenmentToGetAchieveSerializer, AchieveRequirenmentStatusSerializer, AchievementUserStatusSerializer, TestUserSerializer
+from .models import JobPosition, Division, Statistics, TestUser, UserProfile, Task, WeeklyTask, TaskUserStatus, Team, \
     Competition, Product, RequirementsToBuyProduct, Test, Question, Answer, TestBlock, Achievement, RequirenmentToGetAchieve, AchieveRequirenmentStatus, AchievementUserStatus, Purchase
 from django.http import HttpResponse, JsonResponse
 
@@ -76,6 +76,12 @@ class TestsViewSet(viewsets.ModelViewSet):
     queryset = Test.objects.all()
 
 
+class TestUserViewSet(viewsets.ModelViewSet):
+    permission_classes = (AllowAny,)
+    serializer_class = TestUserSerializer
+    queryset = TestUser.objects.all()
+
+
 class TestBlockViewSet(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
     serializer_class = TestBlockSerializer
@@ -116,6 +122,34 @@ class AchievementUserStatusViewSet(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
     serializer_class = AchievementUserStatusSerializer
     queryset = AchievementUserStatus.objects.all()
+
+
+@api_view(['GET'])
+# For prod use IsAuthenticated . AllowAny using for Debug
+@permission_classes([AllowAny])
+@ensure_csrf_cookie
+def unresolved_test(request):
+    """
+    List all code snippets, or create a new snippet.
+    """
+    if request.method == 'GET':
+        tests = Test.objects.exclude(users=request.user.id).all()
+        serializer = TestsSerializer(tests, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+
+@api_view(['GET'])
+# For prod use IsAuthenticated . AllowAny using for Debug
+@permission_classes([AllowAny])
+@ensure_csrf_cookie
+def unresolved_test(request):
+    """
+    List all code snippets, or create a new snippet.
+    """
+    if request.method == 'GET':
+        tests = Test.objects.exclude(users=request.user.id).all()
+        serializer = TestsSerializer(tests, many=True)
+        return JsonResponse(serializer.data, safe=False)
 
 
 @api_view(['GET', 'PUT'])

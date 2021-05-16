@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import JobPosition, Division, UserProfile, Statistics, Task, TaskUserStatus, Team, Product, \
+from .models import JobPosition, Division, TestUser, UserProfile, Statistics, Task, TaskUserStatus, Team, Product, \
     RequirementsToBuyProduct, Test, Question, Answer, TestBlock, Achievement, RequirenmentToGetAchieve, AchieveRequirenmentStatus, AchievementUserStatus
 
 
@@ -80,6 +80,13 @@ class TestBlockSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TestBlock
+        fields = '__all__'
+
+
+class TestUserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = TestUser
         fields = '__all__'
 
 
