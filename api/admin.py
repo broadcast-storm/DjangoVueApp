@@ -305,9 +305,23 @@ class MyAdminSite(admin.AdminSite):
         return app_list
 
 
-class RequirenmentToGetAchieveInline(admin.TabularInline):
+class RequirenmentToGetAchieveInline(admin.StackedInline):
     model = RequirenmentToGetAchieve
+    extra = 1
 
+    fields = (
+        ('completedAchievement',
+         'completedTask',
+         'completedWeeklyTask',
+         'completedMainQuest',
+         'completedTest',),
+        ('completeTime',),
+        ('level',
+         'quality',
+         'productivity',
+         'competitionsCount',
+         'competitionWinsCount',),
+    )
 
 class AchievementAdmin(admin.ModelAdmin):
     list_display = ('title', 'description', 'get_image')
