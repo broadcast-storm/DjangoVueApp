@@ -35,12 +35,13 @@ class DivisionViewSet(viewsets.ModelViewSet):
 
 class UserProfileViewSet(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
+    queryset = UserProfile.objects.all()
 
 
 @api_view(['GET', 'PUT'])
 # For prod use IsAuthenticated . AllowAny using for Debug
 @permission_classes([AllowAny])
-@ensure_csrf_cookie
+# @ensure_csrf_cookie
 def update_user_money_energy(request):
     if request.method == 'GET':
         serializer = UserProfileSerializer(id=request.user.id)
@@ -127,7 +128,7 @@ class AchievementUserStatusViewSet(viewsets.ModelViewSet):
 @api_view(['GET'])
 # For prod use IsAuthenticated . AllowAny using for Debug
 @permission_classes([AllowAny])
-@ensure_csrf_cookie
+# @ensure_csrf_cookie
 def userFilterForCompetition(request):
     if request.method == 'GET':
         users = UserProfile.objects.all().filter(level=request.data['level'])
@@ -138,7 +139,7 @@ def userFilterForCompetition(request):
 @api_view(['GET', 'PUT'])
 # For prod use IsAuthenticated . AllowAny using for Debug
 @permission_classes([AllowAny])
-@ensure_csrf_cookie
+# @ensure_csrf_cookie
 def shop(request):
     """
     List all code snippets, or create a new snippet.
@@ -172,87 +173,6 @@ def shop(request):
             product.count -= 1
             product.save()
         return Response(data="Done")
-
-
-@api_view(['POST'])
-@permission_classes([AllowAny])
-@ensure_csrf_cookie
-def login(request):
-    user_model = get_user_model()
-    username = request.data.get('username')
-    password = request.data.get('password')
-    response = Response()
-    if (username is None) or (password is None):
-        raise exceptions.AuthenticationFailed(
-            'username and password required')
-
-    user = user_model.objects.filter(username=username).first()
-    if user is None:
-        raise exceptions.AuthenticationFailed('user not found')
-    if not user.check_password(password):
-        raise exceptions.AuthenticationFailed('wrong password')
-
-    serialized_user = UserProfileSerializer(user).data
-
-    new_access_token = generate_access_token(user)
-    new_refresh_token = generate_refresh_token(user)
-
-    max_age = settings.REFRESH_TOKEN_EXPIRES * 24 * 60 * 60
-    expires = datetime.datetime.strftime(
-        datetime.datetime.utcnow() + datetime.timedelta(seconds=max_age),
-        "%a, %d-%b-%Y %H:%M:%S GMT",
-    )
-
-    response.set_cookie(key='refreshtoken', value=new_refresh_token, httponly=True, max_age=max_age,
-                        expires=expires, )
-    response.data = {
-        'access_token': new_access_token,
-        'user': serialized_user,
-    }
-
-    return response
-
-
-@api_view(['POST'])
-@permission_classes([AllowAny])
-@ensure_csrf_cookie
-def logout(request):
-    response = Response()
-    response.delete_cookie('refreshtoken')
-
-    return response
-
-
-@api_view(['POST'])
-@permission_classes([AllowAny])
-@csrf_protect
-def refresh_token(request):
-    """
-    To obtain a new access_token this view expects 2 important things:
-        1. a cookie that contains a valid refresh_token
-        2. a header 'X-CSRFTOKEN' with a valid csrf token, client app can get it from cookies "csrftoken"
-    """
-    user_model = get_user_model()
-    req_refresh_token = request.COOKIES.get('refreshtoken')
-    if refresh_token is None:
-        raise exceptions.AuthenticationFailed(
-            'Authentication credentials were not provided.')
-    try:
-        payload = jwt.decode(
-            req_refresh_token, settings.REFRESH_TOKEN_SECRET, algorithms=['HS256'])
-    except jwt.ExpiredSignatureError:
-        raise exceptions.AuthenticationFailed(
-            'expired refresh token, please login again.')
-
-    user = user_model.objects.filter(id=payload.get('user_id')).first()
-    if user is None:
-        raise exceptions.AuthenticationFailed('User not found')
-
-    if not user.is_active:
-        raise exceptions.AuthenticationFailed('user is inactive')
-
-    access_token = generate_access_token(user)
-    return Response({'access_token': access_token})
 
 
 # Привязка страниц

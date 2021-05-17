@@ -147,10 +147,9 @@ USE_L10N = True
 USE_TZ = True
 
 SWAGGER_SETTINGS = {
+    'DOC_EXPANSION': 'none',
     'SECURITY_DEFINITIONS': {
-        'Basic': {
-            'type': 'basic'
-        },
+        'USE_SESSION_AUTH': False,
         'Bearer': {
             'type': 'apiKey',
             'name': 'Authorization',
@@ -161,8 +160,7 @@ SWAGGER_SETTINGS = {
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'api.authentication.SafeJWTAuthentication',
-        'rest_framework.authentication.TokenAuthentication',  # For postman debug
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',  # make all endpoints private
