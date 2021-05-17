@@ -47,11 +47,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 INSTALLED_APPS = [
+    'baton',
     'django_crontab',
     'whitenoise.runserver_nostatic',
-    #
-    # 'api.apps.SuitConfig',
-    #
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -64,9 +62,11 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'api.apps.ApiConfig',
     'taggit',
-    'admin_reorder',
+    # 'admin_reorder',
     'django_cleanup',
     'easy_thumbnails',
+
+    'baton.autodiscover', #at the end
 ]
 
 MIDDLEWARE = [
@@ -79,7 +79,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'admin_reorder.middleware.ModelAdminReorder',
+    # 'admin_reorder.middleware.ModelAdminReorder',
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -255,27 +255,54 @@ THUMBNAILS_ALIASES = {
 
 THUMBNAILS_BASEDIR = 'thumbnails'
 
-ADMIN_REORDER = (
-    # Keep original label and models
-    'sites',
+# ADMIN_REORDER = (
+#     # Keep original label and models
+#     'sites',
+#
+#     # # Reorder app models
+#     {'app': 'api', 'label': 'Задания','models': ('api.Task', 'api.QuestionTheme', 'api.Question', 'api.WeeklyTask')},
+#     {'app': 'api', 'label': 'Пользователи','models': ('api.Team', 'api.UserProfile')},
+#     {'app': 'api', 'label': 'Поощрения','models': ('api.Achievement',)},
+# )
 
-    # Rename app
-    # {'app': 'api', 'label': 'ЯГеймификация'},
-
-    # # Reorder app models
-    {'app': 'api', 'label': 'Задания','models': ('api.Task', 'api.QuestionTheme', 'api.Question', 'api.WeeklyTask')},
-    {'app': 'api', 'label': 'Пользователи','models': ('api.Team', 'api.UserProfile')},
-    {'app': 'api', 'label': 'Поощрения','models': ('api.Achievement',)},
-    #
-    # # Exclude models
-    # {'app': 'auth', 'models': ('auth.User', )},
-    #
-    # # Cross-linked models
-    # {'app': 'auth', 'models': ('auth.User', 'sites.Site')},
-    #
-    # # models with custom name
-    # {'app': 'auth', 'models': (
-    #     'auth.Group',
-    #     {'model': 'auth.User', 'label': 'Staff'},
-    # )},
-)
+BATON = {
+    'SITE_HEADER': 'Я.Геймификация',
+    'SITE_TITLE': 'Яндекс.Геймификация',
+    'INDEX_TITLE': 'Панель администратора',
+    'SUPPORT_HREF': 'https://github.com/otto-torino/django-baton/issues',
+    'COPYRIGHT': 'Copyright © 2021 <a href="//mospolytech.ru" target="_blank">MosPolytech</a>', # noqa
+    'POWERED_BY': '<a href="//mospolytech.ru" target="_blank">MosPolytech</a>',
+    'MENU_TITLE': 'Menu',
+    # 'GRAVATAR_DEFAULT_IMG': 'retro',
+    # 'LOGIN_SPLASH': '/static/core/img/login-splash.png',
+    # 'SEARCH_FIELD': {
+    #     'label': 'Search contents...',
+    #     'url': '/search/',
+    # },
+    # 'MENU': (
+    #     { 'type': 'title', 'label': 'main', 'apps': ('auth', ) },
+    #     {
+    #         'type': 'app',
+    #         'name': 'auth',
+    #         'label': 'Authentication',
+    #         'icon': 'fa fa-lock',
+    #         'models': (
+    #             {
+    #                 'name': 'user',
+    #                 'label': 'Users'
+    #             },
+    #             {
+    #                 'name': 'group',
+    #                 'label': 'Groups'
+    #             },
+    #         )
+    #     },
+    #     { 'type': 'title', 'label': 'Contents', 'apps': ('flatpages', ) },
+    #     { 'type': 'model', 'label': 'Pages', 'name': 'flatpage', 'app': 'flatpages' },
+    #     { 'type': 'free', 'label': 'Custom Link', 'url': 'http://www.google.it', 'perms': ('flatpages.add_flatpage', 'auth.change_user') },
+    #     { 'type': 'free', 'label': 'My parent voice', 'default_open': True, 'children': [
+    #         { 'type': 'model', 'label': 'A Model', 'name': 'mymodelname', 'app': 'myapp' },
+    #         { 'type': 'free', 'label': 'Another custom link', 'url': 'http://www.google.it' },
+    #     ] },
+    # ),
+}
