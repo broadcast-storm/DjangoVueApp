@@ -874,7 +874,7 @@ class TestUser(models.Model):
     # IDs
 
     status = models.CharField(max_length=20, choices=STATUS_TYPE_CHOICES,
-                              default=STARTED, verbose_name="Сложность")
+                              default=STARTED, verbose_name="Статус")
     rightAnswersCount = models.IntegerField(
         default=0, verbose_name="Кол-во правильных ответов")
     completeTime = models.DateTimeField(

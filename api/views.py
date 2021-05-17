@@ -14,10 +14,10 @@ from .serializers import JobPositionSerializer, DivisionSerializer, \
     UserProfileSerializer, StatisticsSerializer, TaskSerializer, TaskUserStatusSerializer, WeeklyTaskSerializer, \
     TeamSerializer, ProductSerializer, RequirementsToBuyProductSerializer, TestsSerializer, QuestionsSerializer, \
     AnswersSerializer, TestBlockSerializer, AchievementSerializer, RequirenmentToGetAchieveSerializer, AchieveRequirenmentStatusSerializer, \
-    AchievementUserStatusSerializer, CompetitionSerializer, UserCompetitionSerializer
+    AchievementUserStatusSerializer, CompetitionSerializer, UserCompetitionSerializer, TestUserSerializer
 from .models import JobPosition, Division, Statistics, UserProfile, Task, WeeklyTask, TaskUserStatus, Team, \
     Competition, Product, RequirementsToBuyProduct, Test, Question, Answer, TestBlock, Achievement, RequirenmentToGetAchieve, \
-    AchieveRequirenmentStatus, AchievementUserStatus, Purchase
+    AchieveRequirenmentStatus, AchievementUserStatus, Purchase, TestUser
 from django.http import HttpResponse, JsonResponse
 
 
@@ -76,6 +76,12 @@ class TestsViewSet(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
     serializer_class = TestsSerializer
     queryset = Test.objects.all()
+
+
+class TestUserViewSet(viewsets.ModelViewSet):
+    permission_classes = (AllowAny,)
+    serializer_class = TestUserSerializer
+    queryset = TestUser.objects.all()
 
 
 class TestBlockViewSet(viewsets.ModelViewSet):
