@@ -36,8 +36,8 @@ urlpatterns = [
     path('update-data', update_user_money_energy, name='update-data'),
     path('logout', logout, name='logout'),
     path('competition', competition, name='competition'),
-    path('user-filter-for-competitions', userFilterForCompetition, name='user-filter-for-competitions')
+    path('user-filter-for-competitions', userFilterForCompetition,
+         name='user-filter-for-competitions')
 
     # path('competition/currentcompetitions', currentcompetitions, name = 'currentcompetitions')
     # path('searchcompetitions')
-]
