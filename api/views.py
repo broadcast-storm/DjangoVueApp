@@ -13,9 +13,11 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from .serializers import JobPositionSerializer, DivisionSerializer, \
     UserProfileSerializer, StatisticsSerializer, TaskSerializer, TaskUserStatusSerializer, WeeklyTaskSerializer, \
     TeamSerializer, ProductSerializer, RequirementsToBuyProductSerializer, TestsSerializer, QuestionsSerializer, \
-    AnswersSerializer, TestBlockSerializer, AchievementSerializer, RequirenmentToGetAchieveSerializer, AchieveRequirenmentStatusSerializer, AchievementUserStatusSerializer
+    AnswersSerializer, TestBlockSerializer, AchievementSerializer, RequirenmentToGetAchieveSerializer, AchieveRequirenmentStatusSerializer, \
+    AchievementUserStatusSerializer, CompetitionSerializer, UserCompetitionSerializer
 from .models import JobPosition, Division, Statistics, UserProfile, Task, WeeklyTask, TaskUserStatus, Team, \
-    Competition, Product, RequirementsToBuyProduct, Test, Question, Answer, TestBlock, Achievement, RequirenmentToGetAchieve, AchieveRequirenmentStatus, AchievementUserStatus, Purchase
+    Competition, Product, RequirementsToBuyProduct, Test, Question, Answer, TestBlock, Achievement, RequirenmentToGetAchieve, \
+    AchieveRequirenmentStatus, AchievementUserStatus, Purchase
 from django.http import HttpResponse, JsonResponse
 
 
@@ -116,6 +118,17 @@ class AchievementUserStatusViewSet(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
     serializer_class = AchievementUserStatusSerializer
     queryset = AchievementUserStatus.objects.all()
+
+
+@api_view(['GET'])
+# For prod use IsAuthenticated . AllowAny using for Debug
+@permission_classes([AllowAny])
+@ensure_csrf_cookie
+def userFilterForCompetition(request):
+    if request.method == 'GET':
+        users = UserProfile.objects.all().filter(level=request.data['level'])
+        serializer = UserCompetitionSerializer(users, many=True)
+        return JsonResponse(serializer.data, safe=False)
 
 
 @api_view(['GET', 'PUT'])
