@@ -152,10 +152,9 @@ export default {
     margin-bottom: 45px;
     z-index: 9999;
     .cart__back {
-        text-decoration: none;
-        font-size: 24px;
+        font-size: 28px;
         line-height: 28px;
-        color: #7d849a;
+        color: #535a70;
     }
     .cart__headline {
         font-size: 48px;
