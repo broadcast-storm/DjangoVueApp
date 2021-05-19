@@ -123,9 +123,9 @@ export default {
                 test => test.id === parseInt(this.id, 10)
             )[0]
         },
-        numberQuestions: function() {
-            return this.test.questions.length
-        },
+        // numberQuestions: function() {
+        //     return this.test.questions.length
+        // },
     },
     methods: {
         ...mapMutations(['accrueReward']),
@@ -172,6 +172,7 @@ export default {
                 lightnings: lightnings,
             }
             this.$store.commit('accrueReward', this.reward)
+            this.$store.commit('tests/deleteTest', this.test.id)
         },
     },
 }
