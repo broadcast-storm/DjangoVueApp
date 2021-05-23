@@ -1,7 +1,9 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group, User
 from django.contrib.auth.admin import GroupAdmin, UserAdmin
-from .models import UserProfile, Task, WeeklyTask, Division, JobPosition, Team, Question, QuestionTheme, Test, TestBlock, Achievement, RequirenmentToGetAchieve
+from .models import UserProfile, Task, WeeklyTask, Division, JobPosition, Team, \
+    Question, QuestionTheme, Test, TestBlock, Achievement, RequirenmentToGetAchieve, \
+    Product, RequirementsToBuyProduct, ProductCategory, CategoryClothes, Purchase
 from django.db import models
 from django import forms
 from django.urls import resolve
@@ -68,6 +70,7 @@ class UserProfileAdmin(UserAdmin):
     list_display = ('email', 'username', 'name', 'surname', 'last_login', 'userType')
     search_fields = ('email', 'name', 'surname')
     readonly_fields = ('date_joined', 'last_login')
+
     filter_horizontal = ()
     fieldsets = ()
     list_filter = ('division', "jobPosition")
@@ -243,7 +246,7 @@ class TestBlockInlineForm(forms.ModelForm):
         for quest in data:
             if quest.questionTheme != data_theme:
                 raise forms.ValidationError('Выберите вопросы по теме')
-        
+
         return data
 
     class Meta:
@@ -254,7 +257,7 @@ class TestBlockInline(admin.StackedInline):
     extra = 0
     model = TestBlock
     form = TestBlockInlineForm
-            
+
     fieldsets = (
         (None, {
             'fields': (
@@ -275,7 +278,7 @@ class TestAdmin(admin.ModelAdmin):
     inlines = [TestBlockInline,TestUserInline]
 
     list_display = ('title', 'description')
-    
+
     search_fields = ('title',)
     fieldsets = ((None, {
         'fields': (
@@ -332,7 +335,34 @@ class AchievementAdmin(admin.ModelAdmin):
 
     get_image.short_description = 'Фото'
 
+
+class RequirementsToBuyProductInline(admin.TabularInline):
+    model = RequirementsToBuyProduct
+    fields = ('level', 'money',)
+
+
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ('title', 'description', 'get_image', 'count')
+
+    inlines = (RequirementsToBuyProductInline, )
+
+    def get_image(self, obj):
+        if obj.photo:
+            return mark_safe(f'<img src="{obj.photo.url}" width="75">')
+        else:
+            return 'Фото не установлено'
+
+    get_image.short_description = 'Фото'
+
+
+class ProductCategoryAdmin(admin.ModelAdmin):
+    list_display = ('title', 'description')
+
+
 admin.site = MyAdminSite()
+
+admin.site.register(Product, ProductAdmin)
+admin.site.register(ProductCategory, ProductCategoryAdmin)
 
 admin.site.register(Achievement, AchievementAdmin)
 

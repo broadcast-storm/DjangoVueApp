@@ -263,9 +263,9 @@ ADMIN_REORDER = (
     # {'app': 'api', 'label': 'ЯГеймификация'},
 
     # # Reorder app models
-    {'app': 'api', 'label': 'Задания','models': ('api.Task', 'api.QuestionTheme', 'api.Question', 'api.WeeklyTask')},
-    {'app': 'api', 'label': 'Пользователи','models': ('api.Team', 'api.UserProfile')},
-    {'app': 'api', 'label': 'Поощрения','models': ('api.Achievement',)},
+    {'app': 'api', 'label': 'Задания', 'models': ('api.Task', 'api.QuestionTheme', 'api.Question', 'api.WeeklyTask')},
+    {'app': 'api', 'label': 'Пользователи', 'models': ('api.Team', 'api.UserProfile')},
+    {'app': 'api', 'label': 'Поощрения', 'models': ('api.Achievement', {'model': 'api.Product', 'label': 'Магазин'})},
     #
     # # Exclude models
     # {'app': 'auth', 'models': ('auth.User', )},
