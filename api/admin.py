@@ -284,27 +284,6 @@ class TestAdmin(admin.ModelAdmin):
     filter_horizontal = ()
     readonly_fields = ('created_at', 'updated_at')
 
-class MyAdminSite(admin.AdminSite):
-    # Text to put at the end of each page's <title>.
-    site_title = 'Яндекс.Геймификация Админ'
-
-    # Text to put in each page's <h1> (and above login form).
-    site_header = 'Яндекс.Геймификация Админ'
-
-    # Text to put at the top of the admin index page.
-    index_title = 'Панель администрирования'
-
-    def get_app_list(self, request):
-        """
-        Return a sorted list of all the installed apps that have been
-        registered in this site.
-        """
-        app_dict = self._build_app_dict(request)
-
-        app_list = sorted(app_dict.values(), key=lambda x: x['name'].lower())
-        return app_list
-
-
 class RequirenmentToGetAchieveInline(admin.StackedInline):
     model = RequirenmentToGetAchieve
     extra = 1
@@ -336,9 +315,23 @@ class AchievementAdmin(admin.ModelAdmin):
 
     get_image.short_description = 'Фото'
 
-admin.site = MyAdminSite()
+class MyAdminSite(admin.AdminSite):
+    # Text to put at the end of each page's <title>.
+    site_title = 'ЮMoney.Геймификация'
 
-admin.site.register(Achievement, AchievementAdmin)
+    # Text to put in each page's <h1> (and above login form).
+    site_header = 'ЮMoney.Геймификация'
+
+    # Text to put at the top of the admin index page.
+    index_title = 'Панель администрирования'
+
+    def get_app_list(self, request):
+        app_dict = self._build_app_dict(request)
+
+        app_list = sorted(app_dict.values(), key=lambda x: x['name'].lower())
+        return app_list
+
+admin.site = MyAdminSite()
 
 admin.site.register(WeeklyTask, WeeklyTaskAdmin)
 admin.site.register(Task, TaskAdmin)
@@ -346,6 +339,8 @@ admin.site.register(Task, TaskAdmin)
 admin.site.register(Test, TestAdmin)
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(QuestionTheme, QuestionThemeAdmin)
+
+admin.site.register(Achievement, AchievementAdmin)
 
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(Division, DivisionAdmin)

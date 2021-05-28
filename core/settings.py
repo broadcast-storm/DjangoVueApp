@@ -266,43 +266,36 @@ THUMBNAILS_BASEDIR = 'thumbnails'
 # )
 
 BATON = {
-    'SITE_HEADER': 'Я.Геймификация',
-    'SITE_TITLE': 'Яндекс.Геймификация',
+    'SITE_HEADER': 'Геймификация',
+    'SITE_TITLE': 'ЮMoney.Геймификация',
     'INDEX_TITLE': 'Панель администратора',
-    'SUPPORT_HREF': 'https://github.com/otto-torino/django-baton/issues',
+    'SUPPORT_HREF': 'https://github.com/nikita220800/DjangoVueApp',
     'COPYRIGHT': 'Copyright © 2021 <a href="//mospolytech.ru" target="_blank">MosPolytech</a>', # noqa
     'POWERED_BY': '<a href="//mospolytech.ru" target="_blank">MosPolytech</a>',
-    'MENU_TITLE': 'Menu',
-    # 'GRAVATAR_DEFAULT_IMG': 'retro',
-    # 'LOGIN_SPLASH': '/static/core/img/login-splash.png',
-    # 'SEARCH_FIELD': {
-    #     'label': 'Search contents...',
-    #     'url': '/search/',
-    # },
-    # 'MENU': (
-    #     { 'type': 'title', 'label': 'main', 'apps': ('auth', ) },
-    #     {
-    #         'type': 'app',
-    #         'name': 'auth',
-    #         'label': 'Authentication',
-    #         'icon': 'fa fa-lock',
-    #         'models': (
-    #             {
-    #                 'name': 'user',
-    #                 'label': 'Users'
-    #             },
-    #             {
-    #                 'name': 'group',
-    #                 'label': 'Groups'
-    #             },
-    #         )
-    #     },
-    #     { 'type': 'title', 'label': 'Contents', 'apps': ('flatpages', ) },
-    #     { 'type': 'model', 'label': 'Pages', 'name': 'flatpage', 'app': 'flatpages' },
-    #     { 'type': 'free', 'label': 'Custom Link', 'url': 'http://www.google.it', 'perms': ('flatpages.add_flatpage', 'auth.change_user') },
-    #     { 'type': 'free', 'label': 'My parent voice', 'default_open': True, 'children': [
-    #         { 'type': 'model', 'label': 'A Model', 'name': 'mymodelname', 'app': 'myapp' },
-    #         { 'type': 'free', 'label': 'Another custom link', 'url': 'http://www.google.it' },
-    #     ] },
-    # ),
+    'MENU_TITLE': 'Меню',
+    'GRAVATAR_DEFAULT_IMG': 'mp',
+    'LOGIN_SPLASH': '/frontend/src/assets/img/auth/background.jpg',
+
+    'MENU': (
+        { 'type': 'title', 'label': 'Задания', 'apps': ('api', ) },
+        # { 'type': 'model', 'label': 'Квест', 'name': 'quest', 'app': 'api' },
+        { 'type': 'model', 'label': 'Еженедельные задачи', 'name': 'weeklytask', 'app': 'api' },
+        { 'type': 'model', 'label': 'Тесты', 'name': 'test', 'app': 'api' },
+
+        { 'type': 'title', 'label': 'Поощрения', 'apps': ('api', ) },
+        { 'type': 'model', 'label': 'Ачивки', 'name': 'achievement', 'app': 'api' },
+        # { 'type': 'model', 'label': 'Магазин', 'name': 'shop', 'app': 'api' },
+
+        { 'type': 'title', 'label': 'Пользователи', 'apps': ('api', ) },
+        { 'type': 'model', 'label': 'Подразделения', 'name': 'division', 'app': 'api' },
+        { 'type': 'model', 'label': 'Команды', 'name': 'team', 'app': 'api' },
+        { 'type': 'model', 'label': 'Сотрудники', 'name': 'userprofile', 'app': 'api' },
+
+
+        # { 'type': 'free', 'label': 'Custom Link', 'url': 'http://www.google.it', 'perms': ('flatpages.add_flatpage', 'auth.change_user') },
+        # { 'type': 'free', 'label': 'My parent voice', 'default_open': True, 'children': [
+        #     { 'type': 'model', 'label': 'A Model', 'name': 'mymodelname', 'app': 'myapp' },
+        #     { 'type': 'free', 'label': 'Another custom link', 'url': 'http://www.google.it' },
+        # ] },
+    ),
 }
