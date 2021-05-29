@@ -120,6 +120,13 @@ class AnswersSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class AnswersWithoutFlagSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Answer
+        fields = ['id', 'text', 'description', 'image', 'question']
+
+
 # class ShopSerializer(serializers.ModelSerializer):
 #     product = ProductSerializer(read_only=True)
 

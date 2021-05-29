@@ -16,7 +16,7 @@ from .serializers import JobPositionSerializer, DivisionSerializer, \
     UserProfileSerializer, StatisticsSerializer, TaskSerializer, TaskUserStatusSerializer, WeeklyTaskSerializer, \
     TeamSerializer, ProductSerializer, RequirementsToBuyProductSerializer, TestsSerializer, QuestionsSerializer, \
     AnswersSerializer, TestBlockSerializer, AchievementSerializer, RequirenmentToGetAchieveSerializer, AchieveRequirenmentStatusSerializer, \
-    AchievementUserStatusSerializer, CompetitionSerializer, UserCompetitionSerializer, TestUserSerializer, QuestionThemeSerializer, TestBlockQuestionsSerializer
+    AchievementUserStatusSerializer, CompetitionSerializer, UserCompetitionSerializer, TestUserSerializer, QuestionThemeSerializer, TestBlockQuestionsSerializer, AnswersWithoutFlagSerializer
 from .models import JobPosition, Division, QuestionTheme, Statistics, UserProfile, Task, WeeklyTask, TaskUserStatus, Team, \
     Competition, Product, RequirementsToBuyProduct, Test, Question, Answer, TestBlock, Achievement, RequirenmentToGetAchieve, \
     AchieveRequirenmentStatus, AchievementUserStatus, Purchase, TestUser
@@ -165,23 +165,26 @@ def test_questions(request):
     List all code snippets, or create a new snippet.
     """
     if request.method == 'GET':
-        testblock = Question.objects.filter(
-            qst__id=1).all().prefetch_related().values()
-        tst = TestBlock.objects.values("questions__qwe__id", "questions").all()
-        print(tst.query)
-        # print(testblock.query)
-        # print(Question.objects.filter(qst__id=1).all().prefetch_related().query)
-        # products_req = RequirementsToBuyProduct.objects.filter(
-        #     id__in=request.data.get('ids')).all().prefetch_related('product')
-        # tests = Test.objects.exclude(users=request.user.id).all()
+        question_id = []
+        # all_data это массив первый элемент которого тестблок внутри которого вопросы второй элемент массива это ответы
+        all_data = []
+        test_block = TestBlock.objects.filter(
+            test=request.data.get('test_id')).all()
+        serializer = TestBlockQuestionsSerializer(test_block, many=True)
+        # заполняем массив question_id айдишниками вопросов в нужном тесте (через каждый test_block)
+        for item in serializer.data:
+            for item2 in item['questions']:
+                question_id.append(item2["id"])
+        answers = Answer.objects.filter(
+            question__in=question_id).all()
+        serializer2 = AnswersWithoutFlagSerializer(answers, many=True)
+        all_data = (serializer.data, serializer2.data)
+        return JsonResponse(all_data, safe=False)
 
-        serializer = TestBlockQuestionsSerializer(tst, many=True)
-        return JsonResponse(serializer.data, safe=False)
 
-
-@api_view(['GET', 'PUT'])
+@ api_view(['GET', 'PUT'])
 # For prod use IsAuthenticated . AllowAny using for Debug
-@permission_classes([AllowAny])
+@ permission_classes([AllowAny])
 # @ensure_csrf_cookie
 def shop(request):
     """
