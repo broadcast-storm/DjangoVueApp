@@ -1,8 +1,14 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import JobPositionViewSet, DivisionViewSet, UserProfileViewSet, StatisticsViewSet, \
-    TaskViewSet, WeeklyTaskViewSet, TeamsViewSet, login, refresh_token, logout, competition, ProductViewSet, shop, \
-    TestsViewSet, TestUserViewSet, QuestionsViewSet, AnswersViewSet, TestBlockViewSet, AchievementViewSet, RequirenmentToGetAchieveViewSet, AchieveRequirenmentStatusViewSet, AchievementUserStatusViewSet, update_user_money_energy, unresolved_test, QuestionThemeViewSet, test_questions
+    TaskViewSet, WeeklyTaskViewSet, TeamsViewSet, login, refresh_token, logout, competition, ProductViewSet, shop, LogoutView, LogoutAllView, \
+    TestsViewSet, QuestionsViewSet, AnswersViewSet, TestBlockViewSet, AchievementViewSet, RequirenmentToGetAchieveViewSet, \
+    AchieveRequirenmentStatusViewSet, AchievementUserStatusViewSet, update_user_money_energy, userFilterForCompetition, TestUserViewSet, unresolved_test, QuestionThemeViewSet, test_questions
+
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 router = DefaultRouter()
 router.register(r'job-positions', JobPositionViewSet)
@@ -27,17 +33,24 @@ router.register(r'achieve-requirenment-status',
 router.register(r'achievement-user-status',
                 AchievementUserStatusViewSet)
 
+
 urlpatterns = [
     path("", include(router.urls)),
-    path('login', login, name='login'),
-    path('refresh-token', refresh_token, name='refresh-token'),
+    path('login', TokenObtainPairView.as_view(), name='login'),
+    path('logout', LogoutView.as_view(), name='auth_logout'),
+    path('logout-all', LogoutAllView.as_view(), name='auth_logout_all'),
+    path('refresh-token', TokenRefreshView.as_view(), name='refresh-token'),
     path('shop', shop, name='shop'),
     path('update-data', update_user_money_energy, name='update-data'),
-    path('logout', logout, name='logout'),
     path('competition', competition, name='competition'),
     path('unresolved_test', unresolved_test, name='unresolved_test'),
-    path('test-questions', test_questions, name='test_questions')
-
+    path('test-questions', test_questions, name='test_questions'),
+    path('user-filter-for-competitions', userFilterForCompetition,
+         name='user-filter-for-competitions')
     # path('competition/currentcompetitions', currentcompetitions, name = 'currentcompetitions')
     # path('searchcompetitions')
 ]
+
+
+# path('competition/currentcompetitions', currentcompetitions, name = 'currentcompetitions')
+# path('searchcompetitions')

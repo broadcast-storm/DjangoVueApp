@@ -1,6 +1,7 @@
 from rest_framework import serializers
-from .models import JobPosition, Division, QuestionTheme, TestUser, UserProfile, Statistics, Task, TaskUserStatus, Team, Product, \
-    RequirementsToBuyProduct, Test, Question, Answer, TestBlock, Achievement, RequirenmentToGetAchieve, AchieveRequirenmentStatus, AchievementUserStatus
+
+from .models import JobPosition, Division, TestUser, UserProfile, Statistics, Task, TaskUserStatus, Team, Product, \
+    RequirementsToBuyProduct, Test, Question, Answer, TestBlock, Achievement, RequirenmentToGetAchieve, AchieveRequirenmentStatus, AchievementUserStatus, QuestionTheme, Competition
 
 
 class JobPositionSerializer(serializers.ModelSerializer):
@@ -152,4 +153,17 @@ class AchievementUserStatusSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AchievementUserStatus
+        fields = '__all__'
+
+
+class UserCompetitionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ['id', 'username', 'name', 'surname',
+                  'productivity', 'quality', 'level', 'photo']
+
+
+class CompetitionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Competition
         fields = '__all__'

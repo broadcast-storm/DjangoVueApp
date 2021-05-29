@@ -826,14 +826,18 @@ class Test(models.Model):
 
 
 class TestBlock(models.Model):
-    # IDs
 
+    # IDs
     questionTheme = models.ForeignKey(
         QuestionTheme, on_delete=models.CASCADE, verbose_name="Тематика", )
     test = models.ForeignKey(
         Test, on_delete=models.CASCADE, verbose_name="Тест", )
     questions = models.ManyToManyField(
         Question, verbose_name="Вопросы", related_name="qst")
+
+    test = models.ForeignKey(
+        Test, on_delete=models.CASCADE, verbose_name="Тест", )
+    questions = models.ManyToManyField(Question, verbose_name="", default=None)
 
     # IDs
 
@@ -894,8 +898,8 @@ class TestUser(models.Model):
         return str(self.id)
 
     class Meta:
-        verbose_name = "тестовый блок"
-        verbose_name_plural = "тестовые блоки"
+        verbose_name = "пользователь"
+        verbose_name_plural = "пользователи"
 
 
 class TestUserAnswer(models.Model):

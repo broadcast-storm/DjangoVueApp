@@ -23,6 +23,7 @@
 [Git](https://git-scm.com/);
 
 Склонируйте репозиторий
+
 ```sh
 $ git clone https://github.com/nikita220800/DjangoVueApp.git
 ```
@@ -46,7 +47,6 @@ $ pip install -r requirements.txt
 
 #### В папке core скопируйте файл .env.example в .env
 
- 
 Установите все необходимые миграции, убедитесь, что был создан файл db.sqlite3
 
 ```sh
@@ -78,6 +78,10 @@ $ yarn install
 Создайте файлы .env.production и .env.development и введите эти значения
 
 ```sh
+Время жизни access токена (в минутах)
+VUE_APP_ACCESS_TOKEN_EXPIRES=
+Ссылка на backend api
+API_BASE_URL=
 Для development
 API_BASE_URL=http://127.0.0.1:8000
 Для production
