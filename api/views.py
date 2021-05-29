@@ -44,6 +44,20 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     queryset = UserProfile.objects.all()
 
 
+@api_view(['GET'])
+# For prod use IsAuthenticated . AllowAny using for Debug
+@permission_classes([AllowAny])
+# @ensure_csrf_cookie
+def unresolved_test(request):
+    """
+    List all code snippets, or create a new snippet.
+    """
+    if request.method == 'GET':
+        tests = Test.objects.exclude(users=request.user.id).all()
+        serializer = TestsSerializer(tests, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+
 @api_view(['GET', 'PUT'])
 # For prod use IsAuthenticated . AllowAny using for Debug
 @permission_classes([AllowAny])
