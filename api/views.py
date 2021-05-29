@@ -13,8 +13,8 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from .serializers import JobPositionSerializer, DivisionSerializer, \
     UserProfileSerializer, StatisticsSerializer, TaskSerializer, TaskUserStatusSerializer, WeeklyTaskSerializer, \
     TeamSerializer, ProductSerializer, RequirementsToBuyProductSerializer, TestsSerializer, QuestionsSerializer, \
-    AnswersSerializer, TestBlockSerializer, AchievementSerializer, RequirenmentToGetAchieveSerializer, AchieveRequirenmentStatusSerializer, AchievementUserStatusSerializer, TestUserSerializer
-from .models import JobPosition, Division, Statistics, TestUser, UserProfile, Task, WeeklyTask, TaskUserStatus, Team, \
+    AnswersSerializer, TestBlockSerializer, AchievementSerializer, RequirenmentToGetAchieveSerializer, AchieveRequirenmentStatusSerializer, AchievementUserStatusSerializer, TestUserSerializer, QuestionThemeSerializer, TestBlockQuestionsSerializer
+from .models import JobPosition, Division, QuestionTheme, Statistics, TestUser, UserProfile, Task, WeeklyTask, TaskUserStatus, Team, \
     Competition, Product, RequirementsToBuyProduct, Test, Question, Answer, TestBlock, Achievement, RequirenmentToGetAchieve, AchieveRequirenmentStatus, AchievementUserStatus, Purchase
 from django.http import HttpResponse, JsonResponse
 
@@ -29,6 +29,12 @@ class DivisionViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     serializer_class = DivisionSerializer
     queryset = Division.objects.all()
+
+
+class QuestionThemeViewSet(viewsets.ModelViewSet):
+    permission_classes = (AllowAny,)
+    serializer_class = QuestionThemeSerializer
+    queryset = QuestionTheme.objects.all()
 
 
 class UserProfileViewSet(viewsets.ModelViewSet):
@@ -142,13 +148,22 @@ def unresolved_test(request):
 # For prod use IsAuthenticated . AllowAny using for Debug
 @permission_classes([AllowAny])
 @ensure_csrf_cookie
-def unresolved_test(request):
+def test_questions(request):
     """
     List all code snippets, or create a new snippet.
     """
     if request.method == 'GET':
-        tests = Test.objects.exclude(users=request.user.id).all()
-        serializer = TestsSerializer(tests, many=True)
+        testblock = Question.objects.filter(
+            qst__id=1).all().prefetch_related().values()
+        tst = TestBlock.objects.values("questions__qwe__id", "questions").all()
+        print(tst.query)
+        # print(testblock.query)
+        # print(Question.objects.filter(qst__id=1).all().prefetch_related().query)
+        # products_req = RequirementsToBuyProduct.objects.filter(
+        #     id__in=request.data.get('ids')).all().prefetch_related('product')
+        # tests = Test.objects.exclude(users=request.user.id).all()
+
+        serializer = TestBlockQuestionsSerializer(tst, many=True)
         return JsonResponse(serializer.data, safe=False)
 
 

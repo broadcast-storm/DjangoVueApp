@@ -767,7 +767,7 @@ class Answer(models.Model):
     # IDs
 
     question = models.ForeignKey(
-        Question, on_delete=models.CASCADE, verbose_name="Вопрос")
+        Question, on_delete=models.CASCADE, verbose_name="Вопрос", related_name="qwe")
 
     # IDs
 
@@ -832,7 +832,8 @@ class TestBlock(models.Model):
         QuestionTheme, on_delete=models.CASCADE, verbose_name="Тематика", )
     test = models.ForeignKey(
         Test, on_delete=models.CASCADE, verbose_name="Тест", )
-    questions = models.ManyToManyField(Question, verbose_name="Вопросы", )
+    questions = models.ManyToManyField(
+        Question, verbose_name="Вопросы", related_name="qst")
 
     # IDs
 

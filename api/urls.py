@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import JobPositionViewSet, DivisionViewSet, UserProfileViewSet, StatisticsViewSet, \
     TaskViewSet, WeeklyTaskViewSet, TeamsViewSet, login, refresh_token, logout, competition, ProductViewSet, shop, \
-    TestsViewSet, TestUserViewSet, QuestionsViewSet, AnswersViewSet, TestBlockViewSet, AchievementViewSet, RequirenmentToGetAchieveViewSet, AchieveRequirenmentStatusViewSet, AchievementUserStatusViewSet, update_user_money_energy, unresolved_test
+    TestsViewSet, TestUserViewSet, QuestionsViewSet, AnswersViewSet, TestBlockViewSet, AchievementViewSet, RequirenmentToGetAchieveViewSet, AchieveRequirenmentStatusViewSet, AchievementUserStatusViewSet, update_user_money_energy, unresolved_test, QuestionThemeViewSet, test_questions
 
 router = DefaultRouter()
 router.register(r'job-positions', JobPositionViewSet)
@@ -18,6 +18,7 @@ router.register(r'tests-user', TestUserViewSet)
 router.register(r'questions', QuestionsViewSet)
 router.register(r'answers', AnswersViewSet)
 router.register(r'test-block', TestBlockViewSet)
+router.register(r'question-theme', QuestionThemeViewSet)
 router.register(r'achievement', AchievementViewSet)
 router.register(r'requirenment-to-get-achieve',
                 RequirenmentToGetAchieveViewSet)
@@ -34,7 +35,9 @@ urlpatterns = [
     path('update-data', update_user_money_energy, name='update-data'),
     path('logout', logout, name='logout'),
     path('competition', competition, name='competition'),
-    path('unresolved_test', unresolved_test, name='unresolved_test')
+    path('unresolved_test', unresolved_test, name='unresolved_test'),
+    path('test-questions', test_questions, name='test_questions')
+
     # path('competition/currentcompetitions', currentcompetitions, name = 'currentcompetitions')
     # path('searchcompetitions')
 ]

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import JobPosition, Division, TestUser, UserProfile, Statistics, Task, TaskUserStatus, Team, Product, \
+from .models import JobPosition, Division, QuestionTheme, TestUser, UserProfile, Statistics, Task, TaskUserStatus, Team, Product, \
     RequirementsToBuyProduct, Test, Question, Answer, TestBlock, Achievement, RequirenmentToGetAchieve, AchieveRequirenmentStatus, AchievementUserStatus
 
 
@@ -76,6 +76,28 @@ class TestsSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class QuestionThemeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = QuestionTheme
+        fields = '__all__'
+
+
+class QuestionsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Question
+        fields = '__all__'
+
+
+class TestBlockQuestionsSerializer(serializers.ModelSerializer):
+    questions = QuestionsSerializer(many=True)
+
+    class Meta:
+        model = TestBlock
+        fields = '__all__'
+
+
 class TestBlockSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -87,13 +109,6 @@ class TestUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TestUser
-        fields = '__all__'
-
-
-class QuestionsSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Question
         fields = '__all__'
 
 
