@@ -16,7 +16,7 @@ from .serializers import JobPositionSerializer, DivisionSerializer, \
     UserProfileSerializer, StatisticsSerializer, TaskSerializer, TaskUserStatusSerializer, WeeklyTaskSerializer, \
     TeamSerializer, ProductSerializer, RequirementsToBuyProductSerializer, TestsSerializer, QuestionsSerializer, \
     AnswersSerializer, TestBlockSerializer, AchievementSerializer, RequirenmentToGetAchieveSerializer, AchieveRequirenmentStatusSerializer, \
-    AchievementUserStatusSerializer, CompetitionSerializer, UserCompetitionSerializer, TestUserSerializer, QuestionThemeSerializer, TestBlockQuestionsSerializer, AnswersWithoutFlagSerializer
+    AchievementUserStatusSerializer, CompetitionSerializer, UserCompetitionSerializer, TestUserSerializer, QuestionThemeSerializer, TestBlockQuestionsSerializer, AnswersWithoutFlagSerializer, AnswersIdSerializer, TestsWithoutUsersSerializer
 from .models import JobPosition, Division, QuestionTheme, Statistics, UserProfile, Task, WeeklyTask, TaskUserStatus, Team, \
     Competition, Product, RequirementsToBuyProduct, Test, Question, Answer, TestBlock, Achievement, RequirenmentToGetAchieve, \
     AchieveRequirenmentStatus, AchievementUserStatus, Purchase, TestUser
@@ -42,20 +42,6 @@ class QuestionThemeViewSet(viewsets.ModelViewSet):
 class UserProfileViewSet(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
     queryset = UserProfile.objects.all()
-
-
-@api_view(['GET'])
-# For prod use IsAuthenticated . AllowAny using for Debug
-@permission_classes([AllowAny])
-# @ensure_csrf_cookie
-def unresolved_test(request):
-    """
-    List all code snippets, or create a new snippet.
-    """
-    if request.method == 'GET':
-        tests = Test.objects.exclude(users=request.user.id).all()
-        serializer = TestsSerializer(tests, many=True)
-        return JsonResponse(serializer.data, safe=False)
 
 
 @api_view(['GET', 'PUT'])
@@ -160,25 +146,51 @@ def userFilterForCompetition(request):
 # For prod use IsAuthenticated . AllowAny using for Debug
 @permission_classes([AllowAny])
 # @ensure_csrf_cookie
+def unresolved_test(request):
+    """
+    List all code snippets, or create a new snippet.
+    """
+    ##################
+    # serializer без user
+    ##################
+    if request.method == 'GET':
+        tests = Test.objects.exclude(users=request.user.id).all()
+        serializer = TestsWithoutUsersSerializer(tests, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+
+@api_view(['GET'])
+# For prod use IsAuthenticated . AllowAny using for Debug
+@permission_classes([AllowAny])
+# @ensure_csrf_cookie
 def test_questions(request):
     """
     List all code snippets, or create a new snippet.
     """
     if request.method == 'GET':
-        question_id = []
+        question_choice_id = []
+        question_without_choice_id = []
         # all_data это массив первый элемент которого тестблок внутри которого вопросы второй элемент массива это ответы
         all_data = []
         test_block = TestBlock.objects.filter(
             test=request.data.get('test_id')).all()
         serializer = TestBlockQuestionsSerializer(test_block, many=True)
         # заполняем массив question_id айдишниками вопросов в нужном тесте (через каждый test_block)
+        # Не отправляет ответы для вопросов с вводом текста и числа
         for item in serializer.data:
             for item2 in item['questions']:
-                question_id.append(item2["id"])
-        answers = Answer.objects.filter(
-            question__in=question_id).all()
-        serializer2 = AnswersWithoutFlagSerializer(answers, many=True)
-        all_data = (serializer.data, serializer2.data)
+                if item2["answerType"] == "one_choice" or item2["answerType"] == "multi_choice":
+                    question_choice_id.append(item2["id"])
+                else:
+                    question_without_choice_id.append(item2["id"])
+
+        answers_choice = Answer.objects.filter(
+            question__in=question_choice_id).all()
+        answers_without_choice = Answer.objects.filter(
+            question__in=question_without_choice_id).all()
+        serializer2 = AnswersWithoutFlagSerializer(answers_choice, many=True)
+        serializer3 = AnswersIdSerializer(answers_without_choice, many=True)
+        all_data = (serializer.data, serializer2.data, serializer3.data)
         return JsonResponse(all_data, safe=False)
 
 
@@ -190,8 +202,10 @@ def shop(request):
     """
     List all code snippets, or create a new snippet.
     """
+    # Выводит товары которые есть в наличии и их стоимость
     if request.method == 'GET':
-        products = RequirementsToBuyProduct.objects.all().prefetch_related('product')
+        products = RequirementsToBuyProduct.objects.filter(
+            product__count=1).all().prefetch_related('product')
         serializer = RequirementsToBuyProductSerializer(products, many=True)
         return JsonResponse(serializer.data, safe=False)
 

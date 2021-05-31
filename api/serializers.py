@@ -77,6 +77,14 @@ class TestsSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class TestsWithoutUsersSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Test
+        fields = ["id", "title", "description", "pointsToComplete", "canLeave", "canSkip", "showAnswers",
+                  "isInterview", "canSeeSpentTime", "canSeeTestClosing", "created_at", "updated_at"]
+
+
 class QuestionThemeSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -126,6 +134,12 @@ class AnswersWithoutFlagSerializer(serializers.ModelSerializer):
         model = Answer
         fields = ['id', 'text', 'description', 'image', 'question']
 
+
+class AnswersIdSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Answer
+        fields = ['id', 'question']
 
 # class ShopSerializer(serializers.ModelSerializer):
 #     product = ProductSerializer(read_only=True)
