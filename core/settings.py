@@ -47,6 +47,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 INSTALLED_APPS = [
+    'baton',
     'django_crontab',
     'whitenoise.runserver_nostatic',
     #
@@ -64,9 +65,11 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'api.apps.ApiConfig',
     'taggit',
-    'admin_reorder',
+    # 'admin_reorder',
     'django_cleanup',
     'easy_thumbnails',
+
+    'baton.autodiscover', #at the end
 ]
 
 MIDDLEWARE = [
@@ -79,7 +82,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'admin_reorder.middleware.ModelAdminReorder',
+  
+    # 'admin_reorder.middleware.ModelAdminReorder',
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -255,27 +259,47 @@ THUMBNAILS_ALIASES = {
 
 THUMBNAILS_BASEDIR = 'thumbnails'
 
-ADMIN_REORDER = (
-    # Keep original label and models
-    'sites',
+# ADMIN_REORDER = (
+#     # Keep original label and models
+#     'sites',
+#
+#     # # Reorder app models
+#     {'app': 'api', 'label': 'Задания','models': ('api.Task', 'api.QuestionTheme', 'api.Question', 'api.WeeklyTask')},
+#     {'app': 'api', 'label': 'Пользователи','models': ('api.Team', 'api.UserProfile')},
+#     {'app': 'api', 'label': 'Поощрения','models': ('api.Achievement',)},
+# )
 
-    # Rename app
-    # {'app': 'api', 'label': 'ЯГеймификация'},
+BATON = {
+    'SITE_HEADER': 'Геймификация',
+    'SITE_TITLE': 'ЮMoney.Геймификация',
+    'INDEX_TITLE': 'Панель администратора',
+    'SUPPORT_HREF': 'https://github.com/nikita220800/DjangoVueApp',
+    'COPYRIGHT': 'Copyright © 2021 <a href="//mospolytech.ru" target="_blank">MosPolytech</a>', # noqa
+    'POWERED_BY': '<a href="//mospolytech.ru" target="_blank">MosPolytech</a>',
+    'MENU_TITLE': 'Меню',
+    'GRAVATAR_DEFAULT_IMG': 'mp',
+    'LOGIN_SPLASH': '/frontend/src/assets/img/auth/background.jpg',
 
-    # # Reorder app models
-    {'app': 'api', 'label': 'Задания', 'models': ('api.Task', 'api.QuestionTheme', 'api.Question', 'api.WeeklyTask')},
-    {'app': 'api', 'label': 'Пользователи', 'models': ('api.Team', 'api.UserProfile')},
-    {'app': 'api', 'label': 'Поощрения', 'models': ('api.Achievement', {'model': 'api.Product', 'label': 'Магазин'})},
-    #
-    # # Exclude models
-    # {'app': 'auth', 'models': ('auth.User', )},
-    #
-    # # Cross-linked models
-    # {'app': 'auth', 'models': ('auth.User', 'sites.Site')},
-    #
-    # # models with custom name
-    # {'app': 'auth', 'models': (
-    #     'auth.Group',
-    #     {'model': 'auth.User', 'label': 'Staff'},
-    # )},
-)
+    'MENU': (
+        { 'type': 'title', 'label': 'Задания', 'apps': ('api', ) },
+        # { 'type': 'model', 'label': 'Квест', 'name': 'quest', 'app': 'api' },
+        { 'type': 'model', 'label': 'Еженедельные задачи', 'name': 'weeklytask', 'app': 'api' },
+        { 'type': 'model', 'label': 'Тесты', 'name': 'test', 'app': 'api' },
+
+        { 'type': 'title', 'label': 'Поощрения', 'apps': ('api', ) },
+        { 'type': 'model', 'label': 'Ачивки', 'name': 'achievement', 'app': 'api' },
+        # { 'type': 'model', 'label': 'Магазин', 'name': 'shop', 'app': 'api' },
+
+        { 'type': 'title', 'label': 'Пользователи', 'apps': ('api', ) },
+        { 'type': 'model', 'label': 'Подразделения', 'name': 'division', 'app': 'api' },
+        { 'type': 'model', 'label': 'Команды', 'name': 'team', 'app': 'api' },
+        { 'type': 'model', 'label': 'Сотрудники', 'name': 'userprofile', 'app': 'api' },
+
+
+        # { 'type': 'free', 'label': 'Custom Link', 'url': 'http://www.google.it', 'perms': ('flatpages.add_flatpage', 'auth.change_user') },
+        # { 'type': 'free', 'label': 'My parent voice', 'default_open': True, 'children': [
+        #     { 'type': 'model', 'label': 'A Model', 'name': 'mymodelname', 'app': 'myapp' },
+        #     { 'type': 'free', 'label': 'Another custom link', 'url': 'http://www.google.it' },
+        # ] },
+    ),
+}

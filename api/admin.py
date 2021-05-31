@@ -85,8 +85,7 @@ class JobPositionAdmin(admin.ModelAdmin):
 class UserProfileAdmin(UserAdmin):
     list_display = ('email', 'username', 'name', 'surname', 'last_login', 'userType')
     search_fields = ('email', 'name', 'surname')
-    readonly_fields = ('date_joined', 'last_login')
-
+    readonly_fields = ('date_joined', 'last_login', 'competitionCount', 'winCompetitionCount')
     filter_horizontal = ()
     fieldsets = ()
     list_filter = ('division', "jobPosition")
@@ -97,6 +96,8 @@ class UserProfileAdmin(UserAdmin):
               "description", "photo",
               ("money", "health", "energy"),
               ("level", "quality", "productivity"),
+            #   ("completedTests", "completedTasks", "completedQuests"),
+            #   ("achievements"),
               ("competitionCount", "winCompetitionCount"),
               "last_login", "date_joined")
 
@@ -125,6 +126,7 @@ class TaskAdmin(admin.ModelAdmin):
 
     def tag_list(self, obj):
         return u", ".join(o.name for o in obj.tags.all())
+    tag_list.short_description = "Теги"
 
     inlines = [SubTask]
     list_display = ('title', 'taskType', 'subTasksCount', 'parent', 'weekly', 'isTeamTask', 'tag_list')
@@ -177,6 +179,7 @@ class WeeklyTaskAdmin(admin.ModelAdmin):
 
     def tag_list(self, obj):
         return u", ".join(o.name for o in obj.tags.all())
+    tag_list.short_description = "Теги"
 
     list_display = ('title', 'taskType', 'subTasksCount', 'isTeamTask', 'tag_list')
     list_filter = ('tags',)
@@ -207,6 +210,7 @@ class QuestionAdmin(admin.ModelAdmin):
 
     def tag_list(self, obj):
         return u", ".join(o.name for o in obj.tags.all())
+    tag_list.short_description = "Теги"
 
     list_display = ('title', 'description', 'questionTheme', 'tag_list')
     search_fields = ('title',)
@@ -222,6 +226,7 @@ class QuestionAdmin(admin.ModelAdmin):
 
         )
     }),)
+    list_filter = ('tags',)
     filter_horizontal = ()
     readonly_fields = ('created_at', 'updated_at')
 
@@ -236,20 +241,6 @@ class QuestionThemeAdmin(admin.ModelAdmin):
         )
     }),)
     filter_horizontal = ()
-
-class TestUserInline(admin.StackedInline):
-    extra = 0
-    # max_num = 10
-    model = Test.users.through
-    fields = (
-        ('user',
-         'status',),
-        ('rightAnswersCount',
-         'completeTime',
-         'points',
-         'hasLeftTest',)
-    )
-    readonly_fields = ('rightAnswersCount', 'completeTime')
 
 class TestBlockInlineForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -283,7 +274,6 @@ class TestBlockInline(admin.StackedInline):
         (None, {
             'fields': (
             ('questionTheme',
-            'questionsCount',
             'blockWeight',),
             ('created_at',
             'updated_at',))
@@ -296,7 +286,7 @@ class TestBlockInline(admin.StackedInline):
     readonly_fields = ('created_at', 'updated_at')
 
 class TestAdmin(admin.ModelAdmin):
-    inlines = [TestBlockInline,TestUserInline]
+    inlines = [TestBlockInline,]
 
     list_display = ('title', 'description')
 
@@ -309,7 +299,6 @@ class TestAdmin(admin.ModelAdmin):
             'canLeave',
             'canSkip',
             'showAnswers',
-            'isInterview',
             'canSeeSpentTime',
             'canSeeTestClosing',
         )
@@ -318,30 +307,23 @@ class TestAdmin(admin.ModelAdmin):
     filter_horizontal = ()
     readonly_fields = ('created_at', 'updated_at')
 
-class MyAdminSite(admin.AdminSite):
-    # Text to put at the end of each page's <title>.
-    site_title = 'Яндекс.Геймификация Админ'
-
-    # Text to put in each page's <h1> (and above login form).
-    site_header = 'Яндекс.Геймификация Админ'
-
-    # Text to put at the top of the admin index page.
-    index_title = 'Панель администрирования'
-
-    def get_app_list(self, request):
-        """
-        Return a sorted list of all the installed apps that have been
-        registered in this site.
-        """
-        app_dict = self._build_app_dict(request)
-
-        app_list = sorted(app_dict.values(), key=lambda x: x['name'].lower())
-        return app_list
-
-
-class RequirenmentToGetAchieveInline(admin.TabularInline):
+class RequirenmentToGetAchieveInline(admin.StackedInline):
     model = RequirenmentToGetAchieve
+    extra = 1
 
+    fields = (
+        ('completedAchievement',
+         'completedTask',
+         'completedWeeklyTask',
+         'completedMainQuest',
+         'completedTest',),
+        ('completeTime',),
+        ('level',
+         'quality',
+         'productivity',
+         'competitionsCount',
+         'competitionWinsCount',),
+    )
 
 class AchievementAdmin(admin.ModelAdmin):
     list_display = ('title', 'description', 'get_image')
@@ -355,7 +337,6 @@ class AchievementAdmin(admin.ModelAdmin):
             return 'Фото не установлено'
 
     get_image.short_description = 'Фото'
-
 
 class RequirementsToBuyProductInline(admin.TabularInline):
     model = RequirementsToBuyProduct
@@ -379,13 +360,23 @@ class ProductAdmin(admin.ModelAdmin):
 class ProductCategoryAdmin(admin.ModelAdmin):
     list_display = ('title', 'description')
 
+class MyAdminSite(admin.AdminSite):
+    # Text to put at the end of each page's <title>.
+    site_title = 'ЮMoney.Геймификация'
+
+    # Text to put in each page's <h1> (and above login form).
+    site_header = 'ЮMoney.Геймификация'
+
+    # Text to put at the top of the admin index page.
+    index_title = 'Панель администрирования'
+
+    def get_app_list(self, request):
+        app_dict = self._build_app_dict(request)
+
+        app_list = sorted(app_dict.values(), key=lambda x: x['name'].lower())
+        return app_list
 
 admin.site = MyAdminSite()
-
-admin.site.register(Product, ProductAdmin)
-admin.site.register(ProductCategory, ProductCategoryAdmin)
-
-admin.site.register(Achievement, AchievementAdmin)
 
 admin.site.register(WeeklyTask, WeeklyTaskAdmin)
 admin.site.register(Task, TaskAdmin)
@@ -393,6 +384,10 @@ admin.site.register(Task, TaskAdmin)
 admin.site.register(Test, TestAdmin)
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(QuestionTheme, QuestionThemeAdmin)
+
+admin.site.register(Achievement, AchievementAdmin)
+admin.site.register(Product, ProductAdmin)
+admin.site.register(ProductCategory, ProductCategoryAdmin)
 
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(Division, DivisionAdmin)

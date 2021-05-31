@@ -124,6 +124,17 @@ class UserProfile(AbstractBaseUser):
     competitionCount = models.IntegerField(default=0, verbose_name="Кол-во соревнований")
     winCompetitionCount = models.IntegerField(default=0, verbose_name="Кол-во выиграных соревнований")
 
+    # def completedTests(self, instance):
+    #     self.statistics.completedTests
+    # def completedTasks(self, instance):
+    #     self.statistics.completedTasks
+    # def completedQuests(self, instance):
+    #     self.statistics.completedQuests
+    # def achievements(self, instance):
+    #     self.statistics.achievements
+
+    # completedTests = property(completedTests)
+
     class Meta:
         verbose_name = "пользователь"
         verbose_name_plural = "пользователи"
@@ -145,7 +156,7 @@ class UserProfile(AbstractBaseUser):
 class Statistics(models.Model):
     # IDs
 
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, verbose_name="Пользователь")
+    user = models.OneToOneField(UserProfile, on_delete=models.CASCADE, verbose_name="Пользователь", related_name="statistics")
 
     # IDs
 
@@ -565,7 +576,7 @@ class RequirenmentToGetAchieve(models.Model):
     achievement = models.ForeignKey(Achievement, on_delete=models.CASCADE, verbose_name="Ачивка")
 
     completedAchievement = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True,
-                                             verbose_name='Выполенная другая ачивка', )
+                                             verbose_name='Выполненная другая ачивка', )
     completedTask = models.ForeignKey(Task, on_delete=models.CASCADE, verbose_name="Выполненная задача",
                                       blank=True, null=True, )
     completedWeeklyTask = models.ForeignKey(WeeklyTask, on_delete=models.CASCADE,
@@ -583,10 +594,10 @@ class RequirenmentToGetAchieve(models.Model):
     completeTime = models.DateTimeField(blank=True, null=True, verbose_name="Время на выполнение")
 
     level = models.IntegerField(default=0, verbose_name="Требуемый уровень")
-    quality = models.FloatField(default=0.0, verbose_name="Треюуемое качество")
+    quality = models.FloatField(default=0.0, verbose_name="Требуемое качество")
     productivity = models.FloatField(default=0.0, verbose_name="Требуемая продуктивность")
     competitionsCount = models.IntegerField(default=0, verbose_name="Кол-во соревнований")
-    competitionWinsCount = models.IntegerField(default=0, verbose_name="Кол-во выиграных соревнований")
+    competitionWinsCount = models.IntegerField(default=0, verbose_name="Кол-во выигранных соревнований")
 
     def __str__(self):
         return str(self.id)
