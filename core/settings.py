@@ -50,6 +50,9 @@ INSTALLED_APPS = [
     'baton',
     'django_crontab',
     'whitenoise.runserver_nostatic',
+    #
+    # 'api.apps.SuitConfig',
+    #
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -79,6 +82,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+  
     # 'admin_reorder.middleware.ModelAdminReorder',
 ]
 

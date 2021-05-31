@@ -1,12 +1,30 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group, User
 from django.contrib.auth.admin import GroupAdmin, UserAdmin
-from .models import UserProfile, Statistics, Task, WeeklyTask, Division, JobPosition, Team, Question, QuestionTheme, Test, TestBlock, Achievement, RequirenmentToGetAchieve
+from .models import UserProfile, Task, WeeklyTask, Division, JobPosition, Team, \
+    Question, QuestionTheme, Test, TestBlock, Achievement, RequirenmentToGetAchieve, \
+    Product, RequirementsToBuyProduct, ProductCategory, CategoryClothes, Purchase
 from django.db import models
 from django import forms
 from django.urls import resolve
 from django.utils.safestring import mark_safe
+from django import forms
 
+from django.contrib import admin
+from django.contrib.admin import ModelAdmin, TabularInline
+# from .models import Category, Product, ProductSliderImage
+
+
+# class AdminCategory(ModelAdmin):
+#     search_fields = ['title']
+#     list_display = ['title', 'active']
+#     list_filter = ('active',)
+#
+#
+# class AdminProduct(ModelAdmin):
+#     search_fields = ['title']
+#     list_display = ['title', 'active']
+#     list_filter = ('active', 'parent')
 
 # Register your models here.
 
@@ -101,6 +119,8 @@ class SubTask(admin.StackedInline):
 
 
 class TaskAdmin(admin.ModelAdmin):
+    # category = 'testy'
+
     def get_queryset(self, request):
         return super().get_queryset(request).prefetch_related('tags')
 
@@ -151,6 +171,7 @@ class TaskInline(admin.StackedInline):
 
 
 class WeeklyTaskAdmin(admin.ModelAdmin):
+
     inlines = [TaskInline]
 
     def get_queryset(self, request):
@@ -182,6 +203,8 @@ class WeeklyTaskAdmin(admin.ModelAdmin):
 
 
 class QuestionAdmin(admin.ModelAdmin):
+
+
     def get_queryset(self, request):
         return super().get_queryset(request).prefetch_related('tags')
 
@@ -235,7 +258,7 @@ class TestBlockInlineForm(forms.ModelForm):
         for quest in data:
             if quest.questionTheme != data_theme:
                 raise forms.ValidationError('Выберите вопросы по теме')
-        
+
         return data
 
     class Meta:
@@ -246,7 +269,7 @@ class TestBlockInline(admin.StackedInline):
     extra = 0
     model = TestBlock
     form = TestBlockInlineForm
-            
+
     fieldsets = (
         (None, {
             'fields': (
@@ -266,7 +289,7 @@ class TestAdmin(admin.ModelAdmin):
     inlines = [TestBlockInline,]
 
     list_display = ('title', 'description')
-    
+
     search_fields = ('title',)
     fieldsets = ((None, {
         'fields': (
@@ -315,6 +338,28 @@ class AchievementAdmin(admin.ModelAdmin):
 
     get_image.short_description = 'Фото'
 
+class RequirementsToBuyProductInline(admin.TabularInline):
+    model = RequirementsToBuyProduct
+    fields = ('level', 'money',)
+
+
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ('title', 'description', 'get_image', 'count')
+
+    inlines = (RequirementsToBuyProductInline, )
+
+    def get_image(self, obj):
+        if obj.photo:
+            return mark_safe(f'<img src="{obj.photo.url}" width="75">')
+        else:
+            return 'Фото не установлено'
+
+    get_image.short_description = 'Фото'
+
+
+class ProductCategoryAdmin(admin.ModelAdmin):
+    list_display = ('title', 'description')
+
 class MyAdminSite(admin.AdminSite):
     # Text to put at the end of each page's <title>.
     site_title = 'ЮMoney.Геймификация'
@@ -341,6 +386,8 @@ admin.site.register(Question, QuestionAdmin)
 admin.site.register(QuestionTheme, QuestionThemeAdmin)
 
 admin.site.register(Achievement, AchievementAdmin)
+admin.site.register(Product, ProductAdmin)
+admin.site.register(ProductCategory, ProductCategoryAdmin)
 
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(Division, DivisionAdmin)
