@@ -1,8 +1,8 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group, User
 from django.contrib.auth.admin import GroupAdmin, UserAdmin
-from .models import UserProfile, Task, WeeklyTask, Division, JobPosition, Team, \
-    Question, QuestionTheme, Test, TestBlock, Achievement, RequirenmentToGetAchieve, \
+from .models import UserProfile, Task, WeeklyTask, Division, JobPosition, Team, Statistics, \
+    MainQuest, Question, QuestionTheme, Test, TestBlock, Achievement, RequirenmentToGetAchieve, \
     Product, RequirementsToBuyProduct, ProductCategory, CategoryClothes, Purchase
 from django.db import models
 from django import forms
@@ -90,7 +90,7 @@ class UserProfileAdmin(UserAdmin):
     fieldsets = ()
     list_filter = ('division', "jobPosition")
     fields = ('username', 'email',
-              ('name', 'surname', "patronymic"),
+              ('surname', 'name', "patronymic"),
               "birthDate",
               ("userType", "jobPosition", "division"),
               "description", "photo",
@@ -365,14 +365,13 @@ class MyAdminSite(admin.AdminSite):
     site_title = 'ЮMoney.Геймификация'
 
     # Text to put in each page's <h1> (and above login form).
-    site_header = 'ЮMoney.Геймификация'
+    site_header = 'Геймификация'
 
     # Text to put at the top of the admin index page.
     index_title = 'Панель администрирования'
 
     def get_app_list(self, request):
         app_dict = self._build_app_dict(request)
-
         app_list = sorted(app_dict.values(), key=lambda x: x['name'].lower())
         return app_list
 
@@ -393,7 +392,3 @@ admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(Division, DivisionAdmin)
 admin.site.register(JobPosition, JobPositionAdmin)
 admin.site.register(Team, TeamAdmin)
-
-# Дублируют UserProfile
-# admin.site.register(Group, GroupAdmin)
-# admin.site.register(User, UserAdmin)

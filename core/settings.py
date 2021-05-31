@@ -50,9 +50,6 @@ INSTALLED_APPS = [
     'baton',
     'django_crontab',
     'whitenoise.runserver_nostatic',
-    #
-    # 'api.apps.SuitConfig',
-    #
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -65,11 +62,10 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'api.apps.ApiConfig',
     'taggit',
-    # 'admin_reorder',
     'django_cleanup',
     'easy_thumbnails',
 
-    'baton.autodiscover', #at the end
+     'baton.autodiscover', #at the end
 ]
 
 MIDDLEWARE = [
@@ -82,8 +78,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-  
-    # 'admin_reorder.middleware.ModelAdminReorder',
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -259,47 +253,41 @@ THUMBNAILS_ALIASES = {
 
 THUMBNAILS_BASEDIR = 'thumbnails'
 
-# ADMIN_REORDER = (
-#     # Keep original label and models
-#     'sites',
-#
-#     # # Reorder app models
-#     {'app': 'api', 'label': 'Задания','models': ('api.Task', 'api.QuestionTheme', 'api.Question', 'api.WeeklyTask')},
-#     {'app': 'api', 'label': 'Пользователи','models': ('api.Team', 'api.UserProfile')},
-#     {'app': 'api', 'label': 'Поощрения','models': ('api.Achievement',)},
-# )
-
 BATON = {
     'SITE_HEADER': 'Геймификация',
     'SITE_TITLE': 'ЮMoney.Геймификация',
     'INDEX_TITLE': 'Панель администратора',
     'SUPPORT_HREF': 'https://github.com/nikita220800/DjangoVueApp',
-    'COPYRIGHT': 'Copyright © 2021 <a href="//mospolytech.ru" target="_blank">MosPolytech</a>', # noqa
+    'COPYRIGHT': 'Copyright © 2021 <a href="//mospolytech.ru" target="_blank">MosPolytech</a>',
     'POWERED_BY': '<a href="//mospolytech.ru" target="_blank">MosPolytech</a>',
     'MENU_TITLE': 'Меню',
     'GRAVATAR_DEFAULT_IMG': 'mp',
     'LOGIN_SPLASH': '/frontend/src/assets/img/auth/background.jpg',
 
+    'CHANGELIST_FILTERS_IN_MODAL': True,
+    'CHANGELIST_FILTERS_ALWAYS_OPEN': False,
+    # 'CHANGELIST_FILTERS_FORM': False,
+    # 'MENU_ALWAYS_COLLAPSED': True,
+
     'MENU': (
         { 'type': 'title', 'label': 'Задания', 'apps': ('api', ) },
-        # { 'type': 'model', 'label': 'Квест', 'name': 'quest', 'app': 'api' },
+        { 'type': 'model', 'label': 'Квест', 'name': 'mainquest', 'app': 'api' },
         { 'type': 'model', 'label': 'Еженедельные задачи', 'name': 'weeklytask', 'app': 'api' },
         { 'type': 'model', 'label': 'Тесты', 'name': 'test', 'app': 'api' },
 
         { 'type': 'title', 'label': 'Поощрения', 'apps': ('api', ) },
         { 'type': 'model', 'label': 'Ачивки', 'name': 'achievement', 'app': 'api' },
-        # { 'type': 'model', 'label': 'Магазин', 'name': 'shop', 'app': 'api' },
+        { 'type': 'model', 'label': 'Товары', 'name': 'product', 'app': 'api' },
 
         { 'type': 'title', 'label': 'Пользователи', 'apps': ('api', ) },
         { 'type': 'model', 'label': 'Подразделения', 'name': 'division', 'app': 'api' },
         { 'type': 'model', 'label': 'Команды', 'name': 'team', 'app': 'api' },
         { 'type': 'model', 'label': 'Сотрудники', 'name': 'userprofile', 'app': 'api' },
-
-
-        # { 'type': 'free', 'label': 'Custom Link', 'url': 'http://www.google.it', 'perms': ('flatpages.add_flatpage', 'auth.change_user') },
-        # { 'type': 'free', 'label': 'My parent voice', 'default_open': True, 'children': [
-        #     { 'type': 'model', 'label': 'A Model', 'name': 'mymodelname', 'app': 'myapp' },
-        #     { 'type': 'free', 'label': 'Another custom link', 'url': 'http://www.google.it' },
-        # ] },
     ),
+
+    # example of Google Analytics
+    # 'ANALYTICS': {
+    #     'CREDENTIALS': os.path.join(BASE_DIR, 'credentials.json'),
+    #     'VIEW_ID': '12345678',
+    # },
 }

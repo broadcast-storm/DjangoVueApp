@@ -124,17 +124,6 @@ class UserProfile(AbstractBaseUser):
     competitionCount = models.IntegerField(default=0, verbose_name="Кол-во соревнований")
     winCompetitionCount = models.IntegerField(default=0, verbose_name="Кол-во выиграных соревнований")
 
-    # def completedTests(self, instance):
-    #     self.statistics.completedTests
-    # def completedTasks(self, instance):
-    #     self.statistics.completedTasks
-    # def completedQuests(self, instance):
-    #     self.statistics.completedQuests
-    # def achievements(self, instance):
-    #     self.statistics.achievements
-
-    # completedTests = property(completedTests)
-
     class Meta:
         verbose_name = "пользователь"
         verbose_name_plural = "пользователи"
@@ -156,7 +145,7 @@ class UserProfile(AbstractBaseUser):
 class Statistics(models.Model):
     # IDs
 
-    user = models.OneToOneField(UserProfile, on_delete=models.CASCADE, verbose_name="Пользователь", related_name="statistics")
+    user = models.OneToOneField(UserProfile, on_delete=models.CASCADE, verbose_name="Пользователь", related_name="statistics", related_query_name='statistics')
 
     # IDs
 
@@ -238,7 +227,7 @@ class WeeklyTask(models.Model):
     DAILY = 'daily'
     QUEST = 'quest'
     TASK_TYPE_CHOICES = (
-        (DAILY, 'Ежедневное задание'),
+        (DAILY, 'Ежедневная задача'),
         (QUEST, 'Квест'),
     )
 
@@ -259,11 +248,11 @@ class WeeklyTask(models.Model):
 
     difficulty = models.CharField(max_length=20, choices=DIFFICULTY_TYPE_CHOICES,
                                   default=EASY, verbose_name="Сложность")
-    taskType = models.CharField(max_length=20, choices=TASK_TYPE_CHOICES, default=DAILY, verbose_name="Тип задания")
-    title = models.CharField(max_length=200, unique=True, verbose_name="Название задания")
-    description = models.TextField(verbose_name="Описание задания")
-    subTasksCount = models.IntegerField(default=0, verbose_name="Кол-во доп заданий")
-    isTeamTask = models.BooleanField(default=False, verbose_name="Групповое задание")
+    taskType = models.CharField(max_length=20, choices=TASK_TYPE_CHOICES, default=DAILY, verbose_name="Тип задачи")
+    title = models.CharField(max_length=200, unique=True, verbose_name="Название задачи")
+    description = models.TextField(verbose_name="Описание задач")
+    subTasksCount = models.IntegerField(default=0, verbose_name="Кол-во доп задач")
+    isTeamTask = models.BooleanField(default=False, verbose_name="Групповая задача")
     tags = TaggableManager()
 
     accessLevel = models.IntegerField(blank=True, null=True)
@@ -280,8 +269,8 @@ class WeeklyTask(models.Model):
         return self.title
 
     class Meta:
-        verbose_name = "еженедельное задание"
-        verbose_name_plural = "еженедельные задания"
+        verbose_name = "еженедельная задача"
+        verbose_name_plural = "еженедельные задачи"
 
 
 class WeeklyTaskUserStatus(models.Model):
@@ -309,15 +298,15 @@ class WeeklyTaskUserStatus(models.Model):
         return str(self.id)
 
     class Meta:
-        verbose_name = "статус задания отдельного пользователя"
-        verbose_name_plural = "статусы заданий отдельного пользователя"
+        verbose_name = "статус задачи отдельного пользователя"
+        verbose_name_plural = "статусы задач отдельного пользователя"
 
 
 class Task(models.Model):
     DAILY = 'daily'
     QUEST = 'quest'
     TASK_TYPE_CHOICES = (
-        (DAILY, 'Ежедневное задание'),
+        (DAILY, 'Ежедневная задача'),
         (QUEST, 'Квест'),
     )
 
@@ -344,26 +333,26 @@ class Task(models.Model):
 
     difficulty = models.CharField(max_length=20, choices=DIFFICULTY_TYPE_CHOICES,
                                   default=EASY, verbose_name="Сложность")
-    taskType = models.CharField(max_length=20, choices=TASK_TYPE_CHOICES, default=DAILY, verbose_name="Тип задания")
-    title = models.CharField(max_length=200, unique=True, verbose_name="Название задания")
-    description = models.TextField(verbose_name="Описание задания")
-    subTasksCount = models.IntegerField(default=0, verbose_name="Кол-во доп заданий")
-    isTeamTask = models.BooleanField(default=False, verbose_name="Групповое задание")
+    taskType = models.CharField(max_length=20, choices=TASK_TYPE_CHOICES, default=DAILY, verbose_name="Тип задачи")
+    title = models.CharField(max_length=200, unique=True, verbose_name="Название задачи")
+    description = models.TextField(verbose_name="Описание задачи")
+    subTasksCount = models.IntegerField(default=0, verbose_name="Кол-во доп задач")
+    isTeamTask = models.BooleanField(default=False, verbose_name="Групповая задача")
     tags = TaggableManager()
 
     accessLevel = models.IntegerField(blank=True, null=True)
     deadline = models.IntegerField(blank=True, null=True)
 
     money = models.IntegerField(default=0, verbose_name="Валюта")
-    health = models.IntegerField(default=0, verbose_name="HP")
+    health = models.IntegerField(default=0, verbose_name="Жизни")
     energy = models.IntegerField(default=0, verbose_name="Энергия")
 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Время создания")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Время изменения")
 
     class Meta:
-        verbose_name = "задание"
-        verbose_name_plural = "задания"
+        verbose_name = "задача"
+        verbose_name_plural = "задачи"
 
     def __str__(self):
         return self.title
@@ -394,8 +383,8 @@ class TaskUserStatus(models.Model):
         return str(self.id)
 
     class Meta:
-        verbose_name = "статус задания отдельного пользователя"
-        verbose_name_plural = "статусы заданий отдельного пользователя"
+        verbose_name = "статус задачи отдельного пользователя"
+        verbose_name_plural = "статусы задач отдельного пользователя"
 
 
 class MainQuest(models.Model):
@@ -425,7 +414,7 @@ class MainQuest(models.Model):
     tasksCount = models.IntegerField(default=0)
 
     money = models.IntegerField(default=0, verbose_name="Валюта")
-    health = models.IntegerField(default=0, verbose_name="HP")
+    health = models.IntegerField(default=0, verbose_name="Жизни")
     energy = models.IntegerField(default=0, verbose_name="Энергия")
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -509,7 +498,7 @@ class Competition(models.Model):
     productivityCriterion = models.FloatField(default=0.0, verbose_name="Требуемая продуктивность")
 
     money = models.IntegerField(default=0, verbose_name="Валюта")
-    health = models.IntegerField(default=0, verbose_name="HP")
+    health = models.IntegerField(default=0, verbose_name="Жизни")
     energy = models.IntegerField(default=0, verbose_name="Энергия")
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -958,7 +947,7 @@ class RequirementsToBuyProduct(models.Model):
     productivity = models.FloatField(default=0.0, verbose_name="Требуемая продуктивность")
 
     money = models.IntegerField(default=0, verbose_name="Кол-во Валюты")
-    health = models.IntegerField(default=0, verbose_name="Кол-во HP")
+    health = models.IntegerField(default=0, verbose_name="Кол-во Жизней")
     energy = models.IntegerField(default=0, verbose_name="Кол-во Энергии")
 
     def __str__(self):
