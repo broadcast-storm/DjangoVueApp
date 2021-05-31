@@ -8,7 +8,23 @@ from django.db import models
 from django import forms
 from django.urls import resolve
 from django.utils.safestring import mark_safe
+from django import forms
 
+from django.contrib import admin
+from django.contrib.admin import ModelAdmin, TabularInline
+# from .models import Category, Product, ProductSliderImage
+
+
+# class AdminCategory(ModelAdmin):
+#     search_fields = ['title']
+#     list_display = ['title', 'active']
+#     list_filter = ('active',)
+#
+#
+# class AdminProduct(ModelAdmin):
+#     search_fields = ['title']
+#     list_display = ['title', 'active']
+#     list_filter = ('active', 'parent')
 
 # Register your models here.
 
@@ -102,6 +118,8 @@ class SubTask(admin.StackedInline):
 
 
 class TaskAdmin(admin.ModelAdmin):
+    # category = 'testy'
+
     def get_queryset(self, request):
         return super().get_queryset(request).prefetch_related('tags')
 
@@ -151,6 +169,7 @@ class TaskInline(admin.StackedInline):
 
 
 class WeeklyTaskAdmin(admin.ModelAdmin):
+
     inlines = [TaskInline]
 
     def get_queryset(self, request):
@@ -181,6 +200,8 @@ class WeeklyTaskAdmin(admin.ModelAdmin):
 
 
 class QuestionAdmin(admin.ModelAdmin):
+
+
     def get_queryset(self, request):
         return super().get_queryset(request).prefetch_related('tags')
 
