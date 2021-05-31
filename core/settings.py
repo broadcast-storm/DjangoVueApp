@@ -155,10 +155,9 @@ USE_L10N = True
 USE_TZ = True
 
 SWAGGER_SETTINGS = {
+    'DOC_EXPANSION': 'none',
     'SECURITY_DEFINITIONS': {
-        'Basic': {
-            'type': 'basic'
-        },
+        'USE_SESSION_AUTH': False,
         'Bearer': {
             'type': 'apiKey',
             'name': 'Authorization',

@@ -4,7 +4,7 @@
             Доступные тесты
         </h2>
         <div v-for="test in tests" :key="test.id" class="tests__list">
-            <div class="test">
+            <div v-if="test.status === 'notPassed'" class="test">
                 <h3 class="test-headline">
                     {{ test.name }}
                 </h3>
