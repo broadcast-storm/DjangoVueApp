@@ -7,13 +7,13 @@ from rest_framework import exceptions
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import IsAuthenticated, AllowAny
-
+from django.db.models import Q
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
 
 from .serializers import JobPositionSerializer, DivisionSerializer, \
-    UserProfileSerializer, StatisticsSerializer, TaskSerializer, TaskUserStatusSerializer, WeeklyTaskSerializer, \
+    EmptySerializer, UserProfileSerializer, UserGetListSerializer, UserGetSerializer, StatisticsSerializer, TaskSerializer, TaskUserStatusSerializer, WeeklyTaskSerializer, \
     TeamSerializer, ProductSerializer, RequirementsToBuyProductSerializer, TestsSerializer, QuestionsSerializer, \
     AnswersSerializer, TestBlockSerializer, AchievementSerializer, RequirenmentToGetAchieveSerializer, AchieveRequirenmentStatusSerializer, \
     AchievementUserStatusSerializer, CompetitionSerializer, UserCompetitionSerializer, TestUserSerializer
@@ -35,7 +35,25 @@ class DivisionViewSet(viewsets.ModelViewSet):
 
 class UserProfileViewSet(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
+    # serializer_class = UserProfileSerializer
     queryset = UserProfile.objects.all()
+
+    def get_permissions(self):
+        if self.action == 'retrieve' or self.action == 'update':
+            permission_classes = [IsAuthenticated]
+        else:
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return UserGetListSerializer
+        elif self.action == 'retrieve':
+            return UserGetSerializer
+        elif self.action == 'update':
+            return UserProfileSerializer
+        else:
+            return EmptySerializer
 
 
 @api_view(['GET', 'PUT'])
@@ -200,6 +218,49 @@ class TeamsViewSet(viewsets.ModelViewSet):
 class TaskViewSet(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
     queryset = Task.objects.all()
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_daily_tasks(request):
+    if request.method == 'GET':
+        user = UserProfile.objects.get(id=request.user.id)
+        tasks = Task.objects.all().filter(taskType="daily").exclude(
+            ~Q(parent=None)).exclude(
+            ~Q(weekly=None)).filter(division=user.division)
+        serializer = TaskSerializer(tasks, many=True)
+        return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_weekly_tasks(request):
+    if request.method == 'GET':
+        user = UserProfile.objects.get(id=request.user.id)
+        weeklyTasks = WeeklyTask.objects.all().filter(division=user.division)
+        serializer = WeeklyTaskSerializer(weeklyTasks, many=True)
+        for weeklyTask in serializer.data:
+            subTasks = Task.objects.all().filter(weekly=weeklyTask['id'])
+            subSerializer = TaskSerializer(subTasks, many=True)
+            weeklyTask['subTasks'] = subSerializer.data
+        return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_quests(request):
+    if request.method == 'GET':
+
+        user = UserProfile.objects.get(id=request.user.id)
+        quests = Task.objects.all().filter(taskType="quest").exclude(
+            ~Q(parent=None)).exclude(
+            ~Q(weekly=None)).filter(division=user.division)
+        serializer = TaskSerializer(quests, many=True)
+        for quest in serializer.data:
+            subTasks = Task.objects.all().filter(parent=quest['id'])
+            subSerializer = TaskSerializer(subTasks, many=True)
+            quest['subTasks'] = subSerializer.data
+        return Response(serializer.data)
 
 
 class WeeklyTaskViewSet(viewsets.ModelViewSet):

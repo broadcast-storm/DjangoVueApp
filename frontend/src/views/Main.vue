@@ -1,25 +1,29 @@
 <template>
     <div class="main-container">
-        <Header :statistics="stats" />
+        <Header :statistics="profileStats" />
         <Navbar />
         <div class="main-container__content">
-            <router-view name="main-router" />
+            <router-view
+                v-if="profileStats.status === 'success'"
+                name="main-router"
+            />
+            <LoadingPopup v-else />
         </div>
     </div>
 </template>
 
 <script>
 import Header from '@/components/Header'
+import LoadingPopup from '@/components/LoadingPopup'
 import Navbar from '@/components/Navbar/Navbar'
-import { mapGetters } from 'vuex'
-
+import { mapGetters, mapActions } from 'vuex'
 import routesList from '@/router/routesList'
-import { mapActions } from 'vuex'
 import { AUTH_LOGOUT } from '@/store/action-types/tokens'
+import { PROFILE_REQUEST_FETCHING } from '@/store/action-types/profile'
 
 export default {
     name: 'Main',
-    components: { Header, Navbar },
+    components: { Header, Navbar, LoadingPopup },
     data() {
         return {}
     },
@@ -29,12 +33,13 @@ export default {
         })
     },
     computed: {
-        ...mapGetters(['getUserData']),
-        stats: function() {
-            return this.getUserData.stats
-        },
+        ...mapGetters('profile', ['profileStats']),
+    },
+    async mounted() {
+        await this.PROFILE_REQUEST_FETCHING()
     },
     methods: {
+        ...mapActions('profile', [PROFILE_REQUEST_FETCHING]),
         ...mapActions('tokens', [AUTH_LOGOUT]),
     },
 }

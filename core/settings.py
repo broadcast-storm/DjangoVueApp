@@ -27,8 +27,8 @@ environ.Env.read_env()
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 SECRET_KEY = env("SECRET_KEY", default="unsafe-secret-key")
-REFRESH_TOKEN_SECRET = env("REFRESH_TOKEN_SECRET",
-                           default="unsafe-refresh-secret-key")
+# REFRESH_TOKEN_SECRET = env("REFRESH_TOKEN_SECRET",
+#                            default="unsafe-refresh-secret-key")
 
 ACCESS_TOKEN_EXPIRES = env("ACCESS_TOKEN_EXPIRES", default=5)
 REFRESH_TOKEN_EXPIRES = env("REFRESH_TOKEN_EXPIRES", default=14)
@@ -196,6 +196,8 @@ TEMPLATES[0]['DIRS'] += [
 ]
 
 SIMPLE_JWT = {
+    'SIGNING_KEY': SECRET_KEY,
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=ACCESS_TOKEN_EXPIRES),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=REFRESH_TOKEN_EXPIRES),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,

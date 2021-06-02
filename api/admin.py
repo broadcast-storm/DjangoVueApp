@@ -3,6 +3,7 @@ from django.contrib.auth.models import Group, User
 from django.contrib.auth.admin import GroupAdmin, UserAdmin
 from .models import UserProfile, Task, WeeklyTask, Division, JobPosition, Team, Question, QuestionTheme, Test, TestBlock, Achievement, RequirenmentToGetAchieve
 from django.db import models
+from django.db.models import Q
 from django import forms
 from django.urls import resolve
 from django.utils.safestring import mark_safe
@@ -65,7 +66,8 @@ class JobPositionAdmin(admin.ModelAdmin):
 
 
 class UserProfileAdmin(UserAdmin):
-    list_display = ('email', 'username', 'name', 'surname', 'last_login', 'userType')
+    list_display = ('email', 'username', 'name',
+                    'surname', 'last_login', 'userType')
     search_fields = ('email', 'name', 'surname')
     readonly_fields = ('date_joined', 'last_login')
     filter_horizontal = ()
@@ -88,6 +90,7 @@ class SubTask(admin.StackedInline):
     max_num = 3
     fields = (
         'taskType',
+        "division",
         'title',
         'description',
         'isTeamTask',
@@ -100,14 +103,17 @@ class SubTask(admin.StackedInline):
 
 class TaskAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
-        return super().get_queryset(request).prefetch_related('tags')
+        return super().get_queryset(request).exclude(
+            ~Q(parent=None)).exclude(
+            ~Q(weekly=None)).prefetch_related('tags')
 
     def tag_list(self, obj):
         return u", ".join(o.name for o in obj.tags.all())
 
     inlines = [SubTask]
-    list_display = ('title', 'taskType', 'subTasksCount', 'parent', 'weekly', 'isTeamTask', 'tag_list')
-    list_display_links = ('title', 'parent', 'weekly')
+    list_display = ('title', 'taskType', 'subTasksCount',
+                    'isTeamTask', 'tag_list')
+    list_display_links = ('title',)
     search_fields = ('title',)
     readonly_fields = ('created_at', 'updated_at')
     filter_horizontal = ()
@@ -156,7 +162,8 @@ class WeeklyTaskAdmin(admin.ModelAdmin):
     def tag_list(self, obj):
         return u", ".join(o.name for o in obj.tags.all())
 
-    list_display = ('title', 'taskType', 'subTasksCount', 'isTeamTask', 'tag_list')
+    list_display = ('title', 'taskType', 'subTasksCount',
+                    'isTeamTask', 'tag_list')
     list_filter = ('tags',)
     search_fields = ('title',)
     fieldsets = ((None, {
@@ -213,6 +220,7 @@ class QuestionThemeAdmin(admin.ModelAdmin):
     }),)
     filter_horizontal = ()
 
+
 class TestUserInline(admin.StackedInline):
     extra = 0
     # max_num = 10
@@ -227,12 +235,14 @@ class TestUserInline(admin.StackedInline):
     )
     readonly_fields = ('rightAnswersCount', 'completeTime')
 
+
 class TestBlockInlineForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(TestBlockInlineForm, self).__init__(*args, **kwargs)
         if 'instance' in kwargs:
-            self.errors #Без этого почему-то не работает вызов ошибки "Выберите вопросы по теме"
-            self.fields['questions'].queryset=Question.objects.filter(questionTheme=QuestionTheme.objects.get(id=self['questionTheme'].value()))
+            self.errors  # Без этого почему-то не работает вызов ошибки "Выберите вопросы по теме"
+            self.fields['questions'].queryset = Question.objects.filter(
+                questionTheme=QuestionTheme.objects.get(id=self['questionTheme'].value()))
             self.fields['questions'].help_text = 'Пользуйтесь Ctrl (Command) и Shift. Чтобы отобразились вопросы другой тематики, поменяйте тематику и попробуйте сохранить.'
             # Можно заменить виджет, например, на multiwidget
 
@@ -243,26 +253,27 @@ class TestBlockInlineForm(forms.ModelForm):
         for quest in data:
             if quest.questionTheme != data_theme:
                 raise forms.ValidationError('Выберите вопросы по теме')
-        
+
         return data
 
     class Meta:
         model = TestBlock
         fields = '__all__'
 
+
 class TestBlockInline(admin.StackedInline):
     extra = 0
     model = TestBlock
     form = TestBlockInlineForm
-            
+
     fieldsets = (
         (None, {
             'fields': (
-            ('questionTheme',
-            'questionsCount',
-            'blockWeight',),
-            ('created_at',
-            'updated_at',))
+                ('questionTheme',
+                 'questionsCount',
+                 'blockWeight',),
+                ('created_at',
+                 'updated_at',))
         }),
         ('Вопросы', {
             'classes': ('collapse',),
@@ -271,11 +282,12 @@ class TestBlockInline(admin.StackedInline):
     )
     readonly_fields = ('created_at', 'updated_at')
 
+
 class TestAdmin(admin.ModelAdmin):
-    inlines = [TestBlockInline,TestUserInline]
+    inlines = [TestBlockInline, TestUserInline]
 
     list_display = ('title', 'description')
-    
+
     search_fields = ('title',)
     fieldsets = ((None, {
         'fields': (
@@ -293,6 +305,7 @@ class TestAdmin(admin.ModelAdmin):
 
     filter_horizontal = ()
     readonly_fields = ('created_at', 'updated_at')
+
 
 class MyAdminSite(admin.AdminSite):
     # Text to put at the end of each page's <title>.
@@ -331,6 +344,7 @@ class AchievementAdmin(admin.ModelAdmin):
             return 'Фото не установлено'
 
     get_image.short_description = 'Фото'
+
 
 admin.site = MyAdminSite()
 

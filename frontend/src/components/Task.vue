@@ -1,24 +1,26 @@
 <template>
     <div class="task">
-        <h4 class="task__name">{{ data.taskname }}</h4>
+        <h4 class="task__name">{{ data.title }}</h4>
         <ProgressBar class="progressbar" :percent="data.progress" />
         <div class="task__info">
-            <p class="task__type">тип: {{ data.type }}</p>
+            <p class="task__type">тип: {{ getTaskType(data.taskType) }}</p>
             <p class="task__deadline">
-                <span v-if="showMore">Дэдлайн: </span>
-                <span v-else>До: </span>
-                {{ data.deadline }}
+                <span v-if="data.deadline !== null">
+                    <span v-if="showMore">Дэдлайн: </span>
+                    <span v-else>До: </span>
+                    {{ data.deadline }}
+                </span>
             </p>
             <div class="task__awards">
                 <span v-show="showMore">Награда:</span>
                 <div class="task__awards-content">
                     <div class="task__awards-content-item">
                         <CoinSvg class="task__awards-icon" />
-                        {{ data.reward.coins }}
+                        {{ data.money === null ? 0 : data.money }}
                     </div>
                     <div class="task__awards-content-item">
                         <LightningSvg class="task__awards-icon" />
-                        {{ data.reward.lightnings }}
+                        {{ data.energy === null ? 0 : data.energy }}
                     </div>
                 </div>
             </div>
@@ -28,29 +30,32 @@
             <ol v-show="showMore" class="task__subtasks">
                 <h6 class="task__subtasks-title">Подзадачи</h6>
                 <li
-                    v-for="subtask in data.subtasks"
-                    :key="subtask.id"
+                    v-for="(subTask, index) in data.subTasks"
+                    :key="index"
                     :style="[
-                        subtask.status == 'done'
+                        subTask.status === 'done'
                             ? { 'text-decoration': 'line-through' }
                             : { 'text-decoration': 'none' },
                     ]"
                 >
-                    {{ subtask.id }}. {{ subtask.title }}
+                    {{ index + 1 }}. {{ subTask.title }}
                 </li>
             </ol>
             <div v-show="showMore" class="task__desc">
                 <h6 class="task__desc-title">Описание</h6>
-                <p class="task__desc-text">{{ data.desc }}</p>
+                <p class="task__desc-text">{{ data.description }}</p>
             </div>
         </div>
         <input
-            :id="'task__toggle' + data.id"
+            :id="'task__toggle' + (customId === '' ? data.id : customId)"
             v-model="showMore"
             class="task__toggle-inp"
             type="checkbox"
         />
-        <label class="task__toggle" :for="'task__toggle' + data.id">
+        <label
+            class="task__toggle"
+            :for="'task__toggle' + (customId === '' ? data.id : customId)"
+        >
             <div class="arrow"></div>
             <div class="dot"></div>
         </label>
@@ -74,11 +79,26 @@ export default {
             type: Object,
             default: () => {},
         },
+        customId: {
+            type: String,
+            default: '',
+        },
     },
     data() {
         return {
             showMore: false,
         }
+    },
+    methods: {
+        getTaskType: function(type) {
+            return type === 'quest'
+                ? 'Квест'
+                : type === 'daily'
+                ? 'Ежедневное'
+                : type === undefined
+                ? 'Еженедельное'
+                : ''
+        },
     },
 }
 </script>
