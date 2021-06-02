@@ -1,12 +1,31 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group, User
 from django.contrib.auth.admin import GroupAdmin, UserAdmin
-from .models import UserProfile, Task, WeeklyTask, Division, JobPosition, Team, Question, QuestionTheme, Test, TestBlock, Achievement, RequirenmentToGetAchieve
+from .models import UserProfile, Task, WeeklyTask, Division, JobPosition, Team, Statistics, \
+    MainQuest, Question, QuestionTheme, Test, TestBlock, Achievement, RequirenmentToGetAchieve, \
+    Product, RequirementsToBuyProduct, ProductCategory, CategoryClothes, Purchase
 from django.db import models
+from django.db.models import Q
 from django import forms
 from django.urls import resolve
 from django.utils.safestring import mark_safe
+from django import forms
 
+from django.contrib import admin
+from django.contrib.admin import ModelAdmin, TabularInline
+# from .models import Category, Product, ProductSliderImage
+
+
+# class AdminCategory(ModelAdmin):
+#     search_fields = ['title']
+#     list_display = ['title', 'active']
+#     list_filter = ('active',)
+#
+#
+# class AdminProduct(ModelAdmin):
+#     search_fields = ['title']
+#     list_display = ['title', 'active']
+#     list_filter = ('active', 'parent')
 
 # Register your models here.
 
@@ -65,19 +84,22 @@ class JobPositionAdmin(admin.ModelAdmin):
 
 
 class UserProfileAdmin(UserAdmin):
-    list_display = ('email', 'username', 'name', 'surname', 'last_login', 'userType')
+    list_display = ('email', 'username', 'name',
+                    'surname', 'last_login', 'userType')
     search_fields = ('email', 'name', 'surname')
-    readonly_fields = ('date_joined', 'last_login')
+    readonly_fields = ('date_joined', 'last_login', 'competitionCount', 'winCompetitionCount')
     filter_horizontal = ()
     fieldsets = ()
     list_filter = ('division', "jobPosition")
     fields = ('username', 'email',
-              ('name', 'surname', "patronymic"),
+              ('surname', 'name', "patronymic"),
               "birthDate",
               ("userType", "jobPosition", "division"),
               "description", "photo",
               ("money", "health", "energy"),
               ("level", "quality", "productivity"),
+            #   ("completedTests", "completedTasks", "completedQuests"),
+            #   ("achievements"),
               ("competitionCount", "winCompetitionCount"),
               "last_login", "date_joined")
 
@@ -88,6 +110,7 @@ class SubTask(admin.StackedInline):
     max_num = 3
     fields = (
         'taskType',
+        "division",
         'title',
         'description',
         'isTeamTask',
@@ -99,15 +122,21 @@ class SubTask(admin.StackedInline):
 
 
 class TaskAdmin(admin.ModelAdmin):
+    # category = 'testy'
+
     def get_queryset(self, request):
-        return super().get_queryset(request).prefetch_related('tags')
+        return super().get_queryset(request).exclude(
+            ~Q(parent=None)).exclude(
+            ~Q(weekly=None)).prefetch_related('tags')
 
     def tag_list(self, obj):
         return u", ".join(o.name for o in obj.tags.all())
+    tag_list.short_description = "Теги"
 
     inlines = [SubTask]
-    list_display = ('title', 'taskType', 'subTasksCount', 'parent', 'weekly', 'isTeamTask', 'tag_list')
-    list_display_links = ('title', 'parent', 'weekly')
+    list_display = ('title', 'taskType', 'subTasksCount',
+                    'isTeamTask', 'tag_list')
+    list_display_links = ('title',)
     search_fields = ('title',)
     readonly_fields = ('created_at', 'updated_at')
     filter_horizontal = ()
@@ -148,6 +177,7 @@ class TaskInline(admin.StackedInline):
 
 
 class WeeklyTaskAdmin(admin.ModelAdmin):
+
     inlines = [TaskInline]
 
     def get_queryset(self, request):
@@ -155,8 +185,10 @@ class WeeklyTaskAdmin(admin.ModelAdmin):
 
     def tag_list(self, obj):
         return u", ".join(o.name for o in obj.tags.all())
+    tag_list.short_description = "Теги"
 
-    list_display = ('title', 'taskType', 'subTasksCount', 'isTeamTask', 'tag_list')
+    list_display = ('title', 'taskType', 'subTasksCount',
+                    'isTeamTask', 'tag_list')
     list_filter = ('tags',)
     search_fields = ('title',)
     fieldsets = ((None, {
@@ -178,11 +210,14 @@ class WeeklyTaskAdmin(admin.ModelAdmin):
 
 
 class QuestionAdmin(admin.ModelAdmin):
+
+
     def get_queryset(self, request):
         return super().get_queryset(request).prefetch_related('tags')
 
     def tag_list(self, obj):
         return u", ".join(o.name for o in obj.tags.all())
+    tag_list.short_description = "Теги"
 
     list_display = ('title', 'description', 'questionTheme', 'tag_list')
     search_fields = ('title',)
@@ -198,6 +233,7 @@ class QuestionAdmin(admin.ModelAdmin):
 
         )
     }),)
+    list_filter = ('tags',)
     filter_horizontal = ()
     readonly_fields = ('created_at', 'updated_at')
 
@@ -213,26 +249,13 @@ class QuestionThemeAdmin(admin.ModelAdmin):
     }),)
     filter_horizontal = ()
 
-class TestUserInline(admin.StackedInline):
-    extra = 0
-    # max_num = 10
-    model = Test.users.through
-    fields = (
-        ('user',
-         'status',),
-        ('rightAnswersCount',
-         'completeTime',
-         'points',
-         'hasLeftTest',)
-    )
-    readonly_fields = ('rightAnswersCount', 'completeTime')
-
 class TestBlockInlineForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(TestBlockInlineForm, self).__init__(*args, **kwargs)
         if 'instance' in kwargs:
-            self.errors #Без этого почему-то не работает вызов ошибки "Выберите вопросы по теме"
-            self.fields['questions'].queryset=Question.objects.filter(questionTheme=QuestionTheme.objects.get(id=self['questionTheme'].value()))
+            self.errors  # Без этого почему-то не работает вызов ошибки "Выберите вопросы по теме"
+            self.fields['questions'].queryset = Question.objects.filter(
+                questionTheme=QuestionTheme.objects.get(id=self['questionTheme'].value()))
             self.fields['questions'].help_text = 'Пользуйтесь Ctrl (Command) и Shift. Чтобы отобразились вопросы другой тематики, поменяйте тематику и попробуйте сохранить.'
             # Можно заменить виджет, например, на multiwidget
 
@@ -243,26 +266,27 @@ class TestBlockInlineForm(forms.ModelForm):
         for quest in data:
             if quest.questionTheme != data_theme:
                 raise forms.ValidationError('Выберите вопросы по теме')
-        
+
         return data
 
     class Meta:
         model = TestBlock
         fields = '__all__'
 
+
 class TestBlockInline(admin.StackedInline):
     extra = 0
     model = TestBlock
     form = TestBlockInlineForm
-            
+
     fieldsets = (
         (None, {
             'fields': (
             ('questionTheme',
-            'questionsCount',
             'blockWeight',),
             ('created_at',
             'updated_at',))
+
         }),
         ('Вопросы', {
             'classes': ('collapse',),
@@ -271,11 +295,12 @@ class TestBlockInline(admin.StackedInline):
     )
     readonly_fields = ('created_at', 'updated_at')
 
+
 class TestAdmin(admin.ModelAdmin):
-    inlines = [TestBlockInline,TestUserInline]
+    inlines = [TestBlockInline,]
 
     list_display = ('title', 'description')
-    
+
     search_fields = ('title',)
     fieldsets = ((None, {
         'fields': (
@@ -285,7 +310,6 @@ class TestAdmin(admin.ModelAdmin):
             'canLeave',
             'canSkip',
             'showAnswers',
-            'isInterview',
             'canSeeSpentTime',
             'canSeeTestClosing',
         )
@@ -294,30 +318,24 @@ class TestAdmin(admin.ModelAdmin):
     filter_horizontal = ()
     readonly_fields = ('created_at', 'updated_at')
 
-class MyAdminSite(admin.AdminSite):
-    # Text to put at the end of each page's <title>.
-    site_title = 'Яндекс.Геймификация Админ'
 
-    # Text to put in each page's <h1> (and above login form).
-    site_header = 'Яндекс.Геймификация Админ'
-
-    # Text to put at the top of the admin index page.
-    index_title = 'Панель администрирования'
-
-    def get_app_list(self, request):
-        """
-        Return a sorted list of all the installed apps that have been
-        registered in this site.
-        """
-        app_dict = self._build_app_dict(request)
-
-        app_list = sorted(app_dict.values(), key=lambda x: x['name'].lower())
-        return app_list
-
-
-class RequirenmentToGetAchieveInline(admin.TabularInline):
+class RequirenmentToGetAchieveInline(admin.StackedInline):
     model = RequirenmentToGetAchieve
+    extra = 1
 
+    fields = (
+        ('completedAchievement',
+         'completedTask',
+         'completedWeeklyTask',
+         'completedMainQuest',
+         'completedTest',),
+        ('completeTime',),
+        ('level',
+         'quality',
+         'productivity',
+         'competitionsCount',
+         'competitionWinsCount',),
+    )
 
 class AchievementAdmin(admin.ModelAdmin):
     list_display = ('title', 'description', 'get_image')
@@ -332,9 +350,44 @@ class AchievementAdmin(admin.ModelAdmin):
 
     get_image.short_description = 'Фото'
 
-admin.site = MyAdminSite()
+class RequirementsToBuyProductInline(admin.TabularInline):
+    model = RequirementsToBuyProduct
+    fields = ('level', 'money',)
 
-admin.site.register(Achievement, AchievementAdmin)
+
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ('title', 'description', 'get_image', 'count')
+
+    inlines = (RequirementsToBuyProductInline, )
+
+    def get_image(self, obj):
+        if obj.photo:
+            return mark_safe(f'<img src="{obj.photo.url}" width="75">')
+        else:
+            return 'Фото не установлено'
+
+    get_image.short_description = 'Фото'
+
+
+class ProductCategoryAdmin(admin.ModelAdmin):
+    list_display = ('title', 'description')
+
+class MyAdminSite(admin.AdminSite):
+    # Text to put at the end of each page's <title>.
+    site_title = 'ЮMoney.Геймификация'
+
+    # Text to put in each page's <h1> (and above login form).
+    site_header = 'Геймификация'
+
+    # Text to put at the top of the admin index page.
+    index_title = 'Панель администрирования'
+
+    def get_app_list(self, request):
+        app_dict = self._build_app_dict(request)
+        app_list = sorted(app_dict.values(), key=lambda x: x['name'].lower())
+        return app_list
+
+admin.site = MyAdminSite()
 
 admin.site.register(WeeklyTask, WeeklyTaskAdmin)
 admin.site.register(Task, TaskAdmin)
@@ -343,11 +396,11 @@ admin.site.register(Test, TestAdmin)
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(QuestionTheme, QuestionThemeAdmin)
 
+admin.site.register(Achievement, AchievementAdmin)
+admin.site.register(Product, ProductAdmin)
+admin.site.register(ProductCategory, ProductCategoryAdmin)
+
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(Division, DivisionAdmin)
 admin.site.register(JobPosition, JobPositionAdmin)
 admin.site.register(Team, TeamAdmin)
-
-# Дублируют UserProfile
-# admin.site.register(Group, GroupAdmin)
-# admin.site.register(User, UserAdmin)

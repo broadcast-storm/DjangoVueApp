@@ -1,31 +1,35 @@
 <template>
     <div>
-        <div class="profile-wrapper">
+        <div v-if="profileStatus === 'success'" class="profile-wrapper">
             <div class="column-wrap wrap__profile">
                 <div ref="profile" class="profile">
                     <div class="profile__main-info">
                         <div class="profile__main-info__photo">
                             <img
-                                :src="user.photo"
+                                :src="profileInfo.photo"
                                 alt="User photo"
                                 class="img"
                             />
                         </div>
                         <div class="profile__main-info__text">
                             <h2 class="text__name">
-                                {{ user.surname + ' ' + user.name }}
+                                {{
+                                    profileInfo.surname + ' ' + profileInfo.name
+                                }}
                                 <span class="text__name__patronymic">
-                                    {{ user.patronymic }}
+                                    {{ profileInfo.patronymic }}
                                 </span>
                             </h2>
                             <p class="text__department">
-                                {{ user.department }}
+                                {{ profileInfo.division_details.title }}
                             </p>
-                            <p class="text__bio">{{ user.bio }}</p>
+                            <p class="text__bio">
+                                {{ profileInfo.description }}
+                            </p>
                             <p class="text__level">
                                 Текущий уровень
                                 <span class="text__level__count">
-                                    {{ user.level }}
+                                    {{ profileInfo.level }}
                                 </span>
                             </p>
                         </div>
@@ -35,40 +39,57 @@
                         <div class="profile__stats-item">
                             <CoinSvg class="profile__stats-icon" />
                             <span class="profile__stats-value coins">{{
-                                user.stats['coins']
+                                profileInfo.money
                             }}</span>
                         </div>
                         <div class="profile__stats-item">
                             <LightningSvg class="profile__stats-icon" />
                             <span class="profile__stats-value lightnings">{{
-                                user.stats['lightnings']
+                                profileInfo.energy
                             }}</span>
                         </div>
                         <div class="profile__stats-item">
                             <HeartSvg class="profile__stats-icon" />
                             <span class="profile__stats-value hearts">{{
-                                user.stats['hearts']
+                                profileInfo.health
                             }}</span>
                         </div>
                     </div>
                     <div class="task-props">
                         <div class="profile__task">
                             <p class="profile__task-title">Основной квест:</p>
-                            <h3 class="profile__task-name">
-                                {{ user.task.taskname }}
-                            </h3>
-                            <ProgressBar
-                                :percent="user.task.progress"
-                                class="progress-bar"
+                            <template v-if="mainQuest.status === 'success'">
+                                <h3 class="profile__task-name">
+                                    {{ mainQuest.data[0].title }}
+                                </h3>
+                                <ProgressBar
+                                    :percent="
+                                        mainQuest.data[0].progress === undefined
+                                            ? 0
+                                            : mainQuest.data[0].progress
+                                    "
+                                    class="progress-bar"
+                                />
+                                <p class="profile__task-deadline">
+                                    <span class="progress">
+                                        <span class="gray-txt">Прогресс:</span
+                                        >{{
+                                            mainQuest.data[0].progress ===
+                                            undefined
+                                                ? 0
+                                                : mainQuest.data[0].progress
+                                        }}%
+                                    </span>
+                                    <span class="gray-txt">Срок:</span> до
+                                    {{ date }}
+                                </p>
+                            </template>
+                            <Spinner
+                                v-if="mainQuest.status === 'loading'"
+                                :size="25"
+                                :line-bg-color="'#b1b2b7'"
+                                :line-fg-color="'#26bcc2'"
                             />
-                            <p class="profile__task-deadline">
-                                <span class="progress">
-                                    <span class="gray-txt">Прогресс:</span
-                                    >{{ user.task.progress }}%
-                                </span>
-                                <span class="gray-txt">Срок:</span> до
-                                {{ date }}
-                            </p>
                         </div>
                         <table class="profile__props">
                             <tr class="profile__props-row">
@@ -76,7 +97,7 @@
                                     Продуктивность:
                                 </td>
                                 <td class="profile__props-row-value">
-                                    {{ user.productivity }}%
+                                    {{ profileInfo.productivity }}%
                                 </td>
                                 <td class="profile__props-row-light">
                                     из 100% на сегодня
@@ -87,7 +108,7 @@
                                     Качество:
                                 </td>
                                 <td class="profile__props-row-value">
-                                    {{ user.quality }}
+                                    {{ profileInfo.quality }}
                                 </td>
                                 <td class="profile__props-row-light">
                                     из 100 на сегодня
@@ -98,7 +119,7 @@
                                     Текущий уровень:
                                 </td>
                                 <td class="profile__props-row-value">
-                                    {{ user.level }}
+                                    {{ profileInfo.level }}
                                 </td>
                                 <td></td>
                             </tr>
@@ -134,11 +155,47 @@
             >
                 <div class="tasks" :style="{ height: commonHeight }">
                     <h2 class="tasks__title">Список задач</h2>
-                    <Task
-                        v-for="task in tasks"
-                        :key="task.id"
-                        :data="task"
-                        class="tasks__item"
+                    <template
+                        v-if="
+                            dailyTasks.status === 'success' &&
+                                weeklyTasks.status === 'success'
+                        "
+                    >
+                        <span
+                            v-if="
+                                dailyTasks.status === 'success' &&
+                                    weeklyTasks.status === 'success' &&
+                                    dailyTasks.data === 0 &&
+                                    weeklyTasks.data === 0
+                            "
+                            :style="{
+                                display: 'inline-block',
+                                width: '100%',
+                                color: '#7d849a',
+                                textAlign: 'center',
+                                marginTop: '200px',
+                            }"
+                            >Нет активных задач</span
+                        >
+                        <template v-else>
+                            <Task
+                                v-for="task in tasksList"
+                                :key="getTaskId(task.taskType, task.id)"
+                                :data="task"
+                                :custom-id="getTaskId(task.taskType, task.id)"
+                                class="tasks__item"
+                            />
+                        </template>
+                    </template>
+                    <Spinner
+                        v-if="
+                            dailyTasks.status === 'loading' ||
+                                weeklyTasks.status === 'loading'
+                        "
+                        :style="{ marginTop: '200px' }"
+                        :size="25"
+                        :line-bg-color="'#b1b2b7'"
+                        :line-fg-color="'#26bcc2'"
                     />
                 </div>
             </div>
@@ -179,7 +236,13 @@ import HeartSvg from '@/assets/icons/heart.svg'
 import LightningSvg from '@/assets/icons/lightning.svg'
 import ProgressBar from '@/components/ProgressBar.vue'
 import Task from '@/components/Task.vue'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
+import {
+    WEEKLY_TASKS_REQUEST,
+    DAILY_TASKS_REQUEST,
+    MAIN_QUEST_REQUEST,
+} from '@/store/action-types/tasks'
+import Spinner from 'vue-simple-spinner'
 
 export default {
     name: 'Profile',
@@ -189,6 +252,7 @@ export default {
         LightningSvg,
         ProgressBar,
         Task,
+        Spinner,
     },
     data() {
         return {
@@ -196,11 +260,13 @@ export default {
             windowWidth: window.innerWidth,
             screenMobile: window.innerWidth > 768 ? 'all' : 'tasks',
             user: Object.assign({}, this.$store.getters.getUserData),
-            tasks: Object.assign({}, this.$store.getters.getTasks),
+            tasksList: [],
         }
     },
     computed: {
         ...mapGetters(['getUserData']),
+        ...mapGetters('profile', ['profileStatus', 'profileInfo']),
+        ...mapGetters('tasks', ['dailyTasks', 'weeklyTasks', 'mainQuest']),
         date() {
             const date = this.getUserData.task.deadline
 
@@ -228,12 +294,38 @@ export default {
         this.$nextTick(() => {
             window.addEventListener('resize', this.onResize)
         })
+        await this.WEEKLY_TASKS_REQUEST()
+        await this.DAILY_TASKS_REQUEST()
+        await this.MAIN_QUEST_REQUEST()
+        if (
+            this.dailyTasks.status === 'success' &&
+            this.weeklyTasks.status === 'success'
+        )
+            this.weeklyTasks.data === null
+                ? (this.tasksList = this.dailyTasks.data)
+                : (this.tasksList = this.dailyTasks.data.concat(
+                      this.weeklyTasks.data
+                  ))
     },
 
     beforeDestroy() {
         window.removeEventListener('resize', this.onResize)
     },
     methods: {
+        ...mapActions('tasks', [
+            WEEKLY_TASKS_REQUEST,
+            DAILY_TASKS_REQUEST,
+            MAIN_QUEST_REQUEST,
+        ]),
+        getTaskId: function(type, id) {
+            return type === 'quest'
+                ? `q${id}`
+                : type === 'daily'
+                ? `d${id}`
+                : type === undefined
+                ? `w${id}`
+                : `e${id}`
+        },
         changeScreenMobile: function(type) {
             this.screenMobile = type
         },

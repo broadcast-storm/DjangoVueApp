@@ -27,8 +27,8 @@ environ.Env.read_env()
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 SECRET_KEY = env("SECRET_KEY", default="unsafe-secret-key")
-REFRESH_TOKEN_SECRET = env("REFRESH_TOKEN_SECRET",
-                           default="unsafe-refresh-secret-key")
+# REFRESH_TOKEN_SECRET = env("REFRESH_TOKEN_SECRET",
+#                            default="unsafe-refresh-secret-key")
 
 ACCESS_TOKEN_EXPIRES = env("ACCESS_TOKEN_EXPIRES", default=5)
 REFRESH_TOKEN_EXPIRES = env("REFRESH_TOKEN_EXPIRES", default=14)
@@ -41,7 +41,13 @@ ALLOWED_HOSTS = ['yandex-gamification.std-884.ist.mospolytech.ru', '127.0.0.1']
 
 # Application definition
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.request',
+)
+
 INSTALLED_APPS = [
+    'baton',
     'django_crontab',
     'whitenoise.runserver_nostatic',
     'django.contrib.admin',
@@ -58,6 +64,8 @@ INSTALLED_APPS = [
     'taggit',
     'django_cleanup',
     'easy_thumbnails',
+
+     'baton.autodiscover', #at the end
 ]
 
 MIDDLEWARE = [
@@ -196,6 +204,8 @@ TEMPLATES[0]['DIRS'] += [
 ]
 
 SIMPLE_JWT = {
+    'SIGNING_KEY': SECRET_KEY,
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=ACCESS_TOKEN_EXPIRES),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=REFRESH_TOKEN_EXPIRES),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
@@ -243,3 +253,42 @@ THUMBNAILS_ALIASES = {
 }
 
 THUMBNAILS_BASEDIR = 'thumbnails'
+
+BATON = {
+    'SITE_HEADER': 'Геймификация',
+    'SITE_TITLE': 'ЮMoney.Геймификация',
+    'INDEX_TITLE': 'Панель администратора',
+    'SUPPORT_HREF': 'https://github.com/nikita220800/DjangoVueApp',
+    'COPYRIGHT': 'Copyright © 2021 <a href="//mospolytech.ru" target="_blank">MosPolytech</a>',
+    'POWERED_BY': '<a href="//mospolytech.ru" target="_blank">MosPolytech</a>',
+    'MENU_TITLE': 'Меню',
+    'GRAVATAR_DEFAULT_IMG': 'mp',
+    'LOGIN_SPLASH': '/frontend/src/assets/img/auth/background.jpg',
+
+    'CHANGELIST_FILTERS_IN_MODAL': True,
+    'CHANGELIST_FILTERS_ALWAYS_OPEN': False,
+    # 'CHANGELIST_FILTERS_FORM': False,
+    # 'MENU_ALWAYS_COLLAPSED': True,
+
+    'MENU': (
+        { 'type': 'title', 'label': 'Задания', 'apps': ('api', ) },
+        { 'type': 'model', 'label': 'Квест', 'name': 'mainquest', 'app': 'api' },
+        { 'type': 'model', 'label': 'Еженедельные задачи', 'name': 'weeklytask', 'app': 'api' },
+        { 'type': 'model', 'label': 'Тесты', 'name': 'test', 'app': 'api' },
+
+        { 'type': 'title', 'label': 'Поощрения', 'apps': ('api', ) },
+        { 'type': 'model', 'label': 'Ачивки', 'name': 'achievement', 'app': 'api' },
+        { 'type': 'model', 'label': 'Товары', 'name': 'product', 'app': 'api' },
+
+        { 'type': 'title', 'label': 'Пользователи', 'apps': ('api', ) },
+        { 'type': 'model', 'label': 'Подразделения', 'name': 'division', 'app': 'api' },
+        { 'type': 'model', 'label': 'Команды', 'name': 'team', 'app': 'api' },
+        { 'type': 'model', 'label': 'Сотрудники', 'name': 'userprofile', 'app': 'api' },
+    ),
+
+    # example of Google Analytics
+    # 'ANALYTICS': {
+    #     'CREDENTIALS': os.path.join(BASE_DIR, 'credentials.json'),
+    #     'VIEW_ID': '12345678',
+    # },
+}

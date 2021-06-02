@@ -1,28 +1,78 @@
 <template>
-    <div>
-        <div class="mainQuest-wrap">
+    <div class="wrapper">
+        <div class="main">
             <div class="mainQuestInfo-wrap">
-                <div class="text__gray__big">Основной квест:</div>
-                <h1 class="test-headline">{{ mainQuest.taskname }}</h1>
-                <ProgressBar
-                    :percent="mainQuest.progress"
-                    class="progress-bar"
-                />
-                <div class="text_deadline">
-                    <div class="text__gray">Срок:</div>
-                    <div class="date">до {{ mainQuest.deadline }}</div>
-                </div>
-                <div class="tasks" :style="{ height: commonHeight }">
-                    <h2 class="tasks__title">Список задач</h2>
-                    <Task
-                        v-for="subtask in mainQuest.subtasks"
-                        :key="subtask.id"
-                        :data="subtask"
-                        class="tasks__item"
+                <template
+                    v-if="
+                        mainQuest.status === 'success' &&
+                            !(
+                                mainQuest.data === null ||
+                                mainQuest.data.length === 0
+                            )
+                    "
+                >
+                    <div class="text__gray__big">Основной квест:</div>
+                    <h1 class="test-headline">{{ mainQuest.data[0].title }}</h1>
+                    <ProgressBar
+                        :percent="
+                            mainQuest.data[0].progress === undefined
+                                ? 0
+                                : mainQuest.data[0].progress
+                        "
+                        class="progress-bar"
                     />
+                    <div class="text_deadline">
+                        <div class="text__gray">Срок:</div>
+                        <div class="date">
+                            до 6.06.2021 {{ mainQuest.data[0].deadline }}
+                        </div>
+                    </div>
+                    <div class="tasks">
+                        <h2 class="tasks__title">Список задач</h2>
+                        <div class="tasks__list">
+                            <Task
+                                v-for="subTask in mainQuest.data[0].subTasks"
+                                :key="subTask.id"
+                                :data="subTask"
+                                class="tasks__item"
+                            />
+                        </div>
+                    </div>
+                </template>
+                <div
+                    v-if="
+                        mainQuest.status === 'loading' ||
+                            (mainQuest.status === 'success' &&
+                                (mainQuest.data === null ||
+                                    mainQuest.data.length === 0))
+                    "
+                    :style="{
+                        height: '100%',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }"
+                >
+                    <Spinner
+                        v-if="mainQuest.status === 'loading'"
+                        :size="25"
+                        :line-bg-color="'#b1b2b7'"
+                        :line-fg-color="'#26bcc2'"
+                    />
+                    <span
+                        v-if="
+                            mainQuest.status === 'success' &&
+                                (mainQuest.data === null ||
+                                    mainQuest.data.length === 0)
+                        "
+                        style="color:#1a2740"
+                        >Нет активного основного квеста</span
+                    >
                 </div>
             </div>
-            <div class="tree_wrap"></div>
+            <div class="tree_wrap">
+                <span>Здесь будет граф основного квеста</span>
+            </div>
         </div>
     </div>
 </template>
@@ -30,62 +80,65 @@
 <script>
 import Task from '@/components/Task.vue'
 import ProgressBar from '@/components/ProgressBar.vue'
+import { mapGetters, mapActions } from 'vuex'
+import { MAIN_QUEST_REQUEST } from '@/store/action-types/tasks'
+import Spinner from 'vue-simple-spinner'
+
 export default {
     name: 'MainQuest',
     components: {
         Task,
         ProgressBar,
+        Spinner,
     },
-    data() {
-        return {
-            mainQuest: Object.assign({}, this.$store.getters.getMainQuest),
-            tasks: Object.assign({}, this.$store.getters.getTasks),
-        }
+    computed: {
+        ...mapGetters('tasks', ['mainQuest']),
+    },
+    async mounted() {
+        if (this.mainQuest.status !== 'success') await this.MAIN_QUEST_REQUEST()
+    },
+    methods: {
+        ...mapActions('tasks', [MAIN_QUEST_REQUEST]),
     },
 }
 </script>
 
 <style lang="scss" scoped>
-* {
-    box-sizing: border-box;
+.wrapper {
+    height: 100vh;
 }
-.mainQuest-wrap {
+.main {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    margin-top: 90px;
-    height: calc(100vh - 90px);
+    box-sizing: border-box;
+    padding-top: 150px;
+    height: 100%;
     width: 100%;
-    overflow-y: auto;
 }
 .mainQuestInfo-wrap {
-    display: inline;
-    position: relative;
-    max-width: 470px;
-    min-height: 793px;
-    max-height: 793px;
+    min-width: 450px;
+    max-width: 550px;
+    width: 40%;
+    height: 75vh;
     border: 1px solid #b1b2b7;
     box-sizing: border-box;
-    margin: 59px 45px 91px 18px;
+    margin: 0 20px 0 20px;
+    padding: 30px 30px 0 30px;
 }
 
 .tasks {
     box-sizing: border-box;
-    min-height: 470px;
-    max-height: 540px;
-    width: 400px;
-    overflow-y: auto;
-    min-width: 412px;
-    margin-left: 33px;
-    margin-right: 30px;
-
+    &__list {
+        height: 38vh;
+        overflow-y: auto;
+        min-height: 290px;
+    }
     &__title {
         font-size: 24px;
         font-weight: 400;
-        line-height: 16px;
         color: #1a2740;
-        margin-top: 1px;
-        margin-bottom: 35px;
+        margin-bottom: 20px;
     }
 
     &__item:not(:first-child) {
@@ -93,53 +146,55 @@ export default {
     }
 }
 
+.text_deadline {
+    margin-bottom: 30px;
+}
+
 .date {
     display: inline-block;
     margin-left: 5px;
-    margin-bottom: 58px;
     font-size: 18px;
 }
 
 .text {
     &__gray {
         display: inline-block;
-        margin-left: 33px;
         color: #545969;
         font-size: 18px;
         line-height: 16px;
         &__big {
-            margin-left: 33px;
             color: #545969;
-            margin-top: 36px;
             font-size: 24px;
             line-height: 16px;
         }
     }
 }
 .test-headline {
-    margin-top: 19px;
-    margin-left: 33px;
+    margin-top: 10px;
     font-size: 36px;
-    line-height: 16px;
 }
 .progress-bar {
     max-width: 407px;
     margin-top: 23px;
-    margin-left: 33px;
-    margin-right: 30px;
     margin-bottom: 10px;
 }
 .progressbar {
     background-color: #fff;
+    margin-top: 10px;
 }
 
 .tree_wrap {
-    display: inline;
     border: 1px solid #b1b2b7;
     box-sizing: border-box;
-    width: 568px;
-    height: 793px;
+    min-width: 450px;
+    max-width: 550px;
+    height: 75vh;
+    width: 40%;
     background-color: white;
-    margin: 59px 45px 91px 0;
+    margin: 0 20px 0 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #1a2740;
 }
 </style>

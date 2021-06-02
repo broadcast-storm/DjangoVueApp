@@ -4,6 +4,7 @@
             {{ pageName }}
         </h1>
         <div
+            v-if="statistics.status === 'success'"
             class="user-statistics"
             :class="{
                 hidden: $router.currentRoute.path === '/',
@@ -13,21 +14,21 @@
                 <CoinSvg class="user-statistics__icon" />
                 <span
                     class="user-statistics__text user-statistics__text_color_yellow"
-                    >{{ statistics.coins }}</span
+                    >{{ statistics.money }}</span
                 >
             </div>
             <div class="user-statistics__stat-block">
                 <LightningSvg class="user-statistics__icon" />
                 <span
                     class="user-statistics__text user-statistics__text_color_green"
-                    >{{ statistics.lightnings }}</span
+                    >{{ statistics.energy }}</span
                 >
             </div>
             <div class="user-statistics__stat-block">
                 <HeartSvg class="user-statistics__icon" />
                 <span
                     class="user-statistics__text user-statistics__text_color_red"
-                    >{{ statistics.hearts }}</span
+                    >{{ statistics.health }}</span
                 >
             </div>
         </div>
