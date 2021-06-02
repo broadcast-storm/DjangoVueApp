@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 from .views import JobPositionViewSet, DivisionViewSet, UserProfileViewSet, StatisticsViewSet, \
     TaskViewSet, WeeklyTaskViewSet, TeamsViewSet, competition, ProductViewSet, shop, LogoutView, LogoutAllView, \
     TestsViewSet, QuestionsViewSet, AnswersViewSet, TestBlockViewSet, AchievementViewSet, RequirenmentToGetAchieveViewSet, \
-    AchieveRequirenmentStatusViewSet, AchievementUserStatusViewSet, update_user_money_energy, userFilterForCompetition, TestUserViewSet
+    AchieveRequirenmentStatusViewSet, AchievementUserStatusViewSet, update_user_money_energy, userFilterForCompetition, get_quests, get_daily_tasks, get_weekly_tasks, TestUserViewSet
 
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -43,7 +43,10 @@ urlpatterns = [
     path('update-data', update_user_money_energy, name='update-data'),
     path('competition', competition, name='competition'),
     path('user-filter-for-competitions', userFilterForCompetition,
-         name='user-filter-for-competitions')]
+         name='user-filter-for-competitions'),
+    path('get-quests', get_quests, name='get-quests'),
+    path('get-daily-tasks', get_daily_tasks, name='get-daily-tasks'),
+    path('get-weekly-tasks', get_weekly_tasks, name='get-weekly-tasks'), ]
 
 
 # path('competition/currentcompetitions', currentcompetitions, name = 'currentcompetitions')

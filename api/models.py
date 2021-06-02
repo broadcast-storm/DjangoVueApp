@@ -377,7 +377,8 @@ class Task(models.Model):
     isTeamTask = models.BooleanField(default=False, verbose_name="Групповая задача")
     tags = TaggableManager()
 
-    accessLevel = models.IntegerField(blank=True, null=True)
+    accessLevel = models.IntegerField(
+        default=0, verbose_name="Мин уровень для задачи")
     deadline = models.IntegerField(blank=True, null=True)
 
     money = models.IntegerField(default=0, verbose_name="Валюта")
