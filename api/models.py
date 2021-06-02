@@ -537,7 +537,7 @@ class MainQuestStatus(models.Model):
 class Competition(models.Model):
     # IDs
 
-    users = models.ManyToManyField(UserProfile)
+    # users = models.ManyToManyField(UserProfile)
     winner = models.ForeignKey(
         UserProfile, on_delete=models.CASCADE, related_name='winner')
 
@@ -568,6 +568,12 @@ class Competition(models.Model):
         verbose_name = "соревнование"
         verbose_name_plural = "соревнования"
 
+
+class CompetitionUser(models.Model):
+
+    competition = models.ForeignKey('Competition', on_delete=models.CASCADE, related_name='competition_id')
+    first_user = models.ForeignKey('UserProfile', on_delete=models.CASCADE, related_name='first_name')
+    second_user = models.ForeignKey('UserProfile', on_delete=models.CASCADE, related_name='second_name')
 
 ##############################################
 # ДОСТИЖЕНИЯ
@@ -759,7 +765,7 @@ class Answer(models.Model):
     # IDs
 
     question = models.ForeignKey(
-        Question, on_delete=models.CASCADE, verbose_name="Вопрос")
+        Question, on_delete=models.CASCADE, verbose_name="Вопрос", related_name="qwe")
 
     # IDs
 
@@ -824,7 +830,8 @@ class TestBlock(models.Model):
         QuestionTheme, on_delete=models.CASCADE, verbose_name="Тематика", )
     test = models.ForeignKey(
         Test, on_delete=models.CASCADE, verbose_name="Тест", )
-    questions = models.ManyToManyField(Question, verbose_name="Вопросы", )
+    questions = models.ManyToManyField(
+        Question, verbose_name="Вопросы", related_name="qst")
 
     test = models.ForeignKey(Test, on_delete=models.CASCADE, verbose_name="Тест", )
     questions = models.ManyToManyField(Question, verbose_name="",default=None)

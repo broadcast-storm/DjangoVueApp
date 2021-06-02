@@ -1,9 +1,9 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import JobPositionViewSet, DivisionViewSet, UserProfileViewSet, StatisticsViewSet, \
-    TaskViewSet, WeeklyTaskViewSet, TeamsViewSet, competition, ProductViewSet, shop, LogoutView, LogoutAllView, \
+    TaskViewSet, WeeklyTaskViewSet, TeamsViewSet,  competition, ProductViewSet, shop, LogoutView, LogoutAllView, \
     TestsViewSet, QuestionsViewSet, AnswersViewSet, TestBlockViewSet, AchievementViewSet, RequirenmentToGetAchieveViewSet, \
-    AchieveRequirenmentStatusViewSet, AchievementUserStatusViewSet, update_user_money_energy, userFilterForCompetition, get_quests, get_daily_tasks, get_weekly_tasks, TestUserViewSet
+    AchieveRequirenmentStatusViewSet, AchievementUserStatusViewSet, update_user_money_energy, userFilterForCompetition, get_quests, get_daily_tasks, get_weekly_tasks, TestUserViewSet, unresolved_test, QuestionThemeViewSet, test_questions, test_post
 
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -24,6 +24,7 @@ router.register(r'tests-user', TestUserViewSet)
 router.register(r'questions', QuestionsViewSet)
 router.register(r'answers', AnswersViewSet)
 router.register(r'test-block', TestBlockViewSet)
+router.register(r'question-theme', QuestionThemeViewSet)
 router.register(r'achievement', AchievementViewSet)
 router.register(r'requirenment-to-get-achieve',
                 RequirenmentToGetAchieveViewSet)
@@ -42,6 +43,9 @@ urlpatterns = [
     path('shop', shop, name='shop'),
     path('update-data', update_user_money_energy, name='update-data'),
     path('competition', competition, name='competition'),
+    path('unresolved_test', unresolved_test, name='unresolved_test'),
+    path('test-questions', test_questions, name='test_questions'),
+    path('test-post', test_post, name='test_post'),
     path('user-filter-for-competitions', userFilterForCompetition,
          name='user-filter-for-competitions'),
     path('get-quests', get_quests, name='get-quests'),
