@@ -3,7 +3,7 @@ from django.contrib.auth.models import Group, User
 from django.contrib.auth.admin import GroupAdmin, UserAdmin
 from .models import UserProfile, Task, WeeklyTask, Division, JobPosition, Team, Statistics, \
     MainQuest, Question, QuestionTheme, Test, TestBlock, Achievement, RequirenmentToGetAchieve, \
-    Product, RequirementsToBuyProduct, ProductCategory, CategoryClothes, Purchase
+    Product, RequirementsToBuyProduct, ProductCategory, CategoryClothes, Purchase, Answer
 from django.db import models
 from django.db.models import Q
 from django import forms
@@ -87,7 +87,8 @@ class UserProfileAdmin(UserAdmin):
     list_display = ('email', 'username', 'name',
                     'surname', 'last_login', 'userType')
     search_fields = ('email', 'name', 'surname')
-    readonly_fields = ('date_joined', 'last_login', 'competitionCount', 'winCompetitionCount')
+    readonly_fields = ('date_joined', 'last_login',
+                       'competitionCount', 'winCompetitionCount')
     filter_horizontal = ()
     fieldsets = ()
     list_filter = ('division', "jobPosition")
@@ -98,8 +99,8 @@ class UserProfileAdmin(UserAdmin):
               "description", "photo",
               ("money", "health", "energy"),
               ("level", "quality", "productivity"),
-            #   ("completedTests", "completedTasks", "completedQuests"),
-            #   ("achievements"),
+              #   ("completedTests", "completedTasks", "completedQuests"),
+              #   ("achievements"),
               ("competitionCount", "winCompetitionCount"),
               "last_login", "date_joined")
 
@@ -209,8 +210,36 @@ class WeeklyTaskAdmin(admin.ModelAdmin):
     filter_horizontal = ()
 
 
-class QuestionAdmin(admin.ModelAdmin):
+class AnswerAdmin(admin.ModelAdmin):
+    search_fields = ('text',)
+    list_display = ('text', 'question',  'isCorrect',)
 
+    fieldsets = (
+        (None, {
+            'fields': (
+                'question',
+                'text',
+                ('description', 'image',),
+                'isCorrect'
+            )
+
+        }),
+    )
+
+
+class AnswerInline(admin.StackedInline):
+    model = Answer
+    can_delete = False
+    extra = 0
+    max_num = 4
+    fields = (
+        'text',
+        ('description', 'image',),
+        'isCorrect'
+    )
+
+
+class QuestionAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         return super().get_queryset(request).prefetch_related('tags')
@@ -219,6 +248,7 @@ class QuestionAdmin(admin.ModelAdmin):
         return u", ".join(o.name for o in obj.tags.all())
     tag_list.short_description = "Теги"
 
+    inlines = [AnswerInline, ]
     list_display = ('title', 'description', 'questionTheme', 'tag_list')
     search_fields = ('title',)
     fieldsets = ((None, {
@@ -249,6 +279,7 @@ class QuestionThemeAdmin(admin.ModelAdmin):
     }),)
     filter_horizontal = ()
 
+
 class TestBlockInlineForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(TestBlockInlineForm, self).__init__(*args, **kwargs)
@@ -278,14 +309,13 @@ class TestBlockInline(admin.StackedInline):
     extra = 0
     model = TestBlock
     form = TestBlockInlineForm
-
     fieldsets = (
         (None, {
             'fields': (
-            ('questionTheme',
-            'blockWeight',),
-            ('created_at',
-            'updated_at',))
+                ('questionTheme',
+                 'blockWeight',),
+                ('created_at',
+                 'updated_at',))
 
         }),
         ('Вопросы', {
@@ -297,7 +327,7 @@ class TestBlockInline(admin.StackedInline):
 
 
 class TestAdmin(admin.ModelAdmin):
-    inlines = [TestBlockInline,]
+    inlines = [TestBlockInline, ]
 
     list_display = ('title', 'description')
 
@@ -337,6 +367,7 @@ class RequirenmentToGetAchieveInline(admin.StackedInline):
          'competitionWinsCount',),
     )
 
+
 class AchievementAdmin(admin.ModelAdmin):
     list_display = ('title', 'description', 'get_image')
 
@@ -349,6 +380,7 @@ class AchievementAdmin(admin.ModelAdmin):
             return 'Фото не установлено'
 
     get_image.short_description = 'Фото'
+
 
 class RequirementsToBuyProductInline(admin.TabularInline):
     model = RequirementsToBuyProduct
@@ -372,6 +404,7 @@ class ProductAdmin(admin.ModelAdmin):
 class ProductCategoryAdmin(admin.ModelAdmin):
     list_display = ('title', 'description')
 
+
 class MyAdminSite(admin.AdminSite):
     # Text to put at the end of each page's <title>.
     site_title = 'ЮMoney.Геймификация'
@@ -387,6 +420,7 @@ class MyAdminSite(admin.AdminSite):
         app_list = sorted(app_dict.values(), key=lambda x: x['name'].lower())
         return app_list
 
+
 admin.site = MyAdminSite()
 
 admin.site.register(WeeklyTask, WeeklyTaskAdmin)
@@ -394,6 +428,7 @@ admin.site.register(Task, TaskAdmin)
 
 admin.site.register(Test, TestAdmin)
 admin.site.register(Question, QuestionAdmin)
+admin.site.register(Answer, AnswerAdmin)
 admin.site.register(QuestionTheme, QuestionThemeAdmin)
 
 admin.site.register(Achievement, AchievementAdmin)

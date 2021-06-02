@@ -177,7 +177,7 @@ def unresolved_test(request):
         return JsonResponse(serializer.data, safe=False)
 
 
-@api_view(['GET'])
+@api_view(['POST'])
 # For prod use IsAuthenticated . AllowAny using for Debug
 @permission_classes([AllowAny])
 # @ensure_csrf_cookie
@@ -185,7 +185,7 @@ def test_questions(request):
     """
     List all code snippets, or create a new snippet.
     """
-    if request.method == 'GET':
+    if request.method == 'POST':
         question_choice_id = []
         question_without_choice_id = []
         # all_data это массив первый элемент которого тестблок внутри которого вопросы второй элемент массива это ответы

@@ -157,8 +157,9 @@ class UserProfile(AbstractBaseUser):
 class Statistics(models.Model):
     # IDs
 
-    user = models.OneToOneField(UserProfile, on_delete=models.CASCADE, verbose_name="Пользователь", related_name="statistics", related_query_name='statistics')
-    
+    user = models.OneToOneField(UserProfile, on_delete=models.CASCADE, verbose_name="Пользователь",
+                                related_name="statistics", related_query_name='statistics')
+
     # user = models.ForeignKey(
     #    UserProfile, on_delete=models.CASCADE, verbose_name="Пользователь")
 
@@ -275,11 +276,15 @@ class WeeklyTask(models.Model):
 
     difficulty = models.CharField(max_length=20, choices=DIFFICULTY_TYPE_CHOICES,
                                   default=EASY, verbose_name="Сложность")
-    taskType = models.CharField(max_length=20, choices=TASK_TYPE_CHOICES, default=DAILY, verbose_name="Тип задачи")
-    title = models.CharField(max_length=200, unique=True, verbose_name="Название задачи")
+    taskType = models.CharField(
+        max_length=20, choices=TASK_TYPE_CHOICES, default=DAILY, verbose_name="Тип задачи")
+    title = models.CharField(max_length=200, unique=True,
+                             verbose_name="Название задачи")
     description = models.TextField(verbose_name="Описание задач")
-    subTasksCount = models.IntegerField(default=0, verbose_name="Кол-во доп задач")
-    isTeamTask = models.BooleanField(default=False, verbose_name="Групповая задача")
+    subTasksCount = models.IntegerField(
+        default=0, verbose_name="Кол-во доп задач")
+    isTeamTask = models.BooleanField(
+        default=False, verbose_name="Групповая задача")
     tags = TaggableManager()
 
     accessLevel = models.IntegerField(blank=True, null=True)
@@ -370,11 +375,15 @@ class Task(models.Model):
 
     difficulty = models.CharField(max_length=20, choices=DIFFICULTY_TYPE_CHOICES,
                                   default=EASY, verbose_name="Сложность")
-    taskType = models.CharField(max_length=20, choices=TASK_TYPE_CHOICES, default=DAILY, verbose_name="Тип задачи")
-    title = models.CharField(max_length=200, unique=True, verbose_name="Название задачи")
+    taskType = models.CharField(
+        max_length=20, choices=TASK_TYPE_CHOICES, default=DAILY, verbose_name="Тип задачи")
+    title = models.CharField(max_length=200, unique=True,
+                             verbose_name="Название задачи")
     description = models.TextField(verbose_name="Описание задачи")
-    subTasksCount = models.IntegerField(default=0, verbose_name="Кол-во доп задач")
-    isTeamTask = models.BooleanField(default=False, verbose_name="Групповая задача")
+    subTasksCount = models.IntegerField(
+        default=0, verbose_name="Кол-во доп задач")
+    isTeamTask = models.BooleanField(
+        default=False, verbose_name="Групповая задача")
     tags = TaggableManager()
 
     accessLevel = models.IntegerField(
@@ -571,13 +580,17 @@ class Competition(models.Model):
 
 class CompetitionUser(models.Model):
 
-    competition = models.ForeignKey('Competition', on_delete=models.CASCADE, related_name='competition_id')
-    first_user = models.ForeignKey('UserProfile', on_delete=models.CASCADE, related_name='first_name')
-    second_user = models.ForeignKey('UserProfile', on_delete=models.CASCADE, related_name='second_name')
+    competition = models.ForeignKey(
+        'Competition', on_delete=models.CASCADE, related_name='competition_id')
+    first_user = models.ForeignKey(
+        'UserProfile', on_delete=models.CASCADE, related_name='first_name')
+    second_user = models.ForeignKey(
+        'UserProfile', on_delete=models.CASCADE, related_name='second_name')
 
 ##############################################
 # ДОСТИЖЕНИЯ
 ##############################################
+
 
 class Achievement(models.Model):
     # IDs
@@ -652,9 +665,12 @@ class RequirenmentToGetAchieve(models.Model):
 
     level = models.IntegerField(default=0, verbose_name="Требуемый уровень")
     quality = models.FloatField(default=0.0, verbose_name="Требуемое качество")
-    productivity = models.FloatField(default=0.0, verbose_name="Требуемая продуктивность")
-    competitionsCount = models.IntegerField(default=0, verbose_name="Кол-во соревнований")
-    competitionWinsCount = models.IntegerField(default=0, verbose_name="Кол-во выигранных соревнований")
+    productivity = models.FloatField(
+        default=0.0, verbose_name="Требуемая продуктивность")
+    competitionsCount = models.IntegerField(
+        default=0, verbose_name="Кол-во соревнований")
+    competitionWinsCount = models.IntegerField(
+        default=0, verbose_name="Кол-во выигранных соревнований")
 
     def __str__(self):
         return str(self.id)
@@ -778,7 +794,7 @@ class Answer(models.Model):
         default=False, verbose_name="Правильный ответ")
 
     def __str__(self):
-        return str(self.title)
+        return str(self.text)
 
     class Meta:
         verbose_name = "ответ"
@@ -833,8 +849,9 @@ class TestBlock(models.Model):
     questions = models.ManyToManyField(
         Question, verbose_name="Вопросы", related_name="qst")
 
-    test = models.ForeignKey(Test, on_delete=models.CASCADE, verbose_name="Тест", )
-    questions = models.ManyToManyField(Question, verbose_name="",default=None)
+    test = models.ForeignKey(
+        Test, on_delete=models.CASCADE, verbose_name="Тест", )
+    questions = models.ManyToManyField(Question, verbose_name="", default=None)
     # IDs
 
     questionsCount = models.IntegerField(
@@ -1130,6 +1147,7 @@ class CategoryClothes(models.Model):
         verbose_name = "описание товара - одежды"
         verbose_name_plural = "описания товаров - одежды"
 
+
 class Purchase(models.Model):
     PENDING = 'pending'
     PAID = 'paid'
@@ -1143,17 +1161,20 @@ class Purchase(models.Model):
     )
     # IDs
 
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, verbose_name="Пользователь")
+    user = models.ForeignKey(
+        UserProfile, on_delete=models.CASCADE, verbose_name="Пользователь")
     products = models.ManyToManyField(Product, verbose_name="Товары")
 
     # IDs
 
-    productCount = models.IntegerField(default=0, verbose_name="Кол-во покупаемых товаров")
+    productCount = models.IntegerField(
+        default=0, verbose_name="Кол-во покупаемых товаров")
     status = models.CharField(max_length=20, choices=PURCHASE_STATUS_CHOICES,
                               default=PENDING, verbose_name="Размер")
 
     def __str__(self):
         return str(self.id)
+
 
 class Meta:
     verbose_name = "покупка"

@@ -1,9 +1,7 @@
 from rest_framework import serializers
 from .models import JobPosition, Division, UserProfile, Statistics, Task, TaskUserStatus, Team, Product, \
     RequirementsToBuyProduct, Test, Question, Answer, TestBlock, Achievement, RequirenmentToGetAchieve, AchieveRequirenmentStatus,\
-    AchievementUserStatus, Competition, WeeklyTask
-from .models import JobPosition, Division, TestUser, UserProfile, Statistics, Task, TaskUserStatus, Team, Product, \
-    RequirementsToBuyProduct, Test, Question, Answer, TestBlock, Achievement, RequirenmentToGetAchieve, AchieveRequirenmentStatus, AchievementUserStatus, QuestionTheme, Competition
+    AchievementUserStatus, Competition, WeeklyTask, TestUser, QuestionTheme
 
 
 class EmptySerializer(serializers.Serializer):

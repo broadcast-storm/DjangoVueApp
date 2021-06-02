@@ -87,9 +87,8 @@ import LightningSvg from '@/assets/icons/lightning.svg'
 import CoinSvg from '@/assets/icons/coin.svg'
 import Complete from '@/assets/icons/tests/complete.svg'
 import Time from '@/assets/icons/tests/time.svg'
-
-import { mapGetters } from 'vuex'
-import { mapMutations } from 'vuex'
+import { QUESTIONS_REQUEST } from '@/store/action-types/tests'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 export default {
     components: {
         Close,
@@ -117,7 +116,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters('tests', ['getTests']),
+        ...mapGetters('tests', ['getTests', 'getQuestionsList']),
         test: function() {
             return this.getTests.filter(
                 test => test.id === parseInt(this.id, 10)
@@ -127,7 +126,12 @@ export default {
         //     return this.test.questions.length
         // },
     },
+    async mounted() {
+        await this.QUESTIONS_REQUEST(this.id)
+        console.log(this.getQuestionsList)
+    },
     methods: {
+        ...mapActions('tests', [QUESTIONS_REQUEST]),
         ...mapMutations(['accrueReward']),
         selectOption: function(option) {
             if (this.selectedValue === option) {

@@ -3,39 +3,77 @@
         <h2 class="tests__headline">
             Доступные тесты
         </h2>
-        <div v-for="test in tests" :key="test.id" class="tests__list">
-            <div v-if="test.status === 'notPassed'" class="test">
-                <h3 class="test-headline">
-                    {{ test.name }}
-                </h3>
-                <div class="test-wrap">
-                    <span class="test-description">{{ test.description }}</span
-                    ><router-link class="test-begin" :to="getLink(test.id)">
-                        Начать<Arrow class="arrow" />
-                    </router-link>
+        <template
+            v-if="
+                getTestsList.status === 'success' &&
+                    getTestsList.data.length !== 0
+            "
+        >
+            <div
+                v-for="test in getTestsList.data"
+                :key="test.id"
+                class="tests__list"
+            >
+                <div v-if="test.status !== 'Passed'" class="test">
+                    <h3 class="test-headline">
+                        {{ test.title }}
+                    </h3>
+                    <div class="test-wrap">
+                        <span class="test-description">{{
+                            test.description
+                        }}</span
+                        ><router-link class="test-begin" :to="getLink(test.id)">
+                            Начать<Arrow class="arrow" />
+                        </router-link>
+                    </div>
                 </div>
             </div>
-        </div>
+        </template>
+        <span
+            v-if="
+                getTestsList.status === 'success' &&
+                    getTestsList.data.length === 0
+            "
+            class="tests__list"
+            >Нет доступных тестов</span
+        >
+        <Spinner
+            v-if="getTestsList.status === 'loading'"
+            class="tests__list"
+            :style="{ marginTop: '50px', width: '50px' }"
+            :size="25"
+            :line-bg-color="'#b1b2b7'"
+            :line-fg-color="'#26bcc2'"
+        />
     </div>
 </template>
 
 <script>
 import Arrow from '@/assets/icons/arrow-rigth.svg'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
+import { TESTS_REQUEST } from '@/store/action-types/tests'
+import Spinner from 'vue-simple-spinner'
+
 export default {
     components: {
         Arrow,
+        Spinner,
     },
     data() {
         return {}
     },
     computed: {
-        ...mapGetters('tests', ['getTests']),
+        ...mapGetters('tests', ['getTests', 'getTestsList']),
         tests: function() {
             return this.getTests
         },
     },
+    async mounted() {
+        await this.TESTS_REQUEST()
+        console.log(this.getTestsList)
+    },
     methods: {
+        ...mapActions('tests', [TESTS_REQUEST]),
         getLink: function(itemId) {
             return '/tests/test/' + itemId
         },
@@ -84,6 +122,7 @@ export default {
                 &-wrap {
                     display: flex;
                     flex-direction: row;
+                    justify-content: space-between;
                     .test-description {
                         font-size: 14px;
                         line-height: 15px;
