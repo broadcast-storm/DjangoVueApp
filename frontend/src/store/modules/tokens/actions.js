@@ -14,13 +14,18 @@ const actions = {
     [AUTH_REQUEST]: async ({ commit }, userCredentials) => {
         try {
             commit(AUTH_REQUEST)
-            const response = await axios.post('/api/login', {
-                headers: {
-                    'Content-Type': 'application/json',
+            const response = await axios.post(
+                '/api/login',
+                {
+                    username: userCredentials.username,
+                    password: userCredentials.password,
                 },
-                username: userCredentials.username,
-                password: userCredentials.password,
-            })
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            )
             commit(AUTH_SUCCESS, {
                 accessToken: response.data.access,
                 refreshToken: response.data.refresh,
@@ -35,12 +40,17 @@ const actions = {
     [AUTH_REFRESH_REQUEST]: async ({ commit, state }) => {
         try {
             commit(AUTH_REFRESH_REQUEST)
-            const response = await axios.post('/api/refresh-token', {
-                headers: {
-                    'Content-Type': 'application/json',
+            const response = await axios.post(
+                '/api/refresh-token',
+                {
+                    refresh: state.refreshToken,
                 },
-                refresh: state.refreshToken,
-            })
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            )
             commit(AUTH_REFRESH_SUCCESS, {
                 accessToken: response.data.access,
             })
@@ -54,12 +64,17 @@ const actions = {
     },
     [AUTH_LOGOUT]: async ({ commit, state }) => {
         try {
-            await axios.post('/api/logout', {
-                headers: {
-                    'Content-Type': 'application/json',
+            await axios.post(
+                '/api/logout',
+                {
+                    refresh_token: state.refreshToken,
                 },
-                refresh_token: state.refreshToken,
-            })
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            )
             commit(AUTH_LOGOUT)
             localStorage.removeItem('refresh_token')
         } catch (error) {

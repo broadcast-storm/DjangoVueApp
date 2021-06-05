@@ -189,10 +189,15 @@ def test_questions(request):
         question_choice_id = []
         question_without_choice_id = []
         # all_data это массив первый элемент которого тестблок внутри которого вопросы второй элемент массива это ответы
-        all_data = []
-        test_block = TestBlock.objects.filter(
+        all_data = {}
+        testInfo = Test.objects.filter(
+            id=request.data.get('test_id')).exclude(users=request.user.id).first()
+        if(testInfo == None):
+            return JsonResponse(None, safe=False)
+        serializerTestInfo = TestsWithoutUsersSerializer(testInfo)
+        test_blocks = TestBlock.objects.filter(
             test=request.data.get('test_id')).all()
-        serializer = TestBlockQuestionsSerializer(test_block, many=True)
+        serializer = TestBlockQuestionsSerializer(test_blocks, many=True)
         # заполняем массив question_id айдишниками вопросов в нужном тесте (через каждый test_block)
         # Не отправляет ответы для вопросов с вводом текста и числа
         for item in serializer.data:
@@ -208,7 +213,8 @@ def test_questions(request):
             question__in=question_without_choice_id).all()
         serializer2 = AnswersWithoutFlagSerializer(answers_choice, many=True)
         serializer3 = AnswersIdSerializer(answers_without_choice, many=True)
-        all_data = (serializer.data, serializer2.data, serializer3.data)
+        all_data = {"testInfo": serializerTestInfo.data, "testBlocks": serializer.data,
+                    "answerOptions": serializer2.data, "answerIds": serializer3.data}
         return JsonResponse(all_data, safe=False)
 
 

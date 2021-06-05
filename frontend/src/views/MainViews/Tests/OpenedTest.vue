@@ -1,80 +1,104 @@
 <template>
-    <div class="tests-wrapper">
-        <div v-if="testStatus" class="test">
-            <div class="test__progress">
-                <router-link class="progress-close" to="/tests"
-                    ><Close
-                /></router-link>
-                <progress
-                    class="progress-bar"
-                    :value="currentQuestionNumber + 1"
-                    :max="test.questions.length"
-                ></progress>
-            </div>
-            <h2 class="test__name">{{ test.name }}</h2>
-            <h3 class="test__question-number">
-                Вопрос {{ currentQuestionNumber + 1 }}
-            </h3>
-            <p class="test__question-description">
-                {{ test.questions[currentQuestionNumber].question }}
-            </p>
-            <div
-                v-for="option in test.questions[currentQuestionNumber].options"
-                :key="option"
-                class="test__answer-options"
-            >
-                <button
-                    class="answer-option"
-                    :class="{ active: selectedValue == option }"
-                    @click="selectOption(option)"
+    <div class="wrapper">
+        <div class="test-container">
+            <div v-if="testStatus" class="test">
+                <Spinner
+                    v-if="getQuestionsList.status === 'loading'"
+                    class="loading"
+                    :style="{ margin: 'auto', width: '50px' }"
+                    :size="25"
+                    :line-bg-color="'#b1b2b7'"
+                    :line-fg-color="'#26bcc2'"
+                />
+                <span
+                    v-else-if="getQuestionsList.status === 'error'"
+                    :style="{ margin: 'auto', color: '#545969' }"
+                    >Тест не найден</span
                 >
-                    {{ option }}
-                </button>
+                <template v-else-if="getQuestionsList.status === 'success'">
+                    <div class="test-block">
+                        <div class="test__progress">
+                            <router-link class="progress-close" to="/tests"
+                                ><Close
+                            /></router-link>
+                            <progress
+                                class="progress-bar"
+                                :value="openedQuestionInd + 1"
+                                :max="getQuestionsList.data.questions.length"
+                            ></progress>
+                        </div>
+                        <h2 class="test__name">
+                            {{ getQuestionsList.data.testInfo.title }}
+                        </h2>
+                    </div>
+
+                    <QuestionBlock
+                        :question-number="openedQuestionInd + 1"
+                        :question-info="
+                            getQuestionsList.data.questions[openedQuestionInd]
+                        "
+                        :select-option="selectOption"
+                    />
+                    <div class="test__nav-btns-container">
+                        <button
+                            v-if="openedQuestionInd !== 0"
+                            class="nav-btn prev active"
+                            :disabled="!selectedValue"
+                            @click="prevQuestion()"
+                        >
+                            Назад
+                        </button>
+                        <button
+                            v-if="
+                                currentQuestionNumber <
+                                    test.questions.length - 1
+                            "
+                            class="nav-btn active"
+                            :disabled="!selectedValue"
+                            @click="nextQuestion()"
+                        >
+                            Дальше
+                        </button>
+
+                        <button
+                            v-else
+                            class="nav-btn active"
+                            :disabled="!selectedValue"
+                            @click="endTest()"
+                        >
+                            Завершить тест
+                        </button>
+                    </div>
+                </template>
             </div>
-            <button
-                v-if="currentQuestionNumber < test.questions.length - 1"
-                class="test__next active"
-                :disabled="!selectedValue"
-                @click="nextQuestion()"
-            >
-                Дальше
-            </button>
-            <button
-                v-else
-                class="test__next active"
-                :disabled="!selectedValue"
-                @click="endTest()"
-            >
-                Завершить тест
-            </button>
-        </div>
-        <div v-else class="test-passed">
-            <Medal class="test-passed__medal" />
-            <h2 class="test-passed__headline">Тест пройден</h2>
-            <div class="test-passed__statistic">
-                <div class="statistic__rights-answers">
-                    <Complete class="rights-answers__icon" />{{
-                        rightAnswers
-                    }}
-                    из {{ test.questions.length }}
+            <div v-else class="test-passed">
+                <Medal class="test-passed__medal" />
+                <h2 class="test-passed__headline">Тест пройден</h2>
+                <div class="test-passed__statistic">
+                    <div class="statistic__rights-answers">
+                        <Complete class="rights-answers__icon" />{{
+                            rightAnswers
+                        }}
+                        из {{ test.questions.length }}
+                    </div>
+                    <div class="statistic__time">
+                        <Time class="time__icon" />{{ leadTime }}
+                    </div>
                 </div>
-                <div class="statistic__time">
-                    <Time class="time__icon" />{{ leadTime }}
+                <div class="test-passed__reward">
+                    <div class="reward__coins">
+                        <CoinSvg class="coins__icon" />{{ reward.coins }}
+                    </div>
+                    <div class="reward__lightning">
+                        <LightningSvg class="lightning__icon" />{{
+                            reward.lightnings
+                        }}
+                    </div>
                 </div>
+                <router-link class="test-passed__back" to="/tests"
+                    >К списку тестов</router-link
+                >
             </div>
-            <div class="test-passed__reward">
-                <div class="reward__coins">
-                    <CoinSvg class="coins__icon" />{{ reward.coins }}
-                </div>
-                <div class="reward__lightning">
-                    <LightningSvg class="lightning__icon" />{{
-                        reward.lightnings
-                    }}
-                </div>
-            </div>
-            <router-link class="test-passed__back" to="/tests"
-                >К списку тестов</router-link
-            >
         </div>
     </div>
 </template>
@@ -87,8 +111,10 @@ import LightningSvg from '@/assets/icons/lightning.svg'
 import CoinSvg from '@/assets/icons/coin.svg'
 import Complete from '@/assets/icons/tests/complete.svg'
 import Time from '@/assets/icons/tests/time.svg'
+import QuestionBlock from '@/components/QuestionBlock.vue'
 import { QUESTIONS_REQUEST } from '@/store/action-types/tests'
 import { mapGetters, mapMutations, mapActions } from 'vuex'
+import Spinner from 'vue-simple-spinner'
 export default {
     components: {
         Close,
@@ -97,6 +123,8 @@ export default {
         CoinSvg,
         Complete,
         Time,
+        QuestionBlock,
+        Spinner,
     },
     props: {
         id: {
@@ -107,8 +135,7 @@ export default {
     data() {
         return {
             testStatus: true,
-            startTime: new Date(),
-            leadTime: '',
+            openedQuestionInd: 0,
             selectedValue: null,
             currentQuestionNumber: 0,
             rightAnswers: 0,
@@ -141,13 +168,7 @@ export default {
             }
         },
         nextQuestion: function() {
-            if (
-                this.test.questions[this.currentQuestionNumber].answer ===
-                this.selectedValue
-            ) {
-                this.rightAnswers += 1
-            }
-            this.currentQuestionNumber += 1
+            this.openedQuestionInd += 1
             this.selectedValue = null
         },
         endTest: function() {
@@ -183,28 +204,32 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-* {
-    box-sizing: border-box;
+.wrapper {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
 }
-.tests-wrapper {
+.test-container {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    margin-top: 90px;
-    height: calc(100vh - 90px);
-    width: 100%;
+    padding-top: 140px;
+    width: 70%;
     overflow-y: auto;
     .test {
+        width: 100%;
         display: flex;
         flex-direction: column;
         background: #ffffff;
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-        justify-content: space-between;
+        justify-content: flex-start;
         align-items: center;
-        padding: 24px 154px 50px 154px;
-        margin-top: 68px;
-        width: 975px;
-        height: 663px;
+        padding: 25px 150px;
+        height: 70vh;
+        .test-block {
+            width: 100%;
+            margin-bottom: 15px;
+        }
         &__progress {
             display: flex;
             flex-direction: row;
@@ -239,70 +264,53 @@ export default {
             }
         }
         &__name {
+            margin-top: 20px;
             font-size: 24px;
-            line-height: 33px;
             color: #000;
-        }
-        &__question-number {
-            font-size: 24px;
-            line-height: 33px;
-            color: #545969;
-        }
-        &__question-description {
-            font-size: 18px;
-            line-height: 25px;
             text-align: center;
-            color: #1a2740;
-            width: 425px;
-            margin-bottom: 46px;
         }
-        &__answer-options {
+        &__nav-btns-container {
             display: flex;
             flex-direction: column;
-            .answer-option {
-                &.active {
-                    background: #fff;
-                    border: 2px solid #26bcc2;
-                    border-bottom: 4px solid #26bcc2;
-                }
-                background: #d8dcea;
-                border: 2px solid #abb2c7;
-                border-bottom: 4px solid #abb2c7;
+            justify-content: center;
+            margin-top: auto;
+            .nav-btn {
                 box-sizing: border-box;
+                background: #89dce0;
                 border-radius: 10px;
+                border: none;
+                border: 2px solid #26bcc2;
+                border-bottom: 4px solid #26bcc2;
                 outline: none;
-                margin-bottom: 21px;
                 font-size: 14px;
                 line-height: 19px;
                 color: #1a2740;
                 width: 312px;
                 height: 41px;
                 cursor: pointer;
+                justify-self: space-between;
+                margin-bottom: 10px;
+                &:disabled {
+                    border: none;
+                    outline: none;
+                    background: #abb2c7;
+                    color: #545969;
+                    cursor: unset;
+                }
                 &:last-child {
                     margin-bottom: 0;
                 }
             }
-        }
-        &__next {
-            box-sizing: border-box;
-            background: #89dce0;
-            border-radius: 10px;
-            border: none;
-            border: 2px solid #26bcc2;
-            border-bottom: 4px solid #26bcc2;
-            outline: none;
-            font-size: 14px;
-            line-height: 19px;
-            color: #1a2740;
-            width: 312px;
-            height: 41px;
-            cursor: pointer;
-            &:disabled {
-                border: none;
-                outline: none;
-                background: #abb2c7;
-                color: #545969;
-                cursor: unset;
+            .prev {
+                background: transparent;
+
+                &:disabled {
+                    border: 2px solid #abb2c7;
+                    outline: none;
+                    background: transparent;
+                    color: #545969;
+                    cursor: unset;
+                }
             }
         }
     }

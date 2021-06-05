@@ -146,7 +146,9 @@ const routes = [
                         path: routesList.testsPage.children.testPage.path,
                         components: {
                             'tests-router': () =>
-                                import('@/views/MainViews/Tests/TestPage.vue'),
+                                import(
+                                    '@/views/MainViews/Tests/OpenedTest.vue'
+                                ),
                         },
                         props: {
                             'tests-router': true,

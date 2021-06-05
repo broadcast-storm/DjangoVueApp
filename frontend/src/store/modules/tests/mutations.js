@@ -28,7 +28,7 @@ const mutations = {
     },
     [QUESTIONS_REQUEST_SUCCESS]: (state, { newQuestions }) => {
         state.questionsStatus = 'success'
-        state.questionsList = [...newQuestions]
+        state.questionsList = { ...newQuestions }
     },
     [QUESTIONS_REQUEST_ERROR]: state => {
         state.questionsStatus = 'error'

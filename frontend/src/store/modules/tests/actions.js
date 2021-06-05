@@ -34,16 +34,47 @@ const actions = {
         try {
             const token = rootState.tokens.accessToken
             commit(QUESTIONS_REQUEST)
-            const response = await axios.post(`/api/test-questions`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
+            const response = await axios.post(
+                `/api/test-questions`,
+                {
+                    test_id: id,
                 },
-                test_id: id,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            )
+
+            if (response.data === null)
+                return commit(QUESTIONS_REQUEST_ERROR, 'not found')
+
+            let questions = []
+            response.data.testBlocks.forEach(testBlock => {
+                testBlock.questions.forEach(question => {
+                    const answerOptions = response.data.answerOptions.filter(
+                        answer => answer.question === question.id
+                    )
+                    const answerIdForNoOption = response.data.answerIds.filter(
+                        answer => answer.question === question.id
+                    )
+                    questions.push({
+                        question,
+                        answerOptions,
+                        answerIdForNoOption,
+                    })
+                })
             })
-            commit(QUESTIONS_REQUEST_SUCCESS, {
-                newQuestions: response.data,
-            })
+            if (questions.length === 0) {
+                commit(QUESTIONS_REQUEST_ERROR, 'not found')
+            } else
+                commit(QUESTIONS_REQUEST_SUCCESS, {
+                    newQuestions: {
+                        testInfo: response.data.testInfo,
+                        questions,
+                    },
+                })
         } catch (error) {
             commit(QUESTIONS_REQUEST_ERROR, error)
             throw error

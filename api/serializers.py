@@ -127,7 +127,8 @@ class QuestionsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Question
-        fields = '__all__'
+        fields = ["id", "answerType", "description",
+                  "difficulty", "image", "title"]
 
 
 class TestBlockQuestionsSerializer(serializers.ModelSerializer):
@@ -135,7 +136,7 @@ class TestBlockQuestionsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TestBlock
-        fields = '__all__'
+        fields = ["id", "questionTheme", "questions", ]
 
 
 class TestBlockSerializer(serializers.ModelSerializer):
