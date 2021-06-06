@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.models import Group, User
 from django.contrib.auth.admin import GroupAdmin, UserAdmin
 from .models import UserProfile, MainQuest, Task, WeeklyTask, Division, JobPosition, Team, Statistics, \
-    MainQuest, Question, QuestionTheme, Test, TestBlock, Achievement, RequirenmentToGetAchieve, \
+    MainQuest, Question, QuestionTheme, Test, TestUser, TestUserAnswer, TestBlock, Achievement, RequirenmentToGetAchieve, \
     Product, RequirementsToBuyProduct, ProductCategory, CategoryClothes, Purchase, Answer
 from django.db import models
 from django.db.models import Q
@@ -206,6 +206,7 @@ class WeeklyTaskAdmin(admin.ModelAdmin):
     readonly_fields = ('created_at', 'updated_at')
     filter_horizontal = ()
 
+
 class MainQuestAdmin(admin.ModelAdmin):
     list_display = ('title', 'description', 'accessLevel')
     search_fields = ('title',)
@@ -219,7 +220,7 @@ class MainQuestAdmin(admin.ModelAdmin):
             'accessLevel',
             # 'tasks'
         )
-    }),(None, {
+    }), (None, {
         'fields': (
             ('created_at',
              'updated_at'),
@@ -228,6 +229,7 @@ class MainQuestAdmin(admin.ModelAdmin):
     list_filter = ('title', 'accessLevel')
     filter_horizontal = ()
     readonly_fields = ('created_at', 'updated_at')
+
 
 class AnswerAdmin(admin.ModelAdmin):
     search_fields = ('text',)
@@ -368,6 +370,35 @@ class TestAdmin(admin.ModelAdmin):
     readonly_fields = ('created_at', 'updated_at')
 
 
+class TestUserAdmin(admin.ModelAdmin):
+
+    list_display = ('id', 'test', 'user', 'status')
+
+    fieldsets = ((None, {
+        'fields': (
+            'status',
+            'rightAnswersCount',
+            'points',
+        )
+    }),)
+
+    filter_horizontal = ()
+
+
+class TestUserAnswerAdmin(admin.ModelAdmin):
+
+    list_display = ('id', 'testUser', 'question', 'text', 'isCorrect')
+
+    fieldsets = ((None, {
+        'fields': (
+            'testUser', 'question', 'text',
+            'isCorrect',
+        )
+    }),)
+
+    filter_horizontal = ()
+
+
 class RequirenmentToGetAchieveInline(admin.StackedInline):
     model = RequirenmentToGetAchieve
     extra = 1
@@ -447,6 +478,8 @@ admin.site.register(Task, TaskAdmin)
 admin.site.register(MainQuest, MainQuestAdmin)
 
 admin.site.register(Test, TestAdmin)
+admin.site.register(TestUser, TestUserAdmin)
+admin.site.register(TestUserAnswer, TestUserAnswerAdmin)
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(Answer, AnswerAdmin)
 admin.site.register(QuestionTheme, QuestionThemeAdmin)

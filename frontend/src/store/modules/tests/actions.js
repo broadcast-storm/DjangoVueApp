@@ -6,6 +6,9 @@ import {
     QUESTIONS_REQUEST,
     QUESTIONS_REQUEST_SUCCESS,
     QUESTIONS_REQUEST_ERROR,
+    SEND_ANSWERS_REQUEST,
+    SEND_ANSWERS_REQUEST_SUCCESS,
+    SEND_ANSWERS_REQUEST_ERROR,
 } from '@/store/action-types/tests'
 
 const actions = {
@@ -77,6 +80,55 @@ const actions = {
                 })
         } catch (error) {
             commit(QUESTIONS_REQUEST_ERROR, error)
+            throw error
+        }
+    },
+
+    [SEND_ANSWERS_REQUEST]: async (
+        { commit, rootState },
+        { answers, testId }
+    ) => {
+        try {
+            const token = rootState.tokens.accessToken
+            commit(SEND_ANSWERS_REQUEST)
+            const data = {
+                test_id: testId,
+                answers_simple: [],
+                answers_multi: [],
+                answers_text: [],
+            }
+            answers.forEach(item => {
+                switch (item.answerType) {
+                    case 'one_choice':
+                        data.answers_simple.push(item.answer)
+                        break
+                    case 'multi_choice':
+                        data.answers_multi.push({
+                            question_id: item.question,
+                            answer_id: item.answer,
+                        })
+                        break
+                    case 'enter_text':
+                    case 'enter_number':
+                        data.answers_text.push({
+                            question_id: item.question,
+                            answer_text: item.answer,
+                        })
+                        break
+                    default:
+                        break
+                }
+            })
+            const response = await axios.post(`/api/send-answers`, data, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+            console.log(response.data)
+            commit(SEND_ANSWERS_REQUEST_SUCCESS, { response: response.data })
+        } catch (error) {
+            commit(SEND_ANSWERS_REQUEST_ERROR, error)
             throw error
         }
     },

@@ -469,8 +469,10 @@ class MainQuest(models.Model):
     title = models.CharField(max_length=120, verbose_name="Называние")
     description = models.TextField(verbose_name="Описание")
     deadline = models.IntegerField(default=0, verbose_name="Дедлайн")
-    accessLevel = models.IntegerField(default=0, verbose_name="Уровень доступа")
-    tasksCount = models.IntegerField(default=0, verbose_name="Количество задач")
+    accessLevel = models.IntegerField(
+        default=0, verbose_name="Уровень доступа")
+    tasksCount = models.IntegerField(
+        default=0, verbose_name="Количество задач")
 
     money = models.IntegerField(default=0, verbose_name="Валюта")
     health = models.IntegerField(default=0, verbose_name="Жизни")
@@ -912,8 +914,8 @@ class TestUser(models.Model):
         return str(self.id)
 
     class Meta:
-        verbose_name = "пользователь"
-        verbose_name_plural = "пользователи"
+        verbose_name = "результат теста"
+        verbose_name_plural = "результаты тестов"
 
 
 class TestUserAnswer(models.Model):

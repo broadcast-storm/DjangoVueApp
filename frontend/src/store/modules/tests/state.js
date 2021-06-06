@@ -197,6 +197,8 @@ const state = {
     testsStatus: 'loading',
     questionsList: null,
     questionsStatus: 'loading',
+    sendAnswerStatus: 'notReady',
+    sendAnswerResult: null,
 }
 
 export default state

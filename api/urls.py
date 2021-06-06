@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 from .views import JobPositionViewSet, DivisionViewSet, UserProfileViewSet, StatisticsViewSet, \
     TaskViewSet, WeeklyTaskViewSet, TeamsViewSet,  competition, ProductViewSet, shop, LogoutView, LogoutAllView, \
     TestsViewSet, QuestionsViewSet, AnswersViewSet, TestBlockViewSet, AchievementViewSet, RequirenmentToGetAchieveViewSet, \
-    AchieveRequirenmentStatusViewSet, AchievementUserStatusViewSet, update_user_money_energy, userFilterForCompetition, get_quests, get_daily_tasks, get_weekly_tasks, TestUserViewSet, unresolved_test, QuestionThemeViewSet, test_questions, test_post
+    AchieveRequirenmentStatusViewSet, AchievementUserStatusViewSet, update_user_money_energy, userFilterForCompetition, get_quests, get_daily_tasks, get_weekly_tasks, TestUserViewSet, unresolved_test, QuestionThemeViewSet, test_questions, send_answers
 
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -41,11 +41,12 @@ urlpatterns = [
     path('logout-all', LogoutAllView.as_view(), name='auth_logout_all'),
     path('refresh-token', TokenRefreshView.as_view(), name='refresh-token'),
     path('shop', shop, name='shop'),
-    path('update-data', update_user_money_energy, name='update-data'),
+    path('update-money-energy', update_user_money_energy,
+         name='update-money-energy'),
     path('competition', competition, name='competition'),
     path('unresolved_test', unresolved_test, name='unresolved_test'),
     path('test-questions', test_questions, name='test_questions'),
-    path('test-post', test_post, name='test_post'),
+    path('send-answers', send_answers, name='send-answers'),
     path('user-filter-for-competitions', userFilterForCompetition,
          name='user-filter-for-competitions'),
     path('get-quests', get_quests, name='get-quests'),

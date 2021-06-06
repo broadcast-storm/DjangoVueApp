@@ -5,6 +5,9 @@ import {
     QUESTIONS_REQUEST,
     QUESTIONS_REQUEST_SUCCESS,
     QUESTIONS_REQUEST_ERROR,
+    SEND_ANSWERS_REQUEST,
+    SEND_ANSWERS_REQUEST_SUCCESS,
+    SEND_ANSWERS_REQUEST_ERROR,
 } from '@/store/action-types/tests'
 
 const mutations = {
@@ -32,6 +35,17 @@ const mutations = {
     },
     [QUESTIONS_REQUEST_ERROR]: state => {
         state.questionsStatus = 'error'
+    },
+
+    [SEND_ANSWERS_REQUEST]: state => {
+        state.sendAnswerStatus = 'sending'
+    },
+    [SEND_ANSWERS_REQUEST_SUCCESS]: (state, { response }) => {
+        state.sendAnswerStatus = 'success'
+        state.sendAnswerResult = { ...response }
+    },
+    [SEND_ANSWERS_REQUEST_ERROR]: state => {
+        state.sendAnswerStatus = 'error'
     },
 }
 

@@ -8,6 +8,10 @@ const getters = {
         status: state.questionsStatus,
         data: state.questionsList,
     }),
+    getAnswersResult: state => ({
+        status: state.sendAnswerStatus,
+        data: state.sendAnswerResult,
+    }),
 }
 
 export default getters

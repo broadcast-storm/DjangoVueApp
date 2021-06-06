@@ -1,7 +1,7 @@
 <template>
     <div class="wrapper">
         <div class="test-container">
-            <div v-if="testStatus" class="test">
+            <div v-if="getAnswersResult.status === 'notReady'" class="test">
                 <Spinner
                     v-if="getQuestionsList.status === 'loading'"
                     class="loading"
@@ -50,11 +50,14 @@
                         </button>
                         <button
                             v-if="
-                                currentQuestionNumber <
-                                    test.questions.length - 1
+                                openedQuestionInd <
+                                    getQuestionsList.data.questions.length - 1
                             "
                             class="nav-btn active"
-                            :disabled="!userAnswers[openedQuestionInd]"
+                            :disabled="
+                                !userAnswers[openedQuestionInd] ||
+                                    !userAnswers[openedQuestionInd].answer
+                            "
                             @click="nextQuestion()"
                         >
                             Дальше
@@ -63,7 +66,7 @@
                         <button
                             v-else
                             class="nav-btn active"
-                            :disabled="!selectedValue"
+                            :disabled="!isCompleted"
                             @click="endTest()"
                         >
                             Завершить тест
@@ -72,32 +75,56 @@
                 </template>
             </div>
             <div v-else class="test-passed">
-                <Medal class="test-passed__medal" />
-                <h2 class="test-passed__headline">Тест пройден</h2>
-                <div class="test-passed__statistic">
-                    <div class="statistic__rights-answers">
-                        <Complete class="rights-answers__icon" />{{
-                            rightAnswers
+                <Spinner
+                    v-if="getAnswersResult.status === 'loading'"
+                    class="loading"
+                    :style="{ margin: 'auto', width: '50px' }"
+                    :size="25"
+                    :line-bg-color="'#b1b2b7'"
+                    :line-fg-color="'#26bcc2'"
+                />
+                <template v-if="getAnswersResult.status === 'success'">
+                    <Medal
+                        v-if="getAnswersResult.data.status === 'done'"
+                        class="test-passed__medal"
+                    />
+                    <h2 class="test-passed__headline">
+                        {{
+                            getAnswersResult.data.status === 'done'
+                                ? 'Тест пройден'
+                                : 'Тест провален'
                         }}
-                        из {{ test.questions.length }}
+                    </h2>
+                    <div class="test-passed__statistic">
+                        <div class="statistic__rights-answers">
+                            <Complete class="rights-answers__icon" />{{
+                                getAnswersResult.data.right_answers
+                            }}
+                            из {{ getAnswersResult.data.total_questions }}
+                        </div>
+                        <!-- <div class="statistic__time">
+                            <Time class="time__icon" />{{ leadTime }}
+                        </div> -->
                     </div>
-                    <div class="statistic__time">
-                        <Time class="time__icon" />{{ leadTime }}
+                    <div
+                        v-if="getAnswersResult.data.status === 'done'"
+                        class="test-passed__reward"
+                    >
+                        <div class="reward__coins">
+                            <CoinSvg class="coins__icon" />{{
+                                getAnswersResult.data.money
+                            }}
+                        </div>
+                        <div class="reward__lightning">
+                            <LightningSvg class="lightning__icon" />{{
+                                getAnswersResult.data.energy
+                            }}
+                        </div>
                     </div>
-                </div>
-                <div class="test-passed__reward">
-                    <div class="reward__coins">
-                        <CoinSvg class="coins__icon" />{{ reward.coins }}
-                    </div>
-                    <div class="reward__lightning">
-                        <LightningSvg class="lightning__icon" />{{
-                            reward.lightnings
-                        }}
-                    </div>
-                </div>
-                <router-link class="test-passed__back" to="/tests"
-                    >К списку тестов</router-link
-                >
+                    <router-link class="test-passed__back" to="/tests"
+                        >К списку тестов</router-link
+                    >
+                </template>
             </div>
         </div>
     </div>
@@ -110,10 +137,14 @@ import Medal from '@/assets/icons/tests/medal.svg'
 import LightningSvg from '@/assets/icons/lightning.svg'
 import CoinSvg from '@/assets/icons/coin.svg'
 import Complete from '@/assets/icons/tests/complete.svg'
-import Time from '@/assets/icons/tests/time.svg'
+// import Time from '@/assets/icons/tests/time.svg'
 import QuestionBlock from '@/components/QuestionBlock.vue'
-import { QUESTIONS_REQUEST } from '@/store/action-types/tests'
-import { mapGetters, mapMutations, mapActions } from 'vuex'
+import {
+    QUESTIONS_REQUEST,
+    SEND_ANSWERS_REQUEST,
+} from '@/store/action-types/tests'
+import { PROFILE_UPDATE } from '@/store/action-types/profile'
+import { mapGetters, mapActions } from 'vuex'
 import Spinner from 'vue-simple-spinner'
 export default {
     components: {
@@ -122,7 +153,7 @@ export default {
         LightningSvg,
         CoinSvg,
         Complete,
-        Time,
+        // Time,
         QuestionBlock,
         Spinner,
     },
@@ -141,19 +172,21 @@ export default {
             rightAnswers: 0,
             userAnswers: [],
             reward: {},
+            isCompleted: false,
         }
     },
 
     computed: {
-        ...mapGetters('tests', ['getTests', 'getQuestionsList']),
+        ...mapGetters('tests', [
+            'getTests',
+            'getQuestionsList',
+            'getAnswersResult',
+        ]),
         test: function() {
             return this.getTests.filter(
                 test => test.id === parseInt(this.id, 10)
             )[0]
         },
-        // numberQuestions: function() {
-        //     return this.test.questions.length
-        // },
     },
     watch: {
         userAnswers: function(newVal) {
@@ -162,75 +195,80 @@ export default {
     },
     async mounted() {
         await this.QUESTIONS_REQUEST(this.id)
-        console.log(this.getQuestionsList)
+        if (this.getQuestionsList.data !== null) {
+            this.getQuestionsList.data.questions.forEach(question => {
+                this.userAnswers.push({
+                    question: question.question.id,
+                    answerType: question.question.answerType,
+                    answer: null,
+                })
+            })
+        }
     },
     methods: {
-        ...mapActions('tests', [QUESTIONS_REQUEST]),
-        ...mapMutations(['accrueReward']),
+        ...mapActions('tests', [QUESTIONS_REQUEST, SEND_ANSWERS_REQUEST]),
+        ...mapActions('profile', [PROFILE_UPDATE]),
+        checkIsCompleted: function() {
+            return (
+                this.userAnswers.filter(item => item.answer === null).length ===
+                0
+            )
+        },
         selectOption: function(option) {
-            console.log(option)
-            // добавление нового ответа
-            if (this.openedQuestionInd === this.userAnswers.length) {
-                this.userAnswers.push({
-                    question: this.getQuestionsList.data.questions[
-                        this.openedQuestionInd
-                    ].question.id,
-                    answerType: this.getQuestionsList.data.questions[
-                        this.openedQuestionInd
-                    ].question.answerType,
-                    answer:
-                        this.getQuestionsList.data.questions[
-                            this.openedQuestionInd
-                        ].question.answerType === 'multi_choice'
-                            ? [option]
-                            : option,
-                })
-            } else {
-                // удаление ответа
-                if (
-                    (this.userAnswers[this.openedQuestionInd].answer ===
-                        option &&
-                        this.getQuestionsList.data.questions[
-                            this.openedQuestionInd
-                        ].answerType !== 'enter_text' &&
-                        this.getQuestionsList.data.questions[
-                            this.openedQuestionInd
-                        ].answerType !== 'enter_number') ||
-                    option === '' ||
-                    this.userAnswers[this.openedQuestionInd].answerType ===
-                        'multi_choice'
-                ) {
+            switch (this.userAnswers[this.openedQuestionInd].answerType) {
+                case 'one_choice':
                     if (
-                        this.userAnswers[this.openedQuestionInd].answer !==
-                            null &&
-                        this.userAnswers[this.openedQuestionInd].answerType ===
-                            'multi_choice' &&
-                        this.userAnswers[
-                            this.openedQuestionInd
-                        ].answer.includes(option) &&
-                        this.userAnswers[this.openedQuestionInd].answer.length >
-                            1
-                    ) {
-                        this.userAnswers[
-                            this.openedQuestionInd
-                        ].answer = this.userAnswers[
-                            this.openedQuestionInd
-                        ].answer.filter(answ => answ !== option)
-                    } else
-                        this.userAnswers[this.openedQuestionInd].answer = null
-                    // изменение ответа
-                } else {
-                    if (
-                        this.userAnswers[this.openedQuestionInd].answerType ===
-                        'multi_choice'
+                        this.userAnswers[this.openedQuestionInd].answer ===
+                        option
                     )
-                        this.userAnswers[this.openedQuestionInd].answer.push(
-                            option
-                        )
+                        this.userAnswers[this.openedQuestionInd].answer = null
                     else
                         this.userAnswers[this.openedQuestionInd].answer = option
-                }
+                    break
+                case 'multi_choice':
+                    if (
+                        this.userAnswers[this.openedQuestionInd].answer === null
+                    )
+                        this.userAnswers[this.openedQuestionInd].answer = [
+                            option,
+                        ]
+                    else {
+                        if (
+                            this.userAnswers[this.openedQuestionInd].answer
+                                .length === 1 &&
+                            this.userAnswers[this.openedQuestionInd]
+                                .answer[0] === option
+                        )
+                            this.userAnswers[
+                                this.openedQuestionInd
+                            ].answer = null
+                        else if (
+                            this.userAnswers[
+                                this.openedQuestionInd
+                            ].answer.includes(option)
+                        ) {
+                            this.userAnswers[
+                                this.openedQuestionInd
+                            ].answer = this.userAnswers[
+                                this.openedQuestionInd
+                            ].answer.filter(answ => answ !== option)
+                        } else
+                            this.userAnswers[
+                                this.openedQuestionInd
+                            ].answer.push(option)
+                    }
+                    break
+                case 'enter_text':
+                case 'enter_number':
+                    if (option === '')
+                        this.userAnswers[this.openedQuestionInd].answer = null
+                    else
+                        this.userAnswers[this.openedQuestionInd].answer = option
+                    break
+                default:
+                    break
             }
+            this.isCompleted = this.checkIsCompleted()
         },
         nextQuestion: function() {
             this.openedQuestionInd += 1
@@ -238,33 +276,12 @@ export default {
         prevQuestion: function() {
             this.openedQuestionInd -= 1
         },
-        endTest: function() {
-            if (
-                this.test.questions[this.currentQuestionNumber].answer ===
-                this.selectedValue
-            ) {
-                this.rightAnswers += 1
-            }
-            this.testStatus = false
-            let endTime = new Date()
-            let ms = endTime - this.startTime
-            let toDate = new Date(ms)
-            this.leadTime =
-                toDate.getUTCMinutes() + ':' + toDate.getUTCSeconds()
-            let coins = Math.round(
-                this.test.reward.coins *
-                    (this.rightAnswers / this.test.questions.length)
-            )
-            let lightnings = Math.round(
-                this.test.reward.lightnings *
-                    (this.rightAnswers / this.test.questions.length)
-            )
-            this.reward = {
-                coins: coins,
-                lightnings: lightnings,
-            }
-            this.$store.commit('accrueReward', this.reward)
-            this.$store.commit('tests/deleteTest', this.test.id)
+        endTest: async function() {
+            await this.SEND_ANSWERS_REQUEST({
+                answers: this.userAnswers,
+                testId: this.id,
+            })
+            await this.PROFILE_UPDATE()
         },
     },
 }

@@ -222,7 +222,7 @@ def test_questions(request):
 # For prod use IsAuthenticated . AllowAny using for Debug
 @ permission_classes([AllowAny])
 # @ensure_csrf_cookie
-def test_post(request):
+def send_answers(request):
     """
     List all code snippets, or create a new snippet.
     """
@@ -241,7 +241,7 @@ def test_post(request):
             id=request.data.get("test_id"))
         status = ''
         points_to_complete = test.pointsToComplete
-        print(points_to_complete)
+        # print(points_to_complete)
 
         ######################
         # SIMPLE QUESTION
@@ -259,7 +259,7 @@ def test_post(request):
                     false_questions_simple.append(
                         answer_simple.get("question"))
                     wrong_answers += 1
-            print(true_questions_simple)
+            # print(true_questions_simple)
 
         ######################
         # MULTI QUESTION
@@ -271,17 +271,17 @@ def test_post(request):
             ]
             true_answers_multi = Answer.objects.filter(
                 question__in=request_answers_multi_questions).filter(isCorrect=True).values("id", "isCorrect", "question")
-            print("true multi")
-            print(true_answers_multi)
-            print("Req multi")
-            print(request_answers_multi)
+            # print("true multi")
+            # print(true_answers_multi)
+            # print("Req multi")
+            # print(request_answers_multi)
             for request_answer_multi in request_answers_multi:
                 true_answers_array = []
                 for true_answer_multi in true_answers_multi:
                     if true_answer_multi.get("question") == request_answer_multi.get("question_id"):
                         true_answers_array.append(
                             str(true_answer_multi.get("id")))
-                if true_answers_array == request_answer_multi.get("answer_id"):
+                if true_answers_array.sort() == request_answer_multi.get("answer_id").sort():
                     true_questions_multi.append(
                         request_answer_multi.get("question_id"))
                     right_answers += 1
@@ -290,20 +290,20 @@ def test_post(request):
                         request_answer_multi.get("question_id"))
                     wrong_answers += 1
                 true_answers_array.clear()
-            print(true_questions_multi)
+            # print(true_questions_multi)
 
         ######################
         # TEXT QUESTION
         # ###############
         request_answers_text = request.data.get("answers_text")
-        print("req text")
-        print(request_answers_text)
+        # print("req text")
+        # print(request_answers_text)
         if request_answers_text:
             request_answers_text_questions = [
                 a.get("question_id") for a in request_answers_text
             ]
-            print("request_answers_text_questions")
-            print(request_answers_text_questions)
+            # print("request_answers_text_questions")
+            # print(request_answers_text_questions)
             true_answers_text = Answer.objects.filter(
                 question__in=request_answers_text_questions).filter(isCorrect=True).values("id", "isCorrect", "question", "text")
             for request_answer_text in request_answers_text:
@@ -311,8 +311,8 @@ def test_post(request):
                 for true_answer_text in true_answers_text:
                     if true_answer_text.get("question") == request_answer_text.get("question_id"):
                         true_answer = str(true_answer_text.get("text"))
-                print(true_answer + '  ' +
-                      str(request_answer_text.get("answer_text")))
+                # print(true_answer + '  ' +
+                #       str(request_answer_text.get("answer_text")))
                 if true_answer == str(request_answer_text.get("answer_text")):
                     true_questions_text.append(
                         request_answer_text.get("question_id"))
@@ -322,21 +322,21 @@ def test_post(request):
                         request_answer_text.get("question_id"))
                     wrong_answers += 1
                 true_answer = None
-            print("Text true")
-            print(true_answers_text)
-            print(true_questions_text)
+            # print("Text true")
+            # print(true_answers_text)
+            # print(true_questions_text)
 
-        print(right_answers)
+        # print(right_answers)
 
         if points_to_complete <= right_answers:
-            status = "Выполнен"
+            status = "done"
         else:
-            status = "Провален"
+            status = "failed"
 
         testUser = TestUser(test=test, user=user, status=status,
                             rightAnswersCount=right_answers, points=right_answers)
         testUser.save()
-        print(testUser)
+        # print(testUser)
         for true_question_simple in true_questions_simple:
             testUserAnswer = TestUserAnswer(
                 testUser=testUser, question_id=true_question_simple, isCorrect=True)
@@ -362,14 +362,15 @@ def test_post(request):
                 testUser=testUser, question_id=false_question_text, isCorrect=False)
             testUserAnswer.save()
 
-        user.money += right_answers*2000
-        user.energy += right_answers*10000
+        user.money += right_answers*200
+        user.energy += right_answers*100
         user.save()
         response = {
-            "money": right_answers*2000,
-            "energy": right_answers*10000,
+            "money": right_answers*200,
+            "energy": right_answers*100,
             "right_answers": right_answers,
-            "total_questions": right_answers+wrong_answers
+            "total_questions": right_answers+wrong_answers,
+            "status": status
         }
         return Response(data=response)
 
