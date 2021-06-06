@@ -15,7 +15,14 @@
                 v-for="option in questionInfo.answerOptions"
                 :key="option.id"
                 class="answer-option"
-                :class="{ active: selectedValue == option.id }"
+                :class="{
+                    active: choosedAnswer
+                        ? choosedAnswer.answer !== null &&
+                          questionInfo.question.answerType === 'multi_choice'
+                            ? choosedAnswer.answer.includes(option.id)
+                            : choosedAnswer.answer === option.id
+                        : false,
+                }"
                 @click="chooseOption(option.id)"
             >
                 {{ option.text }}
@@ -24,15 +31,19 @@
         <div v-else class="question__input">
             <input
                 v-if="questionInfo.question.answerType === 'enter_number'"
+                v-model="number"
                 type="number"
                 class="input"
                 placeholder="Введите число"
+                :class="{ active: number !== '' }"
             />
             <input
                 v-else-if="questionInfo.question.answerType === 'enter_text'"
+                v-model="text"
                 type="text"
                 class="input"
                 placeholder="Введите текст"
+                :class="{ active: text !== '' }"
             />
         </div>
     </div>
@@ -54,15 +65,27 @@ export default {
             type: Function,
             default: () => {},
         },
+        choosedAnswer: {
+            type: [Object, null],
+            default: null,
+        },
     },
     data() {
         return {
-            selectedValue: null,
+            number: this.choosedAnswer ? this.choosedAnswer.answer : '',
+            text: this.choosedAnswer ? this.choosedAnswer.answer : '',
         }
     },
+    watch: {
+        text: function(newVal) {
+            this.selectOption(newVal)
+        },
+        number: function(newVal) {
+            this.selectOption(newVal)
+        },
+    },
     methods: {
-        chooseOption: function(option) {
-            this.selectedValue = option
+        chooseOption(option) {
             this.selectOption(option)
         },
     },
@@ -132,6 +155,10 @@ export default {
             color: #1a2740;
             width: 312px;
             height: 41px;
+            &.active {
+                border: 2px solid #26bcc2;
+                border-bottom: 4px solid #26bcc2;
+            }
         }
     }
 }

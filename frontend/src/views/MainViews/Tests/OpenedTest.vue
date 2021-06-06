@@ -38,12 +38,12 @@
                             getQuestionsList.data.questions[openedQuestionInd]
                         "
                         :select-option="selectOption"
+                        :choosed-answer="userAnswers[openedQuestionInd]"
                     />
                     <div class="test__nav-btns-container">
                         <button
                             v-if="openedQuestionInd !== 0"
                             class="nav-btn prev active"
-                            :disabled="!selectedValue"
                             @click="prevQuestion()"
                         >
                             Назад
@@ -54,7 +54,7 @@
                                     test.questions.length - 1
                             "
                             class="nav-btn active"
-                            :disabled="!selectedValue"
+                            :disabled="!userAnswers[openedQuestionInd]"
                             @click="nextQuestion()"
                         >
                             Дальше
@@ -139,9 +139,11 @@ export default {
             selectedValue: null,
             currentQuestionNumber: 0,
             rightAnswers: 0,
+            userAnswers: [],
             reward: {},
         }
     },
+
     computed: {
         ...mapGetters('tests', ['getTests', 'getQuestionsList']),
         test: function() {
@@ -153,6 +155,11 @@ export default {
         //     return this.test.questions.length
         // },
     },
+    watch: {
+        userAnswers: function(newVal) {
+            console.log(newVal)
+        },
+    },
     async mounted() {
         await this.QUESTIONS_REQUEST(this.id)
         console.log(this.getQuestionsList)
@@ -161,15 +168,75 @@ export default {
         ...mapActions('tests', [QUESTIONS_REQUEST]),
         ...mapMutations(['accrueReward']),
         selectOption: function(option) {
-            if (this.selectedValue === option) {
-                this.selectedValue = null
+            console.log(option)
+            // добавление нового ответа
+            if (this.openedQuestionInd === this.userAnswers.length) {
+                this.userAnswers.push({
+                    question: this.getQuestionsList.data.questions[
+                        this.openedQuestionInd
+                    ].question.id,
+                    answerType: this.getQuestionsList.data.questions[
+                        this.openedQuestionInd
+                    ].question.answerType,
+                    answer:
+                        this.getQuestionsList.data.questions[
+                            this.openedQuestionInd
+                        ].question.answerType === 'multi_choice'
+                            ? [option]
+                            : option,
+                })
             } else {
-                this.selectedValue = option
+                // удаление ответа
+                if (
+                    (this.userAnswers[this.openedQuestionInd].answer ===
+                        option &&
+                        this.getQuestionsList.data.questions[
+                            this.openedQuestionInd
+                        ].answerType !== 'enter_text' &&
+                        this.getQuestionsList.data.questions[
+                            this.openedQuestionInd
+                        ].answerType !== 'enter_number') ||
+                    option === '' ||
+                    this.userAnswers[this.openedQuestionInd].answerType ===
+                        'multi_choice'
+                ) {
+                    if (
+                        this.userAnswers[this.openedQuestionInd].answer !==
+                            null &&
+                        this.userAnswers[this.openedQuestionInd].answerType ===
+                            'multi_choice' &&
+                        this.userAnswers[
+                            this.openedQuestionInd
+                        ].answer.includes(option) &&
+                        this.userAnswers[this.openedQuestionInd].answer.length >
+                            1
+                    ) {
+                        this.userAnswers[
+                            this.openedQuestionInd
+                        ].answer = this.userAnswers[
+                            this.openedQuestionInd
+                        ].answer.filter(answ => answ !== option)
+                    } else
+                        this.userAnswers[this.openedQuestionInd].answer = null
+                    // изменение ответа
+                } else {
+                    if (
+                        this.userAnswers[this.openedQuestionInd].answerType ===
+                        'multi_choice'
+                    )
+                        this.userAnswers[this.openedQuestionInd].answer.push(
+                            option
+                        )
+                    else
+                        this.userAnswers[this.openedQuestionInd].answer = option
+                }
             }
         },
         nextQuestion: function() {
             this.openedQuestionInd += 1
-            this.selectedValue = null
+        },
+        prevQuestion: function() {
+            this.openedQuestionInd -= 1
         },
         endTest: function() {
             if (
