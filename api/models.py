@@ -369,19 +369,19 @@ class Task(models.Model):
         UserProfile, through='TaskUserStatus', through_fields=('task', 'user'), )
 
     division = models.ForeignKey(
-        Division, on_delete=models.CASCADE, verbose_name="Подразделение", )
+        Division, on_delete=models.CASCADE, verbose_name="Подразделение", blank=True, null=True,)
 
     # IDs
 
     difficulty = models.CharField(max_length=20, choices=DIFFICULTY_TYPE_CHOICES,
                                   default=EASY, verbose_name="Сложность")
     taskType = models.CharField(
-        max_length=20, choices=TASK_TYPE_CHOICES, default=DAILY, verbose_name="Тип задачи")
+        max_length=20, choices=TASK_TYPE_CHOICES, default=QUEST, verbose_name="Тип задачи")
     title = models.CharField(max_length=200, unique=True,
                              verbose_name="Название задачи")
     description = models.TextField(verbose_name="Описание задачи")
     subTasksCount = models.IntegerField(
-        default=0, verbose_name="Кол-во доп задач")
+        default=0, verbose_name="Кол-во подзадач")
     isTeamTask = models.BooleanField(
         default=False, verbose_name="Групповая задача")
     tags = TaggableManager()
@@ -443,6 +443,7 @@ class TaskUserStatus(models.Model):
 
 
 class MainQuest(models.Model):
+
     EASY = 'easy'
     MEDIUM = 'medium'
     HARD = 'hard'
@@ -465,11 +466,11 @@ class MainQuest(models.Model):
 
     difficulty = models.CharField(max_length=20, choices=DIFFICULTY_TYPE_CHOICES,
                                   default=EASY, verbose_name="Сложность")
-    title = models.CharField(max_length=120)
-    description = models.TextField()
-    deadline = models.IntegerField(default=0)
-    accessLevel = models.IntegerField(default=0)
-    tasksCount = models.IntegerField(default=0)
+    title = models.CharField(max_length=120, verbose_name="Называние")
+    description = models.TextField(verbose_name="Описание")
+    deadline = models.IntegerField(default=0, verbose_name="Дедлайн")
+    accessLevel = models.IntegerField(default=0, verbose_name="Уровень доступа")
+    tasksCount = models.IntegerField(default=0, verbose_name="Количество задач")
 
     money = models.IntegerField(default=0, verbose_name="Валюта")
     health = models.IntegerField(default=0, verbose_name="Жизни")
@@ -482,8 +483,8 @@ class MainQuest(models.Model):
         return self.title
 
     class Meta:
-        verbose_name = "основной квест"
-        verbose_name_plural = "основные квесты"
+        verbose_name = "квест"
+        verbose_name_plural = "квесты"
 
 
 class MainQuestTree(models.Model):

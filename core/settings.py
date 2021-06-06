@@ -273,7 +273,7 @@ BATON = {
     'MENU': (
         { 'type': 'title', 'label': 'Задания', 'apps': ('api', ) },
         { 'type': 'model', 'label': 'Квест', 'name': 'mainquest', 'app': 'api' },
-        { 'type': 'model', 'label': 'Еженедельные задачи', 'name': 'weeklytask', 'app': 'api' },
+        { 'type': 'model', 'label': 'Задачи', 'name': 'task', 'app': 'api' },
         { 'type': 'model', 'label': 'Тесты', 'name': 'test', 'app': 'api' },
 
         { 'type': 'title', 'label': 'Поощрения', 'apps': ('api', ) },
