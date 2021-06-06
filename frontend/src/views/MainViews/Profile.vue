@@ -58,7 +58,12 @@
                     <div class="task-props">
                         <div class="profile__task">
                             <p class="profile__task-title">Основной квест:</p>
-                            <template v-if="mainQuest.status === 'success'">
+                            <template
+                                v-if="
+                                    mainQuest.status === 'success' &&
+                                        mainQuest.data.length !== 0
+                                "
+                            >
                                 <h3 class="profile__task-name">
                                     {{ mainQuest.data[0].title }}
                                 </h3>
@@ -84,6 +89,18 @@
                                     {{ date }}
                                 </p>
                             </template>
+                            <span
+                                v-if="
+                                    mainQuest.status === 'success' &&
+                                        mainQuest.data.length === 0
+                                "
+                                :style="{
+                                    color: '#7d849a',
+                                    textAlign: 'center',
+                                    marginTop: '10px',
+                                }"
+                                >Нет активного квеста</span
+                            >
                             <Spinner
                                 v-if="mainQuest.status === 'loading'"
                                 :size="25"
@@ -155,18 +172,11 @@
             >
                 <div class="tasks" :style="{ height: commonHeight }">
                     <h2 class="tasks__title">Список задач</h2>
-                    <template
-                        v-if="
-                            dailyTasks.status === 'success' &&
-                                weeklyTasks.status === 'success'
-                        "
-                    >
+                    <template v-if="weeklyTasks.status === 'success'">
                         <span
                             v-if="
-                                dailyTasks.status === 'success' &&
-                                    weeklyTasks.status === 'success' &&
-                                    dailyTasks.data === 0 &&
-                                    weeklyTasks.data === 0
+                                weeklyTasks.status === 'success' &&
+                                    weeklyTasks.data.length === 0
                             "
                             :style="{
                                 display: 'inline-block',
@@ -179,7 +189,7 @@
                         >
                         <template v-else>
                             <Task
-                                v-for="task in tasksList"
+                                v-for="task in weeklyTasks.data"
                                 :key="getTaskId(task.taskType, task.id)"
                                 :data="task"
                                 :custom-id="getTaskId(task.taskType, task.id)"
@@ -188,10 +198,7 @@
                         </template>
                     </template>
                     <Spinner
-                        v-if="
-                            dailyTasks.status === 'loading' ||
-                                weeklyTasks.status === 'loading'
-                        "
+                        v-if="weeklyTasks.status === 'loading'"
                         :style="{ marginTop: '200px' }"
                         :size="25"
                         :line-bg-color="'#b1b2b7'"
@@ -239,7 +246,6 @@ import Task from '@/components/Task.vue'
 import { mapGetters, mapActions } from 'vuex'
 import {
     WEEKLY_TASKS_REQUEST,
-    DAILY_TASKS_REQUEST,
     MAIN_QUEST_REQUEST,
 } from '@/store/action-types/tasks'
 import Spinner from 'vue-simple-spinner'
@@ -260,7 +266,6 @@ export default {
             windowWidth: window.innerWidth,
             screenMobile: window.innerWidth > 768 ? 'all' : 'tasks',
             user: Object.assign({}, this.$store.getters.getUserData),
-            tasksList: [],
         }
     },
     computed: {
@@ -295,28 +300,14 @@ export default {
             window.addEventListener('resize', this.onResize)
         })
         await this.WEEKLY_TASKS_REQUEST()
-        await this.DAILY_TASKS_REQUEST()
         await this.MAIN_QUEST_REQUEST()
-        if (
-            this.dailyTasks.status === 'success' &&
-            this.weeklyTasks.status === 'success'
-        )
-            this.weeklyTasks.data === null
-                ? (this.tasksList = this.dailyTasks.data)
-                : (this.tasksList = this.dailyTasks.data.concat(
-                      this.weeklyTasks.data
-                  ))
     },
 
     beforeDestroy() {
         window.removeEventListener('resize', this.onResize)
     },
     methods: {
-        ...mapActions('tasks', [
-            WEEKLY_TASKS_REQUEST,
-            DAILY_TASKS_REQUEST,
-            MAIN_QUEST_REQUEST,
-        ]),
+        ...mapActions('tasks', [WEEKLY_TASKS_REQUEST, MAIN_QUEST_REQUEST]),
         getTaskId: function(type, id) {
             return type === 'quest'
                 ? `q${id}`

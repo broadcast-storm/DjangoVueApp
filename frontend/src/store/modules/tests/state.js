@@ -193,6 +193,10 @@ const state = {
             ],
         },
     ],
+    testsList: null,
+    testsStatus: 'loading',
+    questionsList: null,
+    questionsStatus: 'loading',
 }
 
 export default state

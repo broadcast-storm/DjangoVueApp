@@ -1,9 +1,7 @@
 from rest_framework import serializers
 from .models import JobPosition, Division, UserProfile, Statistics, Task, TaskUserStatus, Team, Product, \
     RequirementsToBuyProduct, Test, Question, Answer, TestBlock, Achievement, RequirenmentToGetAchieve, AchieveRequirenmentStatus,\
-    AchievementUserStatus, Competition, WeeklyTask
-from .models import JobPosition, Division, TestUser, UserProfile, Statistics, Task, TaskUserStatus, Team, Product, \
-    RequirementsToBuyProduct, Test, Question, Answer, TestBlock, Achievement, RequirenmentToGetAchieve, AchieveRequirenmentStatus, AchievementUserStatus
+    AchievementUserStatus, Competition, WeeklyTask, TestUser, QuestionTheme
 
 
 class EmptySerializer(serializers.Serializer):
@@ -110,6 +108,37 @@ class TestsSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class TestsWithoutUsersSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Test
+        fields = ["id", "title", "description", "pointsToComplete", "canLeave", "canSkip", "showAnswers",
+                  "isInterview", "canSeeSpentTime", "canSeeTestClosing", "created_at", "updated_at"]
+
+
+class QuestionThemeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = QuestionTheme
+        fields = '__all__'
+
+
+class QuestionsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Question
+        fields = ["id", "answerType", "description",
+                  "difficulty", "image", "title"]
+
+
+class TestBlockQuestionsSerializer(serializers.ModelSerializer):
+    questions = QuestionsSerializer(many=True)
+
+    class Meta:
+        model = TestBlock
+        fields = ["id", "questionTheme", "questions", ]
+
+
 class TestBlockSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -124,26 +153,25 @@ class TestUserSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class TestUserSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = TestUser
-        fields = '__all__'
-
-
-class QuestionsSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Question
-        fields = '__all__'
-
-
 class AnswersSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Answer
         fields = '__all__'
 
+
+class AnswersWithoutFlagSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Answer
+        fields = ['id', 'text', 'description', 'image', 'question']
+
+
+class AnswersIdSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Answer
+        fields = ['id', 'question']
 
 # class ShopSerializer(serializers.ModelSerializer):
 #     product = ProductSerializer(read_only=True)
