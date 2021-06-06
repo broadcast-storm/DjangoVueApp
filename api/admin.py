@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group, User
 from django.contrib.auth.admin import GroupAdmin, UserAdmin
-from .models import UserProfile, Task, WeeklyTask, Division, JobPosition, Team, Statistics, \
+from .models import UserProfile, MainQuest, Task, WeeklyTask, Division, JobPosition, Team, Statistics, \
     MainQuest, Question, QuestionTheme, Test, TestBlock, Achievement, RequirenmentToGetAchieve, \
     Product, RequirementsToBuyProduct, ProductCategory, CategoryClothes, Purchase, Answer
 from django.db import models
@@ -110,8 +110,6 @@ class SubTask(admin.StackedInline):
     extra = 0
     max_num = 3
     fields = (
-        'taskType',
-        "division",
         'title',
         'description',
         'isTeamTask',
@@ -164,7 +162,6 @@ class TaskInline(admin.StackedInline):
     extra = 0
     max_num = 3
     fields = (
-        'taskType',
         "division",
         'title',
         'description',
@@ -188,7 +185,7 @@ class WeeklyTaskAdmin(admin.ModelAdmin):
         return u", ".join(o.name for o in obj.tags.all())
     tag_list.short_description = "Теги"
 
-    list_display = ('title', 'taskType', 'subTasksCount',
+    list_display = ('title', 'subTasksCount',
                     'isTeamTask', 'tag_list')
     list_filter = ('tags',)
     search_fields = ('title',)
@@ -209,6 +206,28 @@ class WeeklyTaskAdmin(admin.ModelAdmin):
     readonly_fields = ('created_at', 'updated_at')
     filter_horizontal = ()
 
+class MainQuestAdmin(admin.ModelAdmin):
+    list_display = ('title', 'description', 'accessLevel')
+    search_fields = ('title',)
+    fieldsets = ((None, {
+        'fields': (
+            'division',
+            'difficulty',
+            'title',
+            'description',
+            'deadline',
+            'accessLevel',
+            # 'tasks'
+        )
+    }),(None, {
+        'fields': (
+            ('created_at',
+             'updated_at'),
+        )
+    }))
+    list_filter = ('title', 'accessLevel')
+    filter_horizontal = ()
+    readonly_fields = ('created_at', 'updated_at')
 
 class AnswerAdmin(admin.ModelAdmin):
     search_fields = ('text',)
@@ -425,6 +444,7 @@ admin.site = MyAdminSite()
 
 admin.site.register(WeeklyTask, WeeklyTaskAdmin)
 admin.site.register(Task, TaskAdmin)
+admin.site.register(MainQuest, MainQuestAdmin)
 
 admin.site.register(Test, TestAdmin)
 admin.site.register(Question, QuestionAdmin)
