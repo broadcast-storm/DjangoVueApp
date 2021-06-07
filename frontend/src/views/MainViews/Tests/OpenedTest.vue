@@ -97,10 +97,9 @@
                     </h2>
                     <div class="test-passed__statistic">
                         <div class="statistic__rights-answers">
-                            <Complete class="rights-answers__icon" />{{
-                                getAnswersResult.data.right_answers
-                            }}
-                            из {{ getAnswersResult.data.total_questions }}
+                            <Complete class="rights-answers__icon" /> Правильных
+                            {{ getAnswersResult.data.right_answers }} из
+                            {{ getAnswersResult.data.total_questions }}
                         </div>
                         <!-- <div class="statistic__time">
                             <Time class="time__icon" />{{ leadTime }}

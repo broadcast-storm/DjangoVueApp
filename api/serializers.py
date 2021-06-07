@@ -153,6 +153,13 @@ class TestUserSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class TestUserShortSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = TestUser
+        fields = ["test", ]
+
+
 class AnswersSerializer(serializers.ModelSerializer):
 
     class Meta:

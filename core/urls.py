@@ -36,27 +36,17 @@ schema_view = get_schema_view(
     permission_classes=[permissions.AllowAny],
 )
 
-# favicon_view = RedirectView.as_view(url=os.path.join(settings.STATIC_URL, 'favicon.ico'), permanent=True)
-
 urlpatterns = [
-    path('', index, name='index'),
-    # re_path(r'^favicon\.ico$', favicon_view),
-    path('main-quest/', index, name='index'),
-    path('competitions/', index, name='index'),
-    path('competitions/versus/', index, name='index'),
-    path('statistics/', index, name='index'),
-    path('raiting/', index, name='index'),
-    path('shop/', index, name='index'),
-    path('shop/cart/', index, name='index'),
-    path('tests/', index, name='index'),
-    path('auth/login/', index, name='index'),
-    path('auth/forgot-password/', index, name='index'),
     path('baton/', include('baton.urls')),
     path('admin/', admin.site.urls),
     path("api/", include('api.urls')),
-    re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
-    re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    re_path('^.*$', index, name='index'),
+    re_path(r'^swagger(?P<format>\.json|\.yaml)$',
+            schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    re_path(r'^swagger/$', schema_view.with_ui('swagger',
+            cache_timeout=0), name='schema-swagger-ui'),
+    re_path(r'^redoc/$', schema_view.with_ui('redoc',
+            cache_timeout=0), name='schema-redoc'),
 ]
 
 if settings.DEBUG:

@@ -14,7 +14,7 @@ from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, Ou
 
 from .serializers import JobPositionSerializer, DivisionSerializer, \
     EmptySerializer, UserProfileSerializer, UserGetListSerializer, UserGetSerializer, StatisticsSerializer, TaskSerializer, TaskUserStatusSerializer, WeeklyTaskSerializer, \
-    TeamSerializer, ProductSerializer, RequirementsToBuyProductSerializer, TestsSerializer, QuestionsSerializer, \
+    TeamSerializer, ProductSerializer, RequirementsToBuyProductSerializer, TestsSerializer, TestUserShortSerializer, QuestionsSerializer, \
     AnswersSerializer, TestBlockSerializer, AchievementSerializer, RequirenmentToGetAchieveSerializer, AchieveRequirenmentStatusSerializer, \
     AchievementUserStatusSerializer, CompetitionSerializer, UserCompetitionSerializer, TestUserSerializer, QuestionThemeSerializer, TestBlockQuestionsSerializer, AnswersWithoutFlagSerializer, AnswersIdSerializer, TestsWithoutUsersSerializer
 from .models import JobPosition, Division, QuestionTheme, Statistics, UserProfile, Task, WeeklyTask, TaskUserStatus, Team, \
@@ -172,7 +172,14 @@ def unresolved_test(request):
     # serializer без user
     ##################
     if request.method == 'GET':
-        tests = Test.objects.exclude(users=request.user.id).all()
+        resolvedTests = TestUser.objects.filter(user=request.user.id).filter(
+            status='done').all()
+        serializerResolvedTests = TestUserShortSerializer(
+            resolvedTests, many=True)
+        resolvedIds = []
+        for item in serializerResolvedTests.data:
+            resolvedIds.append(item["test"])
+        tests = Test.objects.exclude(id__in=resolvedIds).all()
         serializer = TestsWithoutUsersSerializer(tests, many=True)
         return JsonResponse(serializer.data, safe=False)
 
@@ -190,8 +197,15 @@ def test_questions(request):
         question_without_choice_id = []
         # all_data это массив первый элемент которого тестблок внутри которого вопросы второй элемент массива это ответы
         all_data = {}
+        resolvedTests = TestUser.objects.filter(user=request.user.id).filter(
+            status='done').all()
+        serializerResolvedTests = TestUserShortSerializer(
+            resolvedTests, many=True)
+        resolvedIds = []
+        for item in serializerResolvedTests.data:
+            resolvedIds.append(item["test"])
         testInfo = Test.objects.filter(
-            id=request.data.get('test_id')).exclude(users=request.user.id).first()
+            id=request.data.get('test_id')).exclude(id__in=resolvedIds).first()
         if(testInfo == None):
             return JsonResponse(None, safe=False)
         serializerTestInfo = TestsWithoutUsersSerializer(testInfo)
@@ -361,10 +375,10 @@ def send_answers(request):
             testUserAnswer = TestUserAnswer(
                 testUser=testUser, question_id=false_question_text, isCorrect=False)
             testUserAnswer.save()
-
-        user.money += right_answers*200
-        user.energy += right_answers*100
-        user.save()
+        if status == 'done':
+            user.money += right_answers*200
+            user.energy += right_answers*100
+            user.save()
         response = {
             "money": right_answers*200,
             "energy": right_answers*100,
