@@ -50,6 +50,7 @@ urlpatterns = [
     path('competition', competition, name='competition'),
     path('unresolved_test', unresolved_test, name='unresolved_test'),
     path('test-questions', test_questions, name='test_questions'),
+    path('test-post', test_post, name='test_post'),
     path('user-filter-for-competitions', userFilterForCompetition,
          name='user-filter-for-competitions'),
     path('competition-finish/<int:pk>', CompetitionUserDetailView, name='competition-finish')

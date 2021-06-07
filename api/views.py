@@ -7,7 +7,7 @@ from rest_framework import exceptions
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import IsAuthenticated, AllowAny
-
+from django.db.models import Q
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
@@ -41,7 +41,25 @@ class QuestionThemeViewSet(viewsets.ModelViewSet):
 
 class UserProfileViewSet(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
+    # serializer_class = UserProfileSerializer
     queryset = UserProfile.objects.all()
+
+    def get_permissions(self):
+        if self.action == 'retrieve' or self.action == 'update':
+            permission_classes = [IsAuthenticated]
+        else:
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return UserGetListSerializer
+        elif self.action == 'retrieve':
+            return UserGetSerializer
+        elif self.action == 'update':
+            return UserProfileSerializer
+        else:
+            return EmptySerializer
 
 
 @api_view(['GET', 'PUT'])
@@ -215,6 +233,162 @@ def test_questions(request):
         return JsonResponse(all_data, safe=False)
 
 
+@ api_view(['POST'])
+# For prod use IsAuthenticated . AllowAny using for Debug
+@ permission_classes([AllowAny])
+# @ensure_csrf_cookie
+def test_post(request):
+    """
+    List all code snippets, or create a new snippet.
+    """
+    # TODO controll transactios
+    if request.method == 'POST':
+        user = UserProfile.objects.get(id=request.user.id)
+        right_answers = 0
+        wrong_answers = 0
+        true_questions_simple = []
+        false_questions_simple = []
+        true_questions_multi = []
+        false_questions_multi = []
+        true_questions_text = []
+        false_questions_text = []
+        test = Test.objects.get(
+            id=request.data.get("test_id"))
+        status = ''
+        points_to_complete = test.pointsToComplete
+        print(points_to_complete)
+
+        ######################
+        # SIMPLE QUESTION
+        # ###############
+        request_answers_simple = request.data.get("answers_simple")
+        if request_answers_simple:
+            answers_simple = Answer.objects.filter(
+                id__in=request_answers_simple).values("isCorrect", "question")
+            for answer_simple in answers_simple:
+                if answer_simple.get("isCorrect"):
+                    true_questions_simple.append(
+                        answer_simple.get("question"))
+                    right_answers += 1
+                else:
+                    false_questions_simple.append(
+                        answer_simple.get("question"))
+                    wrong_answers += 1
+            print(true_questions_simple)
+
+        ######################
+        # MULTI QUESTION
+        # ###############
+        request_answers_multi = request.data.get("answers_multi")
+        if request_answers_multi:
+            request_answers_multi_questions = [
+                a.get("question_id") for a in request_answers_multi
+            ]
+            true_answers_multi = Answer.objects.filter(
+                question__in=request_answers_multi_questions).filter(isCorrect=True).values("id", "isCorrect", "question")
+            print("true multi")
+            print(true_answers_multi)
+            print("Req multi")
+            print(request_answers_multi)
+            for request_answer_multi in request_answers_multi:
+                true_answers_array = []
+                for true_answer_multi in true_answers_multi:
+                    if true_answer_multi.get("question") == request_answer_multi.get("question_id"):
+                        true_answers_array.append(
+                            str(true_answer_multi.get("id")))
+                if true_answers_array == request_answer_multi.get("answer_id"):
+                    true_questions_multi.append(
+                        request_answer_multi.get("question_id"))
+                    right_answers += 1
+                else:
+                    false_questions_multi.append(
+                        request_answer_multi.get("question_id"))
+                    wrong_answers += 1
+                true_answers_array.clear()
+            print(true_questions_multi)
+
+        ######################
+        # TEXT QUESTION
+        # ###############
+        request_answers_text = request.data.get("answers_text")
+        print("req text")
+        print(request_answers_text)
+        if request_answers_text:
+            request_answers_text_questions = [
+                a.get("question_id") for a in request_answers_text
+            ]
+            print("request_answers_text_questions")
+            print(request_answers_text_questions)
+            true_answers_text = Answer.objects.filter(
+                question__in=request_answers_text_questions).filter(isCorrect=True).values("id", "isCorrect", "question", "text")
+            for request_answer_text in request_answers_text:
+                true_answer = None
+                for true_answer_text in true_answers_text:
+                    if true_answer_text.get("question") == request_answer_text.get("question_id"):
+                        true_answer = str(true_answer_text.get("text"))
+                print(true_answer + '  ' +
+                      str(request_answer_text.get("answer_text")))
+                if true_answer == str(request_answer_text.get("answer_text")):
+                    true_questions_text.append(
+                        request_answer_text.get("question_id"))
+                    right_answers += 1
+                else:
+                    false_questions_text.append(
+                        request_answer_text.get("question_id"))
+                    wrong_answers += 1
+                true_answer = None
+            print("Text true")
+            print(true_answers_text)
+            print(true_questions_text)
+
+        print(right_answers)
+
+        if points_to_complete <= right_answers:
+            status = "Выполнен"
+        else:
+            status = "Провален"
+
+        testUser = TestUser(test=test, user=user, status=status,
+                            rightAnswersCount=right_answers, points=right_answers)
+        testUser.save()
+        print(testUser)
+        for true_question_simple in true_questions_simple:
+            testUserAnswer = TestUserAnswer(
+                testUser=testUser, question_id=true_question_simple, isCorrect=True)
+            testUserAnswer.save()
+        for false_question_simple in false_questions_simple:
+            testUserAnswer = TestUserAnswer(
+                testUser=testUser, question_id=false_question_simple, isCorrect=False)
+            testUserAnswer.save()
+        for true_question_multi in true_questions_multi:
+            testUserAnswer = TestUserAnswer(
+                testUser=testUser, question_id=true_question_multi, isCorrect=True)
+            testUserAnswer.save()
+        for false_question_multi in false_questions_multi:
+            testUserAnswer = TestUserAnswer(
+                testUser=testUser, question_id=false_question_multi, isCorrect=False)
+            testUserAnswer.save()
+        for true_question_text in true_questions_text:
+            testUserAnswer = TestUserAnswer(
+                testUser=testUser, question_id=true_question_text, isCorrect=True)
+            testUserAnswer.save()
+        for false_question_text in false_questions_text:
+            testUserAnswer = TestUserAnswer(
+                testUser=testUser, question_id=false_question_text, isCorrect=False)
+            testUserAnswer.save()
+
+        user.money += right_answers*2000
+        user.energy += right_answers*10000
+        user.save()
+        response = {
+            "money": right_answers*2000,
+            "energy": right_answers*10000,
+            "right_answers": right_answers,
+            "total_questions": right_answers+wrong_answers
+        }
+        return Response(data=response)
+
+
 @ api_view(['GET', 'PUT'])
 # For prod use IsAuthenticated . AllowAny using for Debug
 @ permission_classes([AllowAny])
@@ -281,6 +455,49 @@ class TeamsViewSet(viewsets.ModelViewSet):
 class TaskViewSet(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
     queryset = Task.objects.all()
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_daily_tasks(request):
+    if request.method == 'GET':
+        user = UserProfile.objects.get(id=request.user.id)
+        tasks = Task.objects.all().filter(taskType="daily").exclude(
+            ~Q(parent=None)).exclude(
+            ~Q(weekly=None)).filter(division=user.division)
+        serializer = TaskSerializer(tasks, many=True)
+        return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_weekly_tasks(request):
+    if request.method == 'GET':
+        user = UserProfile.objects.get(id=request.user.id)
+        weeklyTasks = WeeklyTask.objects.all().filter(division=user.division)
+        serializer = WeeklyTaskSerializer(weeklyTasks, many=True)
+        for weeklyTask in serializer.data:
+            subTasks = Task.objects.all().filter(weekly=weeklyTask['id'])
+            subSerializer = TaskSerializer(subTasks, many=True)
+            weeklyTask['subTasks'] = subSerializer.data
+        return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_quests(request):
+    if request.method == 'GET':
+
+        user = UserProfile.objects.get(id=request.user.id)
+        quests = Task.objects.all().filter(taskType="quest").exclude(
+            ~Q(parent=None)).exclude(
+            ~Q(weekly=None)).filter(division=user.division)
+        serializer = TaskSerializer(quests, many=True)
+        for quest in serializer.data:
+            subTasks = Task.objects.all().filter(parent=quest['id'])
+            subSerializer = TaskSerializer(subTasks, many=True)
+            quest['subTasks'] = subSerializer.data
+        return Response(serializer.data)
 
 
 class WeeklyTaskViewSet(viewsets.ModelViewSet):
