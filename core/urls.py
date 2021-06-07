@@ -14,13 +14,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.conf.urls import url
+from django.views.generic import TemplateView
 from django.contrib import admin
 from django.views.generic.base import RedirectView
 from django.urls import path, include, re_path
 import os
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import index
+from .views import index, indexForTest
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -38,6 +39,19 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
+    path('', index, name='index'),
+    # re_path(r'^favicon\.ico$', favicon_view),
+    path('main-quest/', index, name='index'),
+    path('competitions/', index, name='index'),
+    path('competitions/versus/', index, name='index'),
+    path('statistics/', index, name='index'),
+    path('raiting/', index, name='index'),
+    path('shop/', index, name='index'),
+    path('shop/cart/', index, name='index'),
+    path('tests/', index, name='index'),
+    path('tests/<int:id>', indexForTest, name='index'),
+    path('auth/login/', index, name='index'),
+    path('auth/forgot-password/', index, name='index'),
     url(r'^baton/', include('baton.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include('api.urls')),
@@ -47,8 +61,7 @@ urlpatterns = [
                                            cache_timeout=0), name='schema-swagger-ui'),
     url(r'^redoc/$', schema_view.with_ui('redoc',
                                          cache_timeout=0), name='schema-redoc'),
-    # re_path(r'^.*$', index, name='index'),
-    url(r'^.*$', index, name='index'),
+
 ]
 
 if settings.DEBUG:
