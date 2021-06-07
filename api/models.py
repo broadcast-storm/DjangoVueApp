@@ -544,7 +544,7 @@ class Competition(models.Model):
 
     # users = models.ManyToManyField(UserProfile)
     winner = models.ForeignKey(
-        UserProfile, on_delete=models.CASCADE, related_name='winner')
+        UserProfile, on_delete=models.CASCADE, related_name='winner', null=True)
 
     # IDs
 

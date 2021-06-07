@@ -3,7 +3,8 @@ from rest_framework.routers import DefaultRouter
 from .views import JobPositionViewSet, DivisionViewSet, UserProfileViewSet, StatisticsViewSet, \
     TaskViewSet, WeeklyTaskViewSet, TeamsViewSet,  competition, ProductViewSet, shop, LogoutView, LogoutAllView, \
     TestsViewSet, QuestionsViewSet, AnswersViewSet, TestBlockViewSet, AchievementViewSet, RequirenmentToGetAchieveViewSet, \
-    AchieveRequirenmentStatusViewSet, AchievementUserStatusViewSet, update_user_money_energy, userFilterForCompetition, TestUserViewSet, unresolved_test, QuestionThemeViewSet, test_questions
+    AchieveRequirenmentStatusViewSet, AchievementUserStatusViewSet, update_user_money_energy, userFilterForCompetition, TestUserViewSet, \
+    CompetitionUserViewSet, CompetitionViewSet, CompetitionUserDetailView, unresolved_test, QuestionThemeViewSet, test_questions
 
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -32,6 +33,10 @@ router.register(r'achieve-requirenment-status',
                 AchieveRequirenmentStatusViewSet)
 router.register(r'achievement-user-status',
                 AchievementUserStatusViewSet)
+router.register(r'competition-create',
+                CompetitionViewSet)
+router.register(r'competition-users',
+                CompetitionUserViewSet)
 
 
 urlpatterns = [
@@ -46,7 +51,8 @@ urlpatterns = [
     path('unresolved_test', unresolved_test, name='unresolved_test'),
     path('test-questions', test_questions, name='test_questions'),
     path('user-filter-for-competitions', userFilterForCompetition,
-         name='user-filter-for-competitions')
+         name='user-filter-for-competitions'),
+    path('competition-finish/<int:pk>', CompetitionUserDetailView, name='competition-finish')
     # path('competition/currentcompetitions', currentcompetitions, name = 'currentcompetitions')
     # path('searchcompetitions')
 ]
