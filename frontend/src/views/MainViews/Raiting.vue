@@ -1,44 +1,46 @@
 <template>
     <div class="wrapper">
         <main class="main">
-            <div class="wrap-info-right">
-                <div class="rating-wrap">
-                    <h3 class="individual-rating">Индивидуальный рейтинг</h3>
-                    <div class="period">
-                        <span class="period__arrow">
-                            <PeriodArrowSvg class="period__arrow__svg" />
-                        </span>
-                        <p class="period__info">за неделю</p>
-                        <span class="period__arrow">
-                            <PeriodArrowSvg
-                                class="period__arrow__svg to-right"
-                            />
-                        </span>
-                    </div>
+            <div class='rating-menu'>
+                <div class="command-type">
+                    <h3 class='selected'>Индивидуальный</h3>
+                    <h3>Командный</h3>
                 </div>
-
-                <!-- БЛОК ИНДИВИДУАЛЬНОГО РЕЙТИНГА -->
-                <div class="b-right">
+                <div class="period">
+                    <span class="period__arrow">
+                        <PeriodArrowSvg class="period__arrow__svg" />
+                    </span>
+                    <p class="period__info">за неделю</p>
+                    <span class="period__arrow">
+                        <PeriodArrowSvg
+                            class="period__arrow__svg to-right"
+                        />
+                    </span>
+                </div>
+            </div>
+            <!-- БЛОК ИНДИВИДУАЛЬНОГО РЕЙТИНГА -->
+            <div class="rating-table">
+                <div class="row-individual">
                     <div
                         v-for="raiting in individualRaiting"
                         :key="raiting.id"
-                        class="b-right__item"
+                        class="row-individual__item"
                     >
-                        <div class="b-right__num">{{ raiting.id }}</div>
-                        <div class="b-right__info">
+                        <div class="row-individual__num">{{ raiting.id }}</div>
+                        <div class="row-individual__info">
                             <img
-                                class="b-right__img"
+                                class="row-individual__img"
                                 :src="raiting.img"
                                 alt=""
                             />
-                            <div class="b-right__wrap">
-                                <h4 class="b-right__title">
+                            <div class="row-individual__wrap">
+                                <h4 class="row-individual__title">
                                     {{ raiting.name }}
                                 </h4>
-                                <span class="b-right__description">{{
+                                <span class="row-individual__description">Отдел: {{
                                     raiting.description
                                 }}</span>
-                                <p class="b-right__raiting">
+                                <p class="row-individual__raiting">
                                     Рейтинг
                                     {{ toNumberString(raiting.raitingValue) }}
                                 </p>
@@ -49,40 +51,25 @@
             </div>
 
             <!-- БЛОК КОМАНДНОГО РЕЙТИНГА -->
-            <div class="wrap-info-right">
-                <div class="rating-wrap">
-                    <h3 class="individual-rating">Командный рейтинг</h3>
-                    <div class="period">
-                        <span class="period__arrow">
-                            <PeriodArrowSvg class="period__arrow__svg" />
-                        </span>
-                        <p class="period__info">за месяц</p>
-                        <span class="period__arrow">
-                            <PeriodArrowSvg
-                                class="period__arrow__svg to-right"
-                            />
-                        </span>
-                    </div>
-                </div>
-
-                <div class="b-left">
+            <div class="rating-table">
+                <div class="row-command">
                     <div
                         v-for="raiting in teamRaiting"
                         :key="raiting.id"
-                        class="b-left__item"
+                        class="row-command__item"
                     >
-                        <div class="b-left__num">{{ raiting.id }}</div>
-                        <div class="b-left__info">
+                        <div class="row-command__num">{{ raiting.id }}</div>
+                        <div class="row-command__info">
                             <img
-                                class="b-left__img"
+                                class="row-command__img"
                                 :src="raiting.img"
                                 alt=""
                             />
-                            <div class="b-left__wrap">
-                                <h4 class="b-left__title">
+                            <div class="row-command__wrap">
+                                <h4 class="row-command__title">
                                     {{ raiting.name }}
                                 </h4>
-                                <p class="b-left__raiting">
+                                <p class="row-command__raiting">
                                     Рейтинг
                                     {{ toNumberString(raiting.raitingValue) }}
                                 </p>
@@ -135,25 +122,66 @@ export default {
 <style lang="scss" scoped>
 .wrapper {
     width: 100%;
-    height: 100vh;
 }
 
 .main {
     padding-top: 90px;
     display: flex;
     justify-content: space-between;
-    height: 100%;
-    box-sizing: border-box;
+    flex-direction: column;
 }
-
-.wrap-info-right {
-    width: 100%;
+.rating-menu {
+    padding: 25px 70px;
+    display: flex;
+    justify-content: space-between;
+    .command-type {
+        width: 420px;
+        display: flex;
+        justify-content: space-between;
+        color: #545969;
+        font-size: 24px;
+        h3 {
+            padding-bottom: 10px;
+        }
+        .selected {
+            border-bottom: 3px solid #545969;
+        }
+    }
+}
+.rating-table {
     margin-left: 70px;
     margin-right: 14px;
-    /* max-height: calc(100vh - 163px);
-     */
-    height: 100%;
-    overflow-y: auto;
+    // height: 100%;
+    // overflow-y: auto;
+    .row-individual__item:nth-child(1) {
+        .row-individual__num {
+            background-color: #EBE31D;
+        }
+    }
+    .row-individual__item:nth-child(2) {
+        .row-individual__num {
+            background-color: #99A4A5;
+        }
+    }
+    .row-individual__item:nth-child(3) {
+        .row-individual__num {
+            background-color: #BE8E10;
+        }
+    }.row-command__item:nth-child(1) {
+        .row-command__num {
+            background-color: #EBE31D;
+        }
+    }
+    .row-command__item:nth-child(2) {
+        .row-command__num {
+            background-color: #99A4A5;
+        }
+    }
+    .row-command__item:nth-child(3) {
+        .row-command__num {
+            background-color: #BE8E10;
+        }
+    }
 }
 
 .individual-rating {
@@ -186,14 +214,15 @@ export default {
     }
 }
 
-.b-right {
+.row-individual  {
     &__item {
         display: flex;
         max-height: 88px;
-        max-width: 448px;
-        margin: 24px 0;
+        max-width: 75%;
+        margin: 17px 0;
         background: #fff;
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        
     }
 
     &__num {
@@ -202,21 +231,22 @@ export default {
         align-items: center;
         background: #26bcc2;
         color: #fff;
-        font-size: 64px;
-        width: 72px;
+        font-size: 48px;
+        width: 81px;
         height: 88px;
+        
     }
 
     &__info {
         display: flex;
         flex: 1;
-        padding: 5px;
-        padding-left: 8px;
+        // padding: 5px;
+        // padding-left: 8px;
     }
 
     &__img {
-        max-width: 81px;
-        max-height: 78px;
+        // max-width: 81px;
+        // max-height: 78px;
         margin-right: 11px;
     }
 
@@ -228,9 +258,9 @@ export default {
     }
 
     &__title {
+        padding-top: 8px;
         color: #1a2740;
     }
-
     &__description {
         font-size: 12px;
         line-height: 25px;
@@ -241,15 +271,15 @@ export default {
         margin-top: 7px;
     }
 }
-
-.b-left {
+.row-command {
     &__item {
         display: flex;
         max-height: 88px;
-        max-width: 448px;
-        margin: 24px 0;
+        max-width: 75%;
+        margin: 17px 0;
         background: #fff;
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        
     }
 
     &__num {
@@ -259,20 +289,21 @@ export default {
         background: #26bcc2;
         color: #fff;
         font-size: 64px;
-        width: 72px;
+        width: 81px;
         height: 88px;
+        
     }
 
     &__info {
         display: flex;
         flex: 1;
-        padding: 5px;
-        padding-left: 8px;
+        // padding: 5px;
+        // padding-left: 8px;
     }
 
     &__img {
-        max-width: 81px;
-        max-height: 78px;
+        // max-width: 81px;
+        // max-height: 78px;
         margin-right: 11px;
     }
 
@@ -284,11 +315,18 @@ export default {
     }
 
     &__title {
+        padding-top: 8px;
         color: #1a2740;
     }
 
+    &__description {
+        font-size: 12px;
+        line-height: 25px;
+        color: #7d849a;
+    }
+
     &__raiting {
-        margin-top: 27px;
+        margin-top: 35px;
     }
 }
 </style>
