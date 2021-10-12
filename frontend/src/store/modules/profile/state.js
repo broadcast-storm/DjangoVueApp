@@ -1,5 +1,6 @@
 const state = {
     profileStatus: 'loading',
+    profileUpdateStatus: '',
     profileInfo: null,
 }
 

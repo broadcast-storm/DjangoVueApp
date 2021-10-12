@@ -56,7 +56,7 @@ const routesList = {
                 header: 'Список тестов',
             },
             testPage: {
-                path: 'test/:id',
+                path: ':id',
                 header: 'Тест',
             },
         },

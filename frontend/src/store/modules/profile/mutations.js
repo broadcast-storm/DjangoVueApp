@@ -2,6 +2,9 @@ import {
     PROFILE_REQUEST_FETCHING,
     PROFILE_REQUEST_SUCCESS,
     PROFILE_REQUEST_ERROR,
+    PROFILE_UPDATE,
+    PROFILE_UPDATE_SUCCESS,
+    PROFILE_UPDATE_ERROR,
 } from '@/store/action-types/profile'
 
 const mutations = {
@@ -14,6 +17,17 @@ const mutations = {
     },
     [PROFILE_REQUEST_ERROR]: state => {
         state.profileStatus = 'error'
+    },
+
+    [PROFILE_UPDATE]: state => {
+        state.profileUpdateStatus = 'loading'
+    },
+    [PROFILE_UPDATE_SUCCESS]: (state, { newProfileInfo }) => {
+        state.profileUpdateStatus = 'success'
+        state.profileInfo = { ...newProfileInfo }
+    },
+    [PROFILE_UPDATE_ERROR]: state => {
+        state.profileUpdateStatus = 'error'
     },
 }
 

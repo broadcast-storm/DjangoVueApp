@@ -12,14 +12,14 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
 
-from .serializers import CompetitionUserSerializer, JobPositionSerializer, DivisionSerializer, \
-    UserProfileSerializer, StatisticsSerializer, TaskSerializer, TaskUserStatusSerializer, WeeklyTaskSerializer, \
+from .serializers import JobPositionSerializer, DivisionSerializer, \
+    EmptySerializer, UserProfileSerializer, UserGetListSerializer, UserGetSerializer, StatisticsSerializer, TaskSerializer, TaskUserStatusSerializer, WeeklyTaskSerializer, \
     TeamSerializer, ProductSerializer, RequirementsToBuyProductSerializer, TestsSerializer, QuestionsSerializer, \
     AnswersSerializer, TestBlockSerializer, AchievementSerializer, RequirenmentToGetAchieveSerializer, AchieveRequirenmentStatusSerializer, \
     AchievementUserStatusSerializer, CompetitionSerializer, UserCompetitionSerializer, TestUserSerializer, QuestionThemeSerializer, TestBlockQuestionsSerializer, AnswersWithoutFlagSerializer, AnswersIdSerializer, TestsWithoutUsersSerializer
 from .models import JobPosition, Division, QuestionTheme, Statistics, UserProfile, Task, WeeklyTask, TaskUserStatus, Team, \
     Competition, Product, RequirementsToBuyProduct, Test, Question, Answer, TestBlock, Achievement, RequirenmentToGetAchieve, \
-    AchieveRequirenmentStatus, AchievementUserStatus, Purchase, TestUser, CompetitionUser
+    AchieveRequirenmentStatus, AchievementUserStatus, Purchase, TestUser, TestUserAnswer
 from django.http import HttpResponse, JsonResponse
 
 
@@ -147,27 +147,6 @@ class AchievementUserStatusViewSet(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
     serializer_class = AchievementUserStatusSerializer
     queryset = AchievementUserStatus.objects.all()
-
-
-class CompetitionViewSet(viewsets.ModelViewSet):
-    permission_classes = (AllowAny,)
-    serializer_class = CompetitionSerializer
-    queryset = Competition.objects.all()
-
-
-class CompetitionUserDetailView(APIView):
-    def patch(self, request, pk, *args, **kwargs):
-        competition = CompetitionUser.objects.get(id=pk)
-        competition.isCompleted = True
-        competition.winner = request.data['winner']
-        competition.save()
-        return competition
-
-
-class CompetitionUserViewSet(viewsets.ModelViewSet):
-    permission_classes = (AllowAny,)
-    serializer_class = CompetitionUserSerializer
-    queryset = CompetitionUser.objects.all()
 
 
 @api_view(['GET'])

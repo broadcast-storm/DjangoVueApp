@@ -3,8 +3,7 @@ from rest_framework.routers import DefaultRouter
 from .views import JobPositionViewSet, DivisionViewSet, UserProfileViewSet, StatisticsViewSet, \
     TaskViewSet, WeeklyTaskViewSet, TeamsViewSet,  competition, ProductViewSet, shop, LogoutView, LogoutAllView, \
     TestsViewSet, QuestionsViewSet, AnswersViewSet, TestBlockViewSet, AchievementViewSet, RequirenmentToGetAchieveViewSet, \
-    AchieveRequirenmentStatusViewSet, AchievementUserStatusViewSet, update_user_money_energy, userFilterForCompetition, TestUserViewSet, \
-    CompetitionUserViewSet, CompetitionViewSet, CompetitionUserDetailView, unresolved_test, QuestionThemeViewSet, test_questions
+    AchieveRequirenmentStatusViewSet, AchievementUserStatusViewSet, update_user_money_energy, userFilterForCompetition, get_quests, get_daily_tasks, get_weekly_tasks, TestUserViewSet, unresolved_test, QuestionThemeViewSet, test_questions, test_post
 
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -33,10 +32,6 @@ router.register(r'achieve-requirenment-status',
                 AchieveRequirenmentStatusViewSet)
 router.register(r'achievement-user-status',
                 AchievementUserStatusViewSet)
-router.register(r'competition-create',
-                CompetitionViewSet)
-router.register(r'competition-users',
-                CompetitionUserViewSet)
 
 
 urlpatterns = [
@@ -53,10 +48,9 @@ urlpatterns = [
     path('test-post', test_post, name='test_post'),
     path('user-filter-for-competitions', userFilterForCompetition,
          name='user-filter-for-competitions'),
-    path('competition-finish/<int:pk>', CompetitionUserDetailView, name='competition-finish')
-    # path('competition/currentcompetitions', currentcompetitions, name = 'currentcompetitions')
-    # path('searchcompetitions')
-]
+    path('get-quests', get_quests, name='get-quests'),
+    path('get-daily-tasks', get_daily_tasks, name='get-daily-tasks'),
+    path('get-weekly-tasks', get_weekly_tasks, name='get-weekly-tasks'), ]
 
 
 # path('competition/currentcompetitions', currentcompetitions, name = 'currentcompetitions')
