@@ -14,7 +14,6 @@
     "core-js": "^3.6.5",
     "idle-vue": "^2.0.5",
     "jsonwebtoken": "^8.5.1",
-    "node-sass": "^4.14.1",
     "vue": "^2.6.11",
     "vue-chartjs": "^3.4.2",
     "vue-router": "^3.2.0",
