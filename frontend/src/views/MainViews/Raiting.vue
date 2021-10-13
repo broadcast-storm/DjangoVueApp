@@ -1,11 +1,11 @@
 <template>
     <div class="wrapper">
         <main class="main">
-            <div class='rating-menu'>
+            <div class="rating-menu">
                 <div class="command-type">
                     <!-- <h3 class='selected'>Индивидуальный</h3> -->
-                    <router-link to='/individual'>Индивидуальный</router-link>
-                    <router-link to='/command'>Командный</router-link>
+                    <router-link to="/individual">Индивидуальный</router-link>
+                    <router-link to="/command">Командный</router-link>
                     <!-- <h3>Командный</h3> -->
                 </div>
                 <div class="period">
@@ -14,9 +14,7 @@
                     </span>
                     <p class="period__info">за неделю</p>
                     <span class="period__arrow">
-                        <PeriodArrowSvg
-                            class="period__arrow__svg to-right"
-                        />
+                        <PeriodArrowSvg class="period__arrow__svg to-right" />
                     </span>
                 </div>
             </div>
@@ -40,9 +38,9 @@
                                 <h4 class="row-individual__title">
                                     {{ raiting.name }}
                                 </h4>
-                                <span class="row-individual__description">Отдел: {{
-                                    raiting.description
-                                }}</span>
+                                <span class="row-individual__description"
+                                    >Отдел: {{ raiting.description }}</span
+                                >
                                 <p class="row-individual__raiting">
                                     Рейтинг
                                     {{ toNumberString(raiting.raitingValue) }}
@@ -51,10 +49,10 @@
                         </div>
                     </div>
                 </div>
-            </div> 
+            </div>
 
             <!-- БЛОК КОМАНДНОГО РЕЙТИНГА -->
-             <div class="rating-table">
+            <div class="rating-table">
                 <div class="row-command">
                     <div
                         v-for="raiting in teamRaiting"
@@ -121,7 +119,7 @@ const individual = {
                     </div>
                 </div>
             </div>
-    `
+    `,
 }
 const command = {
     template: `
@@ -152,12 +150,12 @@ const command = {
                     </div>
                 </div>
             </div>
-    `
+    `,
 }
 
 const routes = [
-    {path: '/',component: individual},
-    {path: '/command',component: command}
+    { path: '/', component: individual },
+    { path: '/command', component: command },
 ]
 routes
 export default {
@@ -178,7 +176,7 @@ export default {
         },
         isLoading: function() {
             return this.getIsLoading
-        }
+        },
     },
     methods: {
         toNumberString: function(num) {
@@ -188,7 +186,7 @@ export default {
                 return num.toFixed(2).toString()
             }
         },
-    }
+    },
 }
 </script>
 
@@ -228,31 +226,32 @@ export default {
     // overflow-y: auto;
     .row-individual__item:nth-child(1) {
         .row-individual__num {
-            background-color: #EBE31D;
+            background-color: #ebe31d;
         }
     }
     .row-individual__item:nth-child(2) {
         .row-individual__num {
-            background-color: #99A4A5;
+            background-color: #99a4a5;
         }
     }
     .row-individual__item:nth-child(3) {
         .row-individual__num {
-            background-color: #BE8E10;
+            background-color: #be8e10;
         }
-    }.row-command__item:nth-child(1) {
+    }
+    .row-command__item:nth-child(1) {
         .row-command__num {
-            background-color: #EBE31D;
+            background-color: #ebe31d;
         }
     }
     .row-command__item:nth-child(2) {
         .row-command__num {
-            background-color: #99A4A5;
+            background-color: #99a4a5;
         }
     }
     .row-command__item:nth-child(3) {
         .row-command__num {
-            background-color: #BE8E10;
+            background-color: #be8e10;
         }
     }
 }
@@ -287,7 +286,7 @@ export default {
     }
 }
 
-.row-individual  {
+.row-individual {
     &__item {
         display: flex;
         max-height: 88px;
@@ -295,7 +294,6 @@ export default {
         margin: 17px 0;
         background: #fff;
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-        
     }
 
     &__num {
@@ -307,7 +305,6 @@ export default {
         font-size: 48px;
         width: 81px;
         height: 88px;
-        
     }
 
     &__info {
@@ -352,7 +349,6 @@ export default {
         margin: 17px 0;
         background: #fff;
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-        
     }
 
     &__num {
@@ -364,7 +360,6 @@ export default {
         font-size: 64px;
         width: 81px;
         height: 88px;
-        
     }
 
     &__info {
