@@ -3,8 +3,10 @@
         <main class="main">
             <div class='rating-menu'>
                 <div class="command-type">
-                    <h3 class='selected'>Индивидуальный</h3>
-                    <h3>Командный</h3>
+                    <!-- <h3 class='selected'>Индивидуальный</h3> -->
+                    <router-link to='/individual'>Индивидуальный</router-link>
+                    <router-link to='/command'>Командный</router-link>
+                    <!-- <h3>Командный</h3> -->
                 </div>
                 <div class="period">
                     <span class="period__arrow">
@@ -18,6 +20,7 @@
                     </span>
                 </div>
             </div>
+            <router-view></router-view>
             <!-- БЛОК ИНДИВИДУАЛЬНОГО РЕЙТИНГА -->
             <div class="rating-table">
                 <div class="row-individual">
@@ -48,10 +51,10 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> 
 
             <!-- БЛОК КОМАНДНОГО РЕЙТИНГА -->
-            <div class="rating-table">
+             <div class="rating-table">
                 <div class="row-command">
                     <div
                         v-for="raiting in teamRaiting"
@@ -84,9 +87,79 @@
 
 <script>
 import PeriodArrowSvg from '@/assets/icons/raiting/period-arrow.svg'
-
 import { mapGetters } from 'vuex'
 
+const individual = {
+    template: `
+    <div class="rating-table">
+                <div class="row-individual">
+                    <div
+                        v-for="raiting in individualRaiting"
+                        :key="raiting.id"
+                        class="row-individual__item"
+                    >
+                        <div class="row-individual__num">{{ raiting.id }}</div>
+                        <div class="row-individual__info">
+                            <img
+                                class="row-individual__img"
+                                :src="raiting.img"
+                                alt=""
+                            />
+                            <div class="row-individual__wrap">
+                                <h4 class="row-individual__title">
+                                    {{ raiting.name }}
+                                </h4>
+                                <span class="row-individual__description">Отдел: {{
+                                    raiting.description
+                                }}</span>
+                                <p class="row-individual__raiting">
+                                    Рейтинг
+                                    {{ toNumberString(raiting.raitingValue) }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    `
+}
+const command = {
+    template: `
+    <div class="rating-table">
+                <div class="row-command">
+                    <div
+                        v-for="raiting in teamRaiting"
+                        :key="raiting.id"
+                        class="row-command__item"
+                    >
+                        <div class="row-command__num">{{ raiting.id }}</div>
+                        <div class="row-command__info">
+                            <img
+                                class="row-command__img"
+                                :src="raiting.img"
+                                alt=""
+                            />
+                            <div class="row-command__wrap">
+                                <h4 class="row-command__title">
+                                    {{ raiting.name }}
+                                </h4>
+                                <p class="row-command__raiting">
+                                    Рейтинг
+                                    {{ toNumberString(raiting.raitingValue) }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    `
+}
+
+const routes = [
+    {path: '/',component: individual},
+    {path: '/command',component: command}
+]
+routes
 export default {
     name: 'Raiting',
     components: { PeriodArrowSvg },
@@ -105,7 +178,7 @@ export default {
         },
         isLoading: function() {
             return this.getIsLoading
-        },
+        }
     },
     methods: {
         toNumberString: function(num) {
@@ -115,7 +188,7 @@ export default {
                 return num.toFixed(2).toString()
             }
         },
-    },
+    }
 }
 </script>
 
