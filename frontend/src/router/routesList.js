@@ -43,8 +43,8 @@ const routesList = {
             },
         },
     },
-    raitingPage: {
-        path: '/raiting',
+    ratingPage: {
+        path: '/rating',
         header: 'Рейтинг',
     },
     testsPage: {

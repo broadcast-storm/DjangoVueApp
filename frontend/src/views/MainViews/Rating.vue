@@ -20,27 +20,27 @@
                 <!-- БЛОК ИНДИВИДУАЛЬНОГО РЕЙТИНГА -->
                 <div class="b-right">
                     <div
-                        v-for="raiting in individualRaiting"
-                        :key="raiting.id"
+                        v-for="rating in individualRating"
+                        :key="rating.id"
                         class="b-right__item"
                     >
-                        <div class="b-right__num">{{ raiting.id }}</div>
+                        <div class="b-right__num">{{ rating.id }}</div>
                         <div class="b-right__info">
                             <img
                                 class="b-right__img"
-                                :src="raiting.img"
+                                :src="rating.img"
                                 alt=""
                             />
                             <div class="b-right__wrap">
                                 <h4 class="b-right__title">
-                                    {{ raiting.name }}
+                                    {{ rating.name }}
                                 </h4>
                                 <span class="b-right__description">{{
-                                    raiting.description
+                                    rating.description
                                 }}</span>
-                                <p class="b-right__raiting">
+                                <p class="b-right__rating">
                                     Рейтинг
-                                    {{ toNumberString(raiting.raitingValue) }}
+                                    {{ toNumberString(rating.ratingValue) }}
                                 </p>
                             </div>
                         </div>
@@ -67,24 +67,24 @@
 
                 <div class="b-left">
                     <div
-                        v-for="raiting in teamRaiting"
-                        :key="raiting.id"
+                        v-for="rating in teamRating"
+                        :key="rating.id"
                         class="b-left__item"
                     >
-                        <div class="b-left__num">{{ raiting.id }}</div>
+                        <div class="b-left__num">{{ rating.id }}</div>
                         <div class="b-left__info">
                             <img
                                 class="b-left__img"
-                                :src="raiting.img"
+                                :src="rating.img"
                                 alt=""
                             />
                             <div class="b-left__wrap">
                                 <h4 class="b-left__title">
-                                    {{ raiting.name }}
+                                    {{ rating.name }}
                                 </h4>
-                                <p class="b-left__raiting">
+                                <p class="b-left__rating">
                                     Рейтинг
-                                    {{ toNumberString(raiting.raitingValue) }}
+                                    {{ toNumberString(rating.ratingValue) }}
                                 </p>
                             </div>
                         </div>
@@ -96,25 +96,25 @@
 </template>
 
 <script>
-import PeriodArrowSvg from '@/assets/icons/raiting/period-arrow.svg'
+import PeriodArrowSvg from '@/assets/icons/rating/period-arrow.svg'
 
 import { mapGetters } from 'vuex'
 
 export default {
-    name: 'Raiting',
+    name: 'Rating',
     components: { PeriodArrowSvg },
     props: {},
     computed: {
-        ...mapGetters('raiting', [
-            'getIndividRaiting',
-            'getTeamRaiting',
+        ...mapGetters('rating', [
+            'getIndividRating',
+            'getTeamRating',
             'getIsLoading',
         ]),
-        individualRaiting: function() {
-            return this.getIndividRaiting
+        individualRating: function() {
+            return this.getIndividRating
         },
-        teamRaiting: function() {
-            return this.getTeamRaiting
+        teamRating: function() {
+            return this.getTeamRating
         },
         isLoading: function() {
             return this.getIsLoading
@@ -221,7 +221,7 @@ export default {
     }
 
     &__title,
-    &__raiting {
+    &__rating {
         font-size: 18px;
         line-height: 16px;
         color: #7d849a;
@@ -237,7 +237,7 @@ export default {
         color: #7d849a;
     }
 
-    &__raiting {
+    &__rating {
         margin-top: 7px;
     }
 }
@@ -277,7 +277,7 @@ export default {
     }
 
     &__title,
-    &__raiting {
+    &__rating {
         font-size: 18px;
         line-height: 16px;
         color: #7d849a;
@@ -287,7 +287,7 @@ export default {
         color: #1a2740;
     }
 
-    &__raiting {
+    &__rating {
         margin-top: 27px;
     }
 }

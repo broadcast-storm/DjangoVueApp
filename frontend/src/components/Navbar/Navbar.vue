@@ -119,7 +119,7 @@ import CompetitionsSvg from './icons/CompetitionsSvg'
 import ProfileSvg from './icons/ProfileSvg'
 import MainQuestSvg from './icons/MainQuestSvg'
 import StatisticsSvg from './icons/StatisticsSvg'
-import RaitingSvg from './icons/RaitingSvg'
+import RatingSvg from './icons/RatingSvg'
 import ShopSvg from './icons/ShopSvg'
 import TestsSvg from './icons/TestsSvg'
 import ExitSvg from './icons/ExitSvg'
@@ -138,7 +138,7 @@ export default {
         ProfileSvg,
         MainQuestSvg,
         StatisticsSvg,
-        RaitingSvg,
+        RatingSvg,
         ShopSvg,
         TestsSvg,
         ExitSvg,
@@ -191,8 +191,8 @@ export default {
                     fillColor: null,
                 },
                 {
-                    path: routesList.raitingPage.path,
-                    icon: RaitingSvg,
+                    path: routesList.ratingPage.path,
+                    icon: RatingSvg,
                     name: 'Рейтинг',
                     viewBoxWidth: 18,
                     viewBoxHeight: 24,
@@ -220,8 +220,8 @@ export default {
             ],
             linksMobile: [
                 {
-                    path: routesList.raitingPage.path,
-                    icon: RaitingSvg,
+                    path: routesList.ratingPage.path,
+                    icon: RatingSvg,
                     name: 'Рейтинг',
                     viewBoxWidth: 18,
                     viewBoxHeight: 24,

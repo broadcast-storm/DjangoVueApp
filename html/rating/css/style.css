@@ -141,7 +141,7 @@ ul li {
   margin-right: 11px;
 }
 
-.b-right__title, .b-right__raiting {
+.b-right__title, .b-right__rating {
   font-size: 18px;
   line-height: 16px;
   color: #7D849A;
@@ -157,7 +157,7 @@ ul li {
   color: #7D849A;
 }
 
-.b-right__raiting {
+.b-right__rating {
   margin-top: 7px;
 }
 
@@ -209,7 +209,7 @@ ul li {
   margin-right: 11px;
 }
 
-.b-left__title, .b-left__raiting {
+.b-left__title, .b-left__rating {
   font-size: 18px;
   line-height: 16px;
   color: #7D849A;
@@ -219,6 +219,6 @@ ul li {
   color: #1A2740;
 }
 
-.b-left__raiting {
+.b-left__rating {
   margin-top: 27px;
 }
