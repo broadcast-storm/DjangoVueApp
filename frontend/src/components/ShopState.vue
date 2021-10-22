@@ -59,7 +59,7 @@ export default {
         .shop__user-stats {
             background-color: #fff;
             box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-            padding: 35px 0 40px 24px;
+            padding: 14px 0 25px 24px;
             margin-bottom: 34px;
             font-size: 24px;
             line-height: 16px;
@@ -90,7 +90,7 @@ export default {
             height: 62px;
             display: flex;
             align-items: center;
-            width: 200px;
+            width: 276px;
             font-size: 24px;
             line-height: 16px;
             color: #545969;
@@ -102,6 +102,7 @@ export default {
                 height: 24px;
                 bottom: 31px;
                 left: 156px;
+                margin-left: 75px;
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -113,8 +114,9 @@ export default {
             }
             .cart-icon {
                 width: 59.4px;
-                height: 53.46px;
-                padding-left: 12.5px;
+                height: 60px;
+                margin-left: 80px;
+                padding-left: 4px;
             }
         }
     }
