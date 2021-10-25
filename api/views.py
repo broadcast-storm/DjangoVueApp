@@ -166,7 +166,7 @@ def userFilterForCompetition(request):
 # @ensure_csrf_cookie
 def unresolved_test(request):
     """
-    List all code snippets, or create a new snippet.
+    Get запрос возвращает все соревнования без пользователей
     """
     ##################
     # serializer без user
@@ -183,7 +183,7 @@ def unresolved_test(request):
 # @ensure_csrf_cookie
 def test_questions(request):
     """
-    List all code snippets, or create a new snippet.
+    Возвращает впоросы у определенного теста и ответы без подсвечивания правильного, если вопросы без вариантов ответа, тогда ответ не отправяется. требует переменную test_id в которую нужно записать id у теста
     """
     if request.method == 'GET':
         question_choice_id = []
@@ -218,7 +218,10 @@ def test_questions(request):
 # @ensure_csrf_cookie
 def test_post(request):
     """
-    List all code snippets, or create a new snippet.
+    Post запрос который завершает тест, засчитывает ответы, добавляет выигранные деньги, энергию
+    Требует answers_simple список c id ответов
+    Требует answers_multi список списков с id ответов 
+    Требует answers_text текстовый ответ 
     """
     # TODO controll transactios
     if request.method == 'POST':
@@ -265,10 +268,6 @@ def test_post(request):
             ]
             true_answers_multi = Answer.objects.filter(
                 question__in=request_answers_multi_questions).filter(isCorrect=True).values("id", "isCorrect", "question")
-            print("true multi")
-            print(true_answers_multi)
-            print("Req multi")
-            print(request_answers_multi)
             for request_answer_multi in request_answers_multi:
                 true_answers_array = []
                 for true_answer_multi in true_answers_multi:
@@ -284,20 +283,15 @@ def test_post(request):
                         request_answer_multi.get("question_id"))
                     wrong_answers += 1
                 true_answers_array.clear()
-            print(true_questions_multi)
 
         ######################
         # TEXT QUESTION
         # ###############
         request_answers_text = request.data.get("answers_text")
-        print("req text")
-        print(request_answers_text)
         if request_answers_text:
             request_answers_text_questions = [
                 a.get("question_id") for a in request_answers_text
             ]
-            print("request_answers_text_questions")
-            print(request_answers_text_questions)
             true_answers_text = Answer.objects.filter(
                 question__in=request_answers_text_questions).filter(isCorrect=True).values("id", "isCorrect", "question", "text")
             for request_answer_text in request_answers_text:
@@ -305,8 +299,6 @@ def test_post(request):
                 for true_answer_text in true_answers_text:
                     if true_answer_text.get("question") == request_answer_text.get("question_id"):
                         true_answer = str(true_answer_text.get("text"))
-                print(true_answer + '  ' +
-                      str(request_answer_text.get("answer_text")))
                 if true_answer == str(request_answer_text.get("answer_text")):
                     true_questions_text.append(
                         request_answer_text.get("question_id"))
@@ -316,12 +308,6 @@ def test_post(request):
                         request_answer_text.get("question_id"))
                     wrong_answers += 1
                 true_answer = None
-            print("Text true")
-            print(true_answers_text)
-            print(true_questions_text)
-
-        print(right_answers)
-
         if points_to_complete <= right_answers:
             status = "Выполнен"
         else:
@@ -330,7 +316,6 @@ def test_post(request):
         testUser = TestUser(test=test, user=user, status=status,
                             rightAnswersCount=right_answers, points=right_answers)
         testUser.save()
-        print(testUser)
         for true_question_simple in true_questions_simple:
             testUserAnswer = TestUserAnswer(
                 testUser=testUser, question_id=true_question_simple, isCorrect=True)
@@ -374,7 +359,8 @@ def test_post(request):
 # @ensure_csrf_cookie
 def shop(request):
     """
-    List all code snippets, or create a new snippet.
+    GET запрос - выводит товары которые есть в наличии и их стоимость
+    POST запрос требует переменную массив ids в которой прописаны id товаров на покупку
     """
     # Выводит товары которые есть в наличии и их стоимость
     if request.method == 'GET':
