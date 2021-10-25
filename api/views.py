@@ -176,6 +176,29 @@ def unresolved_test(request):
         serializer = TestsWithoutUsersSerializer(tests, many=True)
         return JsonResponse(serializer.data, safe=False)
 
+@api_view(['GET'])
+# For prod use IsAuthenticated . AllowAny using for Debug
+@permission_classes([AllowAny])
+# @ensure_csrf_cookie
+def users_select(request):
+    """
+    Поиск будет case sensetive будут искаться подстроки в строке
+    Get запрос возвращает 10 пользователей
+    Возможна фильтрация по имени, необходимо передать name
+    После передачи имени можно передать фамилию surname
+    """
+    if request.method == 'GET':
+        if request.data.get('name', '') and request.data.get('surname', ''):
+            #user = UserProfile.objects.filter(name__icontains=request.data.get('name'), surname__icontains=request.data.get('surname')).order_by('-rating').all()[:10]
+            user = UserProfile.objects.filter(name__icontains=request.data.get('name'), surname__icontains=request.data.get('surname')).all()[:10]
+        elif request.data.get('name', ''):
+            user = UserProfile.objects.filter(name__contains=request.data.get('name')).all()[:10]
+            #user = UserProfile.objects.filter(name__icontains=request.data.get('name')).order_by('-rating').all()[:10]
+        else:
+            user = UserProfile.objects.all()[:10]
+            #user = UserProfile.objects.order_by('-rating').all()[:10]
+        serializer = UserProfileSerializer(user, many=True)
+        return JsonResponse(serializer.data, safe=False)
 
 @api_view(['GET'])
 # For prod use IsAuthenticated . AllowAny using for Debug

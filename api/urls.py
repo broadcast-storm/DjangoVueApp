@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 from .views import JobPositionViewSet, DivisionViewSet, UserProfileViewSet, StatisticsViewSet, \
     TaskViewSet, WeeklyTaskViewSet, TeamsViewSet,  competition, ProductViewSet, shop, LogoutView, LogoutAllView, \
     TestsViewSet, QuestionsViewSet, AnswersViewSet, TestBlockViewSet, AchievementViewSet, RequirenmentToGetAchieveViewSet, \
-    AchieveRequirenmentStatusViewSet, AchievementUserStatusViewSet, update_user_money_energy, userFilterForCompetition, get_quests, get_daily_tasks, get_weekly_tasks, TestUserViewSet, unresolved_test, QuestionThemeViewSet, test_questions, test_post
+    AchieveRequirenmentStatusViewSet, AchievementUserStatusViewSet, update_user_money_energy, userFilterForCompetition, get_quests, get_daily_tasks, get_weekly_tasks, TestUserViewSet, unresolved_test, QuestionThemeViewSet, test_questions, test_post, users_select
 
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -50,7 +50,8 @@ urlpatterns = [
          name='user-filter-for-competitions'),
     path('get-quests', get_quests, name='get-quests'),
     path('get-daily-tasks', get_daily_tasks, name='get-daily-tasks'),
-    path('get-weekly-tasks', get_weekly_tasks, name='get-weekly-tasks'), ]
+    path('get-weekly-tasks', get_weekly_tasks, name='get-weekly-tasks'),
+    path('users-select', users_select, name='users_select') ]
 
 
 # path('competition/currentcompetitions', currentcompetitions, name = 'currentcompetitions')
