@@ -581,6 +581,23 @@ class Competition(models.Model):
         verbose_name_plural = "соревнования"
 
 
+class CompetitionRequest(models.Model):
+    SENT = 'sent'
+    ACCEPTED = 'accepted'
+    DISCARDED = 'discarded'
+
+    REQUEST_STATUS_CHOICE = (
+        (SENT, 'Отправлено'),
+        (ACCEPTED, 'accepted'),
+        (DISCARDED, 'отклонено'),
+    )
+    sender = models.OneToOneField(to=UserProfile, on_delete=models.CASCADE, related_name='sender')
+    receiver = models.OneToOneField(to=UserProfile, on_delete=models.CASCADE, related_name='receiver')
+    send_time = models.DateTimeField(auto_now_add=True)
+    decay_time = models.DateTimeField(blank=False, null=False)
+    status = models.CharField(max_length=10, choices=REQUEST_STATUS_CHOICE, default='sent')
+
+
 class CompetitionUser(models.Model):
 
     competition = models.ForeignKey(
@@ -589,6 +606,7 @@ class CompetitionUser(models.Model):
         'UserProfile', on_delete=models.CASCADE, related_name='first_name')
     second_user = models.ForeignKey(
         'UserProfile', on_delete=models.CASCADE, related_name='second_name')
+    request = models.ManyToManyField(CompetitionRequest, verbose_name='Запрос на участие в соревновании')
 
 ##############################################
 # ДОСТИЖЕНИЯ
