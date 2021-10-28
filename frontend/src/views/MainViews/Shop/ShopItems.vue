@@ -121,7 +121,7 @@
                 v-model="searchText"
                 class="input_item_find"
                 type="text"
-            /><SearchSvg class="input_svg" />
+            /><s class="input_svg" />
             <div class="filter_text">Цена:</div>
             <div class="filter_text_price">От До</div>
             <div>
@@ -129,12 +129,12 @@
                     v-model.number="minPrice"
                     type="number"
                     class="input_item"
-                /><SearchSvg class="input_svg" />
+                /><s class="input_svg" />
                 <input
                     v-model.number="maxPrice"
                     type="number"
                     class="input_item"
-                /><SearchSvg class="input_svg" />
+                /><s class="input_svg" />
             </div>
         </div>
     </div>

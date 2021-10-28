@@ -1,4 +1,5 @@
 <template>
+
     <div class="header-container">
         <h1 class="header-container__page-name">
             {{ pageName }}
@@ -14,21 +15,21 @@
                 <CoinSvg class="user-statistics__icon" />
                 <span
                     class="user-statistics__text user-statistics__text_color_yellow"
-                    >{{ statistics.money }}</span
+                    >{{ String(statistics.money).replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ') }}</span
                 >
             </div>
             <div class="user-statistics__stat-block">
                 <LightningSvg class="user-statistics__icon" />
                 <span
                     class="user-statistics__text user-statistics__text_color_green"
-                    >{{ statistics.energy }}</span
+                    >{{ String(statistics.energy).replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ') }}</span
                 >
             </div>
             <div class="user-statistics__stat-block">
                 <HeartSvg class="user-statistics__icon" />
                 <span
                     class="user-statistics__text user-statistics__text_color_red"
-                    >{{ statistics.health }}</span
+                    >{{ String(statistics.health).replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ') }}</span
                 >
             </div>
         </div>
@@ -82,8 +83,9 @@ export default {
 
 <style lang="scss" scoped>
 .header-container {
-    background-color: $basic-grey;
+    background-color: #5F66A9;
     width: 100%;
+    height: 91px;
     position: absolute;
     z-index: 1000;
     right: 0;
@@ -92,12 +94,15 @@ export default {
     box-sizing: border-box;
     justify-content: space-between;
     align-items: center;
-    padding: 30px 90px;
-    border: 1px solid #b1b2b7;
+    padding: 28px 33px 28px 140px;
     &__page-name {
-        font-size: 24px;
+        width: 157px;
+        height: 30px;
+        font-family: 'Advent Pro', sans-serif;
+        font-size: 36px;
+        font-weight: 600;
         line-height: 28px;
-        color: $brand-night;
+        color: #F0F3FE;
     }
 
     .user-statistics {
@@ -112,20 +117,21 @@ export default {
             height: 20px;
         }
         &__text {
-            font-size: 16px;
+            font-family: 'Advent Pro', sans-serif;
+            font-weight: bold;
+            font-size: 20px;
             line-height: 16px;
-            color: #f2af49;
             margin-left: 5px;
 
             &_color {
                 &_red {
-                    color: $text-color-red;
+                    color: #FF8A8A;
                 }
                 &_yellow {
-                    color: $text-color-yellow;
+                    color: #EDD92A;
                 }
                 &_green {
-                    color: $text-color-green;
+                    color: #B0DCF5;
                 }
             }
         }
