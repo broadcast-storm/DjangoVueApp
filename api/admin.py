@@ -112,6 +112,7 @@ class SubTask(admin.StackedInline):
         'title',
         'description',
         'isTeamTask',
+        'deadline',
         ('money',
          'health',
          'energy'),
@@ -146,6 +147,7 @@ class TaskAdmin(admin.ModelAdmin):
             'title',
             'description',
             'isTeamTask',
+            'deadline',
             ('money',
              'health',
              'energy'),
@@ -206,8 +208,17 @@ class WeeklyTaskAdmin(admin.ModelAdmin):
     filter_horizontal = ()
 
 
+class TasksInline(admin.StackedInline):
+    extra = 0
+    model = MainQuest.tasks.through
+    fields = (
+        ('task',
+         'parentTask')
+    )
+
+
 class MainQuestAdmin(admin.ModelAdmin):
-    list_display = ('title', 'description', 'accessLevel')
+    list_display = ('title', 'description', 'accessLevel', 'is_active', 'time_left')
     search_fields = ('title',)
     fieldsets = ((None, {
         'fields': (
@@ -225,6 +236,7 @@ class MainQuestAdmin(admin.ModelAdmin):
              'updated_at'),
         )
     }))
+    inlines = [TasksInline, ]
     list_filter = ('title', 'accessLevel')
     filter_horizontal = ()
     readonly_fields = ('created_at', 'updated_at')
