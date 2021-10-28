@@ -1,8 +1,5 @@
-import datetime
-
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-from django.utils import timezone
 from taggit.managers import TaggableManager
 
 
@@ -13,240 +10,240 @@ from taggit.managers import TaggableManager
 ##############################################
 
 class JobPosition(models.Model):
-    title = models.CharField(
-        max_length=120, verbose_name="Название должности", unique=True)
-    description = models.TextField(
-        verbose_name="Описание трудовых обязанностей")
+	title = models.CharField(
+		max_length=120, verbose_name="Название должности", unique=True)
+	description = models.TextField(
+		verbose_name="Описание трудовых обязанностей")
 
-    class Meta:
-        verbose_name = "должность"
-        verbose_name_plural = "должности"
+	class Meta:
+		verbose_name = "должность"
+		verbose_name_plural = "должности"
 
-    def __str__(self):
-        return self.title
+	def __str__(self):
+		return self.title
 
 
 class Division(models.Model):
-    title = models.CharField(
-        max_length=120, verbose_name="Подразделение", unique=True)
-    description = models.TextField(
-        verbose_name="Описание подразделения сотрудников")
+	title = models.CharField(
+		max_length=120, verbose_name="Подразделение", unique=True)
+	description = models.TextField(
+		verbose_name="Описание подразделения сотрудников")
 
-    class Meta:
-        verbose_name = "подразделение"
-        verbose_name_plural = "подразделения"
+	class Meta:
+		verbose_name = "подразделение"
+		verbose_name_plural = "подразделения"
 
-    def __str__(self):
-        return self.title
+	def __str__(self):
+		return self.title
 
 
 class UserProfileManager(BaseUserManager):
-    def create_user(self, email, username, name, surname, password=None):
-        if not email:
-            raise ValueError('Users must have an email address')
-        if not username:
-            raise ValueError('Users must have an username')
-        if not name:
-            raise ValueError('Users must have an name')
-        if not surname:
-            raise ValueError('Users must have an surname')
+	def create_user(self, email, username, name, surname, password=None):
+		if not email:
+			raise ValueError('Users must have an email address')
+		if not username:
+			raise ValueError('Users must have an username')
+		if not name:
+			raise ValueError('Users must have an name')
+		if not surname:
+			raise ValueError('Users must have an surname')
 
-        user = self.model(
-            email=self.normalize_email(email),
-            username=username,
-            surname=surname,
-            name=name,
-        )
+		user = self.model(
+			email=self.normalize_email(email),
+			username=username,
+			surname=surname,
+			name=name,
+		)
 
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
+		user.set_password(password)
+		user.save(using=self._db)
+		return user
 
-    def create_superuser(self, email, username, name, surname, password=None):
+	def create_superuser(self, email, username, name, surname, password=None):
 
-        user = self.create_user(
-            email=self.normalize_email(email),
-            password=password,
-            username=username,
-            surname=surname,
-            name=name,
-        )
-        user.is_admin = True
-        user.userType = 'admin'
-        user.save(using=self._db)
-        return user
+		user = self.create_user(
+			email=self.normalize_email(email),
+			password=password,
+			username=username,
+			surname=surname,
+			name=name,
+		)
+		user.is_admin = True
+		user.userType = 'admin'
+		user.save(using=self._db)
+		return user
 
 
 class UserProfile(AbstractBaseUser):
-    ADMIN = 'admin'
-    EXPERT = 'expert'
-    EMPLOYEE = 'employee'
-    GAMEMASTER = 'gamemaster'
-    USER_TYPE_CHOICES = (
-        (ADMIN, 'Администратор'),
-        (EXPERT, 'Эксперт'),
-        (EMPLOYEE, 'Сотрудник'),
-        (GAMEMASTER, 'Гейм-мастер'),
-    )
+	ADMIN = 'admin'
+	EXPERT = 'expert'
+	EMPLOYEE = 'employee'
+	GAMEMASTER = 'gamemaster'
+	USER_TYPE_CHOICES = (
+		(ADMIN, 'Администратор'),
+		(EXPERT, 'Эксперт'),
+		(EMPLOYEE, 'Сотрудник'),
+		(GAMEMASTER, 'Гейм-мастер'),
+	)
 
-    email = models.EmailField(verbose_name="email", max_length=60, unique=True)
-    username = models.CharField(max_length=30, unique=True)
-    date_joined = models.DateTimeField(
-        auto_now_add=True, verbose_name="Зарегистрировался")
-    last_login = models.DateTimeField(auto_now=True, verbose_name="Был в сети")
-    is_admin = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
-    is_superuser = models.BooleanField(default=False)
+	email = models.EmailField(verbose_name="email", max_length=60, unique=True)
+	username = models.CharField(max_length=30, unique=True)
+	date_joined = models.DateTimeField(
+		auto_now_add=True, verbose_name="Зарегистрировался")
+	last_login = models.DateTimeField(auto_now=True, verbose_name="Был в сети")
+	is_admin = models.BooleanField(default=False)
+	is_active = models.BooleanField(default=True)
+	is_staff = models.BooleanField(default=False)
+	is_superuser = models.BooleanField(default=False)
 
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email', 'name', 'surname']
+	USERNAME_FIELD = 'username'
+	REQUIRED_FIELDS = ['email', 'name', 'surname']
 
-    objects = UserProfileManager()
+	objects = UserProfileManager()
 
-    # IDs
+	# IDs
 
-    jobPosition = models.ForeignKey(JobPosition, on_delete=models.CASCADE,
-                                    null=True, blank=True, verbose_name="Должность")
-    division = models.ForeignKey(Division, on_delete=models.CASCADE,
-                                 null=True, blank=True, verbose_name="Подразделение")
-    # IDs
+	jobPosition = models.ForeignKey(JobPosition, on_delete=models.CASCADE,
+	                                null=True, blank=True, verbose_name="Должность")
+	division = models.ForeignKey(Division, on_delete=models.CASCADE,
+	                             null=True, blank=True, verbose_name="Подразделение")
+	# IDs
 
-    userType = models.CharField(max_length=20, choices=USER_TYPE_CHOICES, default=EMPLOYEE,
-                                verbose_name="Тип пользователя")
-    name = models.CharField(max_length=100, blank=True, verbose_name="Имя")
-    surname = models.CharField(
-        max_length=100, blank=True, verbose_name="Фамилия")
-    patronymic = models.CharField(
-        max_length=100, blank=True, null=True, verbose_name="Отчество")
-    birthDate = models.DateField(
-        blank=True, null=True, verbose_name="Дата рождения")
-    description = models.TextField(
-        max_length=200, blank=True, null=True, verbose_name="О себе")
-    photo = models.ImageField(verbose_name="Фото", blank=True, null=True, )
-    level = models.IntegerField(default=0, verbose_name="Уровень")
+	userType = models.CharField(max_length=20, choices=USER_TYPE_CHOICES, default=EMPLOYEE,
+	                            verbose_name="Тип пользователя")
+	name = models.CharField(max_length=100, blank=True, verbose_name="Имя")
+	surname = models.CharField(
+		max_length=100, blank=True, verbose_name="Фамилия")
+	patronymic = models.CharField(
+		max_length=100, blank=True, null=True, verbose_name="Отчество")
+	birthDate = models.DateField(
+		blank=True, null=True, verbose_name="Дата рождения")
+	description = models.TextField(
+		max_length=200, blank=True, null=True, verbose_name="О себе")
+	photo = models.ImageField(verbose_name="Фото", blank=True, null=True, )
+	level = models.IntegerField(default=0, verbose_name="Уровень")
 
-    money = models.IntegerField(default=0, verbose_name="Кол-во Валюты")
-    health = models.IntegerField(default=0, verbose_name="Кол-во HP")
-    energy = models.IntegerField(default=0, verbose_name="Кол-во Энергии")
+	money = models.IntegerField(default=0, verbose_name="Кол-во Валюты")
+	health = models.IntegerField(default=0, verbose_name="Кол-во HP")
+	energy = models.IntegerField(default=0, verbose_name="Кол-во Энергии")
 
-    quality = models.FloatField(default=0.0, verbose_name="Качество")
-    productivity = models.FloatField(
-        default=0.0, verbose_name="Продуктивность")
+	quality = models.FloatField(default=0.0, verbose_name="Качество")
+	productivity = models.FloatField(
+		default=0.0, verbose_name="Продуктивность")
 
-    competitionCount = models.IntegerField(
-        default=0, verbose_name="Кол-во соревнований")
-    winCompetitionCount = models.IntegerField(
-        default=0, verbose_name="Кол-во выиграных соревнований")
+	competitionCount = models.IntegerField(
+		default=0, verbose_name="Кол-во соревнований")
+	winCompetitionCount = models.IntegerField(
+		default=0, verbose_name="Кол-во выиграных соревнований")
 
-    class Meta:
-        verbose_name = "пользователь"
-        verbose_name_plural = "пользователи"
+	class Meta:
+		verbose_name = "пользователь"
+		verbose_name_plural = "пользователи"
 
-    def __str__(self):
-        return self.name + ' ' + self.surname
+	def __str__(self):
+		return self.name + ' ' + self.surname
 
-    def has_perm(self, perm, obj=None):
-        return self.is_admin
+	def has_perm(self, perm, obj=None):
+		return self.is_admin
 
-    def has_module_perms(self, app_label):
-        return True
+	def has_module_perms(self, app_label):
+		return True
 
-    @property
-    def is_staff(self):
-        return self.is_admin
+	@property
+	def is_staff(self):
+		return self.is_admin
 
 
 class Statistics(models.Model):
-    # IDs
+	# IDs
 
-    user = models.OneToOneField(UserProfile, on_delete=models.CASCADE, verbose_name="Пользователь",
-                                related_name="statistics", related_query_name='statistics')
+	user = models.OneToOneField(UserProfile, on_delete=models.CASCADE, verbose_name="Пользователь",
+	                            related_name="statistics", related_query_name='statistics')
 
-    # user = models.ForeignKey(
-    #    UserProfile, on_delete=models.CASCADE, verbose_name="Пользователь")
+	# user = models.ForeignKey(
+	#    UserProfile, on_delete=models.CASCADE, verbose_name="Пользователь")
 
-    # IDs
+	# IDs
 
-    level = models.IntegerField(default=0, verbose_name="Уровень")
-    quality = models.FloatField(default=0.0, verbose_name="Качество")
-    productivity = models.FloatField(
-        default=0.0, verbose_name="Продуктивность")
-    completedTests = models.IntegerField(
-        default=0, verbose_name="Кол-во выполненых тестов")
-    completedTasks = models.IntegerField(
-        default=0, verbose_name="Кол-во выполненых задач")
-    completedQuests = models.IntegerField(
-        default=0, verbose_name="Кол-во выполненых квестов")
-    achievements = models.IntegerField(default=0, verbose_name="Кол-во ачивок")
-    competitions = models.IntegerField(
-        default=0, verbose_name="Кол-во соревнований")
-    competitionWins = models.IntegerField(
-        default=0, verbose_name="Кол-во выиграных соревнований")
+	level = models.IntegerField(default=0, verbose_name="Уровень")
+	quality = models.FloatField(default=0.0, verbose_name="Качество")
+	productivity = models.FloatField(
+		default=0.0, verbose_name="Продуктивность")
+	completedTests = models.IntegerField(
+		default=0, verbose_name="Кол-во выполненых тестов")
+	completedTasks = models.IntegerField(
+		default=0, verbose_name="Кол-во выполненых задач")
+	completedQuests = models.IntegerField(
+		default=0, verbose_name="Кол-во выполненых квестов")
+	achievements = models.IntegerField(default=0, verbose_name="Кол-во ачивок")
+	competitions = models.IntegerField(
+		default=0, verbose_name="Кол-во соревнований")
+	competitionWins = models.IntegerField(
+		default=0, verbose_name="Кол-во выиграных соревнований")
 
-    created_at = models.DateTimeField(
-        auto_now_add=True, verbose_name="Время сбора статистики")
+	created_at = models.DateTimeField(
+		auto_now_add=True, verbose_name="Время сбора статистики")
 
-    class Meta:
-        verbose_name = "статистика пользователя"
-        verbose_name_plural = "статистика пользователей"
+	class Meta:
+		verbose_name = "статистика пользователя"
+		verbose_name_plural = "статистика пользователей"
 
-    def __str__(self):
-        return str(self.id)
+	def __str__(self):
+		return str(self.id)
 
 
 class Team(models.Model):
-    # IDs
+	# IDs
 
-    users = models.ManyToManyField(UserProfile, through='TeamMember',
-                                   through_fields=('team', 'user'))
-    division = models.ForeignKey(
-        Division, on_delete=models.CASCADE, verbose_name="Подразделение", )
+	users = models.ManyToManyField(UserProfile, through='TeamMember',
+	                               through_fields=('team', 'user'))
+	division = models.ForeignKey(
+		Division, on_delete=models.CASCADE, verbose_name="Подразделение", )
 
-    # IDs
+	# IDs
 
-    title = models.CharField(max_length=120, verbose_name="Название команды")
-    description = models.TextField(verbose_name="Описание команды")
-    maxUsersCount = models.IntegerField(
-        default=5, verbose_name="Максимальное кол-во участников")
+	title = models.CharField(max_length=120, verbose_name="Название команды")
+	description = models.TextField(verbose_name="Описание команды")
+	maxUsersCount = models.IntegerField(
+		default=5, verbose_name="Максимальное кол-во участников")
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+	created_at = models.DateTimeField(auto_now_add=True)
+	updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return str(self.title)
+	def __str__(self):
+		return str(self.title)
 
-    class Meta:
-        verbose_name = "команда"
-        verbose_name_plural = "команды"
+	class Meta:
+		verbose_name = "команда"
+		verbose_name_plural = "команды"
 
 
 class TeamMember(models.Model):
-    LEADER = 'leader'
-    MEMBER = 'member'
-    LEF_TEAM = 'left_team'
-    MEMBER_TYPE_CHOICES = (
-        (LEADER, 'Лидер команды'),
-        (MEMBER, 'Обычный участник'),
-        (LEF_TEAM, 'Ушел из команды'),
-    )
-    # IDs
+	LEADER = 'leader'
+	MEMBER = 'member'
+	LEF_TEAM = 'left_team'
+	MEMBER_TYPE_CHOICES = (
+		(LEADER, 'Лидер команды'),
+		(MEMBER, 'Обычный участник'),
+		(LEF_TEAM, 'Ушел из команды'),
+	)
+	# IDs
 
-    user = models.ForeignKey(
-        UserProfile, on_delete=models.CASCADE, verbose_name="Пользователь", )
-    team = models.ForeignKey(
-        Team, on_delete=models.CASCADE, verbose_name="Команда", )
+	user = models.ForeignKey(
+		UserProfile, on_delete=models.CASCADE, verbose_name="Пользователь", )
+	team = models.ForeignKey(
+		Team, on_delete=models.CASCADE, verbose_name="Команда", )
 
-    # IDs
+	# IDs
 
-    memberType = models.CharField(max_length=20, choices=MEMBER_TYPE_CHOICES,
-                                  default=MEMBER, verbose_name="Тип участника")
+	memberType = models.CharField(max_length=20, choices=MEMBER_TYPE_CHOICES,
+	                              default=MEMBER, verbose_name="Тип участника")
 
-    joined_at = models.DateTimeField(auto_now_add=True)
-    leftTeam_at = models.DateTimeField(blank=True, null=True)
+	joined_at = models.DateTimeField(auto_now_add=True)
+	leftTeam_at = models.DateTimeField(blank=True, null=True)
 
-    def __str__(self):
-        return str(self.id)
+	def __str__(self):
+		return str(self.id)
 
 
 ##############################################
@@ -254,316 +251,294 @@ class TeamMember(models.Model):
 ##############################################
 
 class WeeklyTask(models.Model):
-    DAILY = 'daily'
-    QUEST = 'quest'
-    TASK_TYPE_CHOICES = (
-        (DAILY, 'Ежедневная задача'),
-        (QUEST, 'Квест'),
-    )
+	DAILY = 'daily'
+	QUEST = 'quest'
+	TASK_TYPE_CHOICES = (
+		(DAILY, 'Ежедневная задача'),
+		(QUEST, 'Квест'),
+	)
 
-    EASY = 'easy'
-    MEDIUM = 'medium'
-    HARD = 'hard'
-    DIFFICULTY_TYPE_CHOICES = (
-        (EASY, 'Легко'),
-        (MEDIUM, 'Средне'),
-        (HARD, 'Сложно'),
-    )
+	EASY = 'easy'
+	MEDIUM = 'medium'
+	HARD = 'hard'
+	DIFFICULTY_TYPE_CHOICES = (
+		(EASY, 'Легко'),
+		(MEDIUM, 'Средне'),
+		(HARD, 'Сложно'),
+	)
 
-    # IDs
+	# IDs
 
-    division = models.ForeignKey(
-        Division, on_delete=models.CASCADE, verbose_name="Подразделение", )
+	division = models.ForeignKey(
+		Division, on_delete=models.CASCADE, verbose_name="Подразделение", )
 
-    # IDs
+	# IDs
 
-    difficulty = models.CharField(max_length=20, choices=DIFFICULTY_TYPE_CHOICES,
-                                  default=EASY, verbose_name="Сложность")
-    taskType = models.CharField(
-        max_length=20, choices=TASK_TYPE_CHOICES, default=DAILY, verbose_name="Тип задачи")
-    title = models.CharField(max_length=200, unique=True,
-                             verbose_name="Название задачи")
-    description = models.TextField(verbose_name="Описание задач")
-    subTasksCount = models.IntegerField(
-        default=0, verbose_name="Кол-во доп задач")
-    isTeamTask = models.BooleanField(
-        default=False, verbose_name="Групповая задача")
-    tags = TaggableManager()
+	difficulty = models.CharField(max_length=20, choices=DIFFICULTY_TYPE_CHOICES,
+	                              default=EASY, verbose_name="Сложность")
+	taskType = models.CharField(
+		max_length=20, choices=TASK_TYPE_CHOICES, default=DAILY, verbose_name="Тип задачи")
+	title = models.CharField(max_length=200, unique=True,
+	                         verbose_name="Название задачи")
+	description = models.TextField(verbose_name="Описание задач")
+	subTasksCount = models.IntegerField(
+		default=0, verbose_name="Кол-во доп задач")
+	isTeamTask = models.BooleanField(
+		default=False, verbose_name="Групповая задача")
+	tags = TaggableManager()
 
-    accessLevel = models.IntegerField(blank=True, null=True)
-    deadline = models.IntegerField(blank=True, null=True)
+	accessLevel = models.IntegerField(blank=True, null=True)
+	deadline = models.IntegerField(blank=True, null=True)
 
-    money = models.IntegerField(default=0, verbose_name="Валюта")
-    health = models.IntegerField(default=0, verbose_name="HP")
-    energy = models.IntegerField(default=0, verbose_name="Энергия")
+	money = models.IntegerField(default=0, verbose_name="Валюта")
+	health = models.IntegerField(default=0, verbose_name="HP")
+	energy = models.IntegerField(default=0, verbose_name="Энергия")
 
-    created_at = models.DateTimeField(
-        auto_now_add=True, verbose_name="Время создания")
-    updated_at = models.DateTimeField(
-        auto_now=True, verbose_name="Время изменения")
+	created_at = models.DateTimeField(
+		auto_now_add=True, verbose_name="Время создания")
+	updated_at = models.DateTimeField(
+		auto_now=True, verbose_name="Время изменения")
 
-    def __str__(self):
-        return self.title
+	def __str__(self):
+		return self.title
 
-    class Meta:
-        verbose_name = "еженедельная задача"
-        verbose_name_plural = "еженедельные задачи"
+	class Meta:
+		verbose_name = "еженедельная задача"
+		verbose_name_plural = "еженедельные задачи"
 
 
 class WeeklyTaskUserStatus(models.Model):
-    IN_PROGRESS = 'in_progress'
-    COMPLETED = 'completed'
-    TASK_STATUS_CHOICES = (
-        (IN_PROGRESS, 'В процессе выполнения'),
-        (COMPLETED, 'Выполнено'),
-    )
-    # IDs
+	IN_PROGRESS = 'in_progress'
+	COMPLETED = 'completed'
+	TASK_STATUS_CHOICES = (
+		(IN_PROGRESS, 'В процессе выполнения'),
+		(COMPLETED, 'Выполнено'),
+	)
+	# IDs
 
-    weeklyTask = models.ForeignKey(
-        WeeklyTask, on_delete=models.CASCADE, verbose_name="Задача", )
-    user = models.ForeignKey(
-        UserProfile, on_delete=models.CASCADE, verbose_name="Пользователь", )
+	weeklyTask = models.ForeignKey(
+		WeeklyTask, on_delete=models.CASCADE, verbose_name="Задача", )
+	user = models.ForeignKey(
+		UserProfile, on_delete=models.CASCADE, verbose_name="Пользователь", )
 
-    # IDs
+	# IDs
 
-    subTasksCount = models.IntegerField(
-        default=0, verbose_name="Кол-во доп задач")
-    subTasksCompletedCount = models.IntegerField(
-        default=0, verbose_name="Кол-во выполненных доп задач")
-    status = models.CharField(max_length=20, choices=TASK_STATUS_CHOICES, default=IN_PROGRESS,
-                              verbose_name="Статус выполнения", )
-    started_at = models.DateTimeField(
-        auto_now_add=True, verbose_name="Задача начата", )
-    done_at = models.DateTimeField(
-        null=True, blank=True, verbose_name="Задача выполнена", )
+	subTasksCount = models.IntegerField(
+		default=0, verbose_name="Кол-во доп задач")
+	subTasksCompletedCount = models.IntegerField(
+		default=0, verbose_name="Кол-во выполненных доп задач")
+	status = models.CharField(max_length=20, choices=TASK_STATUS_CHOICES, default=IN_PROGRESS,
+	                          verbose_name="Статус выполнения", )
+	started_at = models.DateTimeField(
+		auto_now_add=True, verbose_name="Задача начата", )
+	done_at = models.DateTimeField(
+		null=True, blank=True, verbose_name="Задача выполнена", )
 
-    def __str__(self):
-        return str(self.id)
+	def __str__(self):
+		return str(self.id)
 
-    class Meta:
-        verbose_name = "статус задачи отдельного пользователя"
-        verbose_name_plural = "статусы задач отдельного пользователя"
+	class Meta:
+		verbose_name = "статус задачи отдельного пользователя"
+		verbose_name_plural = "статусы задач отдельного пользователя"
 
 
 class Task(models.Model):
-    DAILY = 'daily'
-    QUEST = 'quest'
-    TASK_TYPE_CHOICES = (
-        (DAILY, 'Ежедневная задача'),
-        (QUEST, 'Квест'),
-    )
+	DAILY = 'daily'
+	QUEST = 'quest'
+	TASK_TYPE_CHOICES = (
+		(DAILY, 'Ежедневная задача'),
+		(QUEST, 'Квест'),
+	)
 
-    EASY = 'easy'
-    MEDIUM = 'medium'
-    HARD = 'hard'
-    DIFFICULTY_TYPE_CHOICES = (
-        (EASY, 'Легко'),
-        (MEDIUM, 'Средне'),
-        (HARD, 'Сложно'),
-    )
+	EASY = 'easy'
+	MEDIUM = 'medium'
+	HARD = 'hard'
+	DIFFICULTY_TYPE_CHOICES = (
+		(EASY, 'Легко'),
+		(MEDIUM, 'Средне'),
+		(HARD, 'Сложно'),
+	)
 
-    # IDs
+	# IDs
 
-    weekly = models.OneToOneField(WeeklyTask, on_delete=models.CASCADE, blank=True, null=True,
-                                  verbose_name='Еженедельное', )
-    parent = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True,
-                               verbose_name='Основное', )
-    users = models.ManyToManyField(
-        UserProfile, through='TaskUserStatus', through_fields=('task', 'user'), )
+	weekly = models.OneToOneField(WeeklyTask, on_delete=models.CASCADE, blank=True, null=True,
+	                              verbose_name='Еженедельное', )
+	parent = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True,
+	                           verbose_name='Основное', )
+	users = models.ManyToManyField(
+		UserProfile, through='TaskUserStatus', through_fields=('task', 'user'), )
 
-    division = models.ForeignKey(
-        Division, on_delete=models.CASCADE, verbose_name="Подразделение", blank=True, null=True, )
+	division = models.ForeignKey(
+		Division, on_delete=models.CASCADE, verbose_name="Подразделение", blank=True, null=True, )
 
-    # IDs
+	# IDs
 
-    difficulty = models.CharField(max_length=20, choices=DIFFICULTY_TYPE_CHOICES,
-                                  default=EASY, verbose_name="Сложность")
-    taskType = models.CharField(
-        max_length=20, choices=TASK_TYPE_CHOICES, default=QUEST, verbose_name="Тип задачи")
-    title = models.CharField(max_length=200, unique=True,
-                             verbose_name="Название задачи")
-    description = models.TextField(verbose_name="Описание задачи")
-    subTasksCount = models.IntegerField(
-        default=0, verbose_name="Кол-во подзадач")
-    isTeamTask = models.BooleanField(
-        default=False, verbose_name="Групповая задача")
-    tags = TaggableManager()
+	difficulty = models.CharField(max_length=20, choices=DIFFICULTY_TYPE_CHOICES,
+	                              default=EASY, verbose_name="Сложность")
+	taskType = models.CharField(
+		max_length=20, choices=TASK_TYPE_CHOICES, default=QUEST, verbose_name="Тип задачи")
+	title = models.CharField(max_length=200, unique=True,
+	                         verbose_name="Название задачи")
+	description = models.TextField(verbose_name="Описание задачи")
+	subTasksCount = models.IntegerField(
+		default=0, verbose_name="Кол-во подзадач")
+	isTeamTask = models.BooleanField(
+		default=False, verbose_name="Групповая задача")
+	tags = TaggableManager()
 
-    accessLevel = models.IntegerField(
-        default=0, verbose_name="Мин уровень для задачи")
-    deadline = models.IntegerField(blank=True, null=True)
+	accessLevel = models.IntegerField(
+		default=0, verbose_name="Мин уровень для задачи")
+	deadline = models.IntegerField(blank=True, null=True)
 
-    money = models.IntegerField(default=0, verbose_name="Валюта")
-    health = models.IntegerField(default=0, verbose_name="Жизни")
-    energy = models.IntegerField(default=0, verbose_name="Энергия")
+	money = models.IntegerField(default=0, verbose_name="Валюта")
+	health = models.IntegerField(default=0, verbose_name="Жизни")
+	energy = models.IntegerField(default=0, verbose_name="Энергия")
 
-    created_at = models.DateTimeField(
-        auto_now_add=True, verbose_name="Время создания")
-    updated_at = models.DateTimeField(
-        auto_now=True, verbose_name="Время изменения")
+	created_at = models.DateTimeField(
+		auto_now_add=True, verbose_name="Время создания")
+	updated_at = models.DateTimeField(
+		auto_now=True, verbose_name="Время изменения")
 
-    class Meta:
-        verbose_name = "задача"
-        verbose_name_plural = "задачи"
+	class Meta:
+		verbose_name = "задача"
+		verbose_name_plural = "задачи"
 
-    def __str__(self):
-        return self.title
+	def __str__(self):
+		return self.title
 
 
 class TaskUserStatus(models.Model):
-    IN_PROGRESS = 'in_progress'
-    COMPLETED = 'completed'
-    TASK_STATUS_CHOICES = (
-        (IN_PROGRESS, 'В процессе выполнения'),
-        (COMPLETED, 'Выполнено'),
-    )
-    # IDs
+	IN_PROGRESS = 'in_progress'
+	COMPLETED = 'completed'
+	TASK_STATUS_CHOICES = (
+		(IN_PROGRESS, 'В процессе выполнения'),
+		(COMPLETED, 'Выполнено'),
+	)
+	# IDs
 
-    task = models.ForeignKey(
-        Task, on_delete=models.CASCADE, verbose_name="Задача", )
-    user = models.ForeignKey(
-        UserProfile, on_delete=models.CASCADE, verbose_name="Пользователь", )
+	task = models.ForeignKey(
+		Task, on_delete=models.CASCADE, verbose_name="Задача", )
+	user = models.ForeignKey(
+		UserProfile, on_delete=models.CASCADE, verbose_name="Пользователь", )
 
-    # IDs
+	# IDs
 
-    subTasksCount = models.IntegerField(
-        default=0, verbose_name="Кол-во доп задач")
-    subTasksCompletedCount = models.IntegerField(
-        default=0, verbose_name="Кол-во выполненных доп задач")
-    status = models.CharField(max_length=20, choices=TASK_STATUS_CHOICES, default=IN_PROGRESS,
-                              verbose_name="Статус выполнения", )
-    started_at = models.DateTimeField(
-        auto_now_add=True, verbose_name="Задача начата", )
-    done_at = models.DateTimeField(
-        null=True, blank=True, verbose_name="Задача выполнена", )
+	subTasksCount = models.IntegerField(
+		default=0, verbose_name="Кол-во доп задач")
+	subTasksCompletedCount = models.IntegerField(
+		default=0, verbose_name="Кол-во выполненных доп задач")
+	status = models.CharField(max_length=20, choices=TASK_STATUS_CHOICES, default=IN_PROGRESS,
+	                          verbose_name="Статус выполнения", )
+	started_at = models.DateTimeField(
+		auto_now_add=True, verbose_name="Задача начата", )
+	done_at = models.DateTimeField(
+		null=True, blank=True, verbose_name="Задача выполнена", )
 
-    def __str__(self):
-        return str(self.id)
+	def __str__(self):
+		return str(self.id)
 
-    class Meta:
-        verbose_name = "статус задачи отдельного пользователя"
-        verbose_name_plural = "статусы задач отдельного пользователя"
+	class Meta:
+		verbose_name = "статус задачи отдельного пользователя"
+		verbose_name_plural = "статусы задач отдельного пользователя"
 
 
 class MainQuest(models.Model):
-    EASY = 'easy'
-    MEDIUM = 'medium'
-    HARD = 'hard'
-    DIFFICULTY_TYPE_CHOICES = (
-        (EASY, 'Легко'),
-        (MEDIUM, 'Средне'),
-        (HARD, 'Сложно'),
-    )
+	EASY = 'easy'
+	MEDIUM = 'medium'
+	HARD = 'hard'
+	DIFFICULTY_TYPE_CHOICES = (
+		(EASY, 'Легко'),
+		(MEDIUM, 'Средне'),
+		(HARD, 'Сложно'),
+	)
 
-    # IDs
+	# IDs
 
-    division = models.ForeignKey(
-        Division, on_delete=models.CASCADE, verbose_name="Подразделение", )
-    tasks = models.ManyToManyField(
-        Task, through='MainQuestTree', through_fields=('mainQuest', 'task'), )
-    users = models.ManyToManyField(
-        UserProfile, through='MainQuestStatus', through_fields=('mainQuest', 'user'), )
+	division = models.ForeignKey(
+		Division, on_delete=models.CASCADE, verbose_name="Подразделение", )
+	tasks = models.ManyToManyField(
+		Task, through='MainQuestTree', through_fields=('mainQuest', 'task'), )
+	users = models.ManyToManyField(
+		UserProfile, through='MainQuestStatus', through_fields=('mainQuest', 'user'), )
 
-    # IDs
+	# IDs
 
-    difficulty = models.CharField(max_length=20, choices=DIFFICULTY_TYPE_CHOICES,
-                                  default=EASY, verbose_name="Сложность")
-    title = models.CharField(max_length=120, verbose_name="Название")
-    description = models.TextField(verbose_name="Описание")
-    deadline = models.DateField(verbose_name="Выполнить до", default=timezone.now)
+	difficulty = models.CharField(max_length=20, choices=DIFFICULTY_TYPE_CHOICES,
+	                              default=EASY, verbose_name="Сложность")
+	title = models.CharField(max_length=120, verbose_name="Называние")
+	description = models.TextField(verbose_name="Описание")
+	deadline = models.IntegerField(default=0, verbose_name="Дедлайн")
+	accessLevel = models.IntegerField(
+		default=0, verbose_name="Уровень доступа")
+	tasksCount = models.IntegerField(
+		default=0, verbose_name="Количество задач")
 
-    @property
-    def is_active(self):
-        return datetime.date.today() < self.deadline
+	money = models.IntegerField(default=0, verbose_name="Валюта")
+	health = models.IntegerField(default=0, verbose_name="Жизни")
+	energy = models.IntegerField(default=0, verbose_name="Энергия")
 
-    @property
-    def time_left(self):
-        deadline_with_time = datetime.datetime(
-            year=self.deadline.year,
-            month=self.deadline.month,
-            day=self.deadline.day,
-            hour=0,
-            minute=0,
-            second=0,
-            microsecond=0
-        )
-        duration = deadline_with_time - datetime.datetime.now().replace(microsecond=0)
-        return duration
+	created_at = models.DateTimeField(auto_now_add=True)
+	updated_at = models.DateTimeField(auto_now=True)
 
-    is_active.fget.short_description = 'Квест активен?'
-    time_left.fget.short_description = 'Осталось времени'
-    accessLevel = models.IntegerField(
-        default=0, verbose_name="Уровень доступа")
-    tasksCount = models.IntegerField(
-        default=0, verbose_name="Количество задач")
+	def __str__(self):
+		return self.title
 
-    money = models.IntegerField(default=0, verbose_name="Валюта")
-    health = models.IntegerField(default=0, verbose_name="Жизни")
-    energy = models.IntegerField(default=0, verbose_name="Энергия")
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.title
-
-    class Meta:
-        verbose_name = "квест"
-        verbose_name_plural = "квесты"
+	class Meta:
+		verbose_name = "квест"
+		verbose_name_plural = "квесты"
 
 
 class MainQuestTree(models.Model):
-    mainQuest = models.ForeignKey(MainQuest, on_delete=models.CASCADE)
-    task = models.ForeignKey(Task, on_delete=models.CASCADE,
-                             verbose_name="Задача",
-                             limit_choices_to={'taskType': 'quest',
-                                               'parent': None})
-    parentTask = models.ForeignKey(
-        Task, on_delete=models.CASCADE,
-        related_name='parentTask',
-        verbose_name="Предыдущая задача",
-        limit_choices_to={'taskType': 'quest',
-                          'parent': None})
+	# IDs
 
-    treeLevel = models.IntegerField(default=0)
-    treePosition = models.IntegerField(default=0)
+	mainQuest = models.ForeignKey(MainQuest, on_delete=models.CASCADE)
+	task = models.ForeignKey(Task, on_delete=models.CASCADE, )
+	parentTask = models.ForeignKey(
+		Task, on_delete=models.CASCADE, related_name='parentTask')
+	childTask = models.ForeignKey(
+		Task, on_delete=models.CASCADE, related_name='childTask')
 
-    def __str__(self):
-        return str(self.id)
+	# IDs
 
-    class Meta:
-        verbose_name = "дерево основного квеста"
-        verbose_name_plural = "деревья основных квестов"
+	treeLevel = models.IntegerField(default=0)
+	treePosition = models.IntegerField(default=0)
+
+	def __str__(self):
+		return str(self.id)
+
+	class Meta:
+		verbose_name = "дерево основной квест"
+		verbose_name_plural = "деревья основных квестов"
 
 
 class MainQuestStatus(models.Model):
-    INPROGRESS = 'inprogress'
-    COMPLETED = 'completed'
-    QUEST_STATUS_CHOICES = (
-        (INPROGRESS, 'В процессе выполнения'),
-        (COMPLETED, 'Выполнено'),
-    )
-    # IDs
+	INPROGRESS = 'inprogress'
+	COMPLETED = 'completed'
+	QUEST_STATUS_CHOICES = (
+		(INPROGRESS, 'В процессе выполнения'),
+		(COMPLETED, 'Выполнено'),
+	)
+	# IDs
 
-    user = models.ForeignKey(
-        UserProfile, on_delete=models.CASCADE, verbose_name="Пользователь", )
-    mainQuest = models.ForeignKey(
-        MainQuest, on_delete=models.CASCADE, verbose_name="Основной квест", )
+	user = models.ForeignKey(
+		UserProfile, on_delete=models.CASCADE, verbose_name="Пользователь", )
+	mainQuest = models.ForeignKey(
+		MainQuest, on_delete=models.CASCADE, verbose_name="Основной квест", )
 
-    # IDs
+	# IDs
 
-    status = models.CharField(max_length=20, choices=QUEST_STATUS_CHOICES, default=INPROGRESS,
-                              verbose_name="Статус выполнения", )
-    completeTime = models.DateTimeField(blank=True, null=True, )
-    started_at = models.DateTimeField(auto_now_add=True)
-    done_at = models.DateTimeField(blank=True, null=True, )
+	status = models.CharField(max_length=20, choices=QUEST_STATUS_CHOICES, default=INPROGRESS,
+	                          verbose_name="Статус выполнения", )
+	completeTime = models.DateTimeField(blank=True, null=True, )
+	started_at = models.DateTimeField(auto_now_add=True)
+	done_at = models.DateTimeField(blank=True, null=True, )
 
-    def __str__(self):
-        return str(self.id)
+	def __str__(self):
+		return str(self.id)
 
-    class Meta:
-        verbose_name = "статус основного квеста пользователя"
-        verbose_name_plural = "статусы основных квестов пользователей"
+	class Meta:
+		verbose_name = "статус основного квеста пользователя"
+		verbose_name_plural = "статусы основных квестов пользователей"
 
 
 ##############################################
@@ -571,54 +546,54 @@ class MainQuestStatus(models.Model):
 ##############################################
 
 class Competition(models.Model):
-    # IDs
+	# IDs
 
-    # users = models.ManyToManyField(UserProfile)
+	# users = models.ManyToManyField(UserProfile)
 
-    winner = models.ForeignKey(
-        UserProfile, on_delete=models.CASCADE, related_name='winner',
-        null=True)  # Раиса настояла на неудалении таблиц из БД
+	winner = models.ForeignKey(
+		UserProfile, on_delete=models.CASCADE, related_name='winner',
+		null=True)  # Раиса настояла на неудалении таблиц из БД
 
-    # IDs
+	# IDs
 
-    title = models.CharField(max_length=120)
-    isCompleted = models.BooleanField(default=False)
-    deadline = models.DateTimeField(blank=True, null=True)
+	title = models.CharField(max_length=120)
+	isCompleted = models.BooleanField(default=False)
+	deadline = models.DateTimeField(blank=True, null=True)
 
-    levelCriterion = models.IntegerField(
-        default=0, verbose_name="Требуемый уровень")
-    qualityCriterion = models.FloatField(
-        default=0.0, verbose_name="Требуемое качество")
-    productivityCriterion = models.FloatField(
-        default=0.0, verbose_name="Требуемая продуктивность")  # не знаю, что с этим делать, по сути не нужно
+	levelCriterion = models.IntegerField(
+		default=0, verbose_name="Требуемый уровень")
+	qualityCriterion = models.FloatField(
+		default=0.0, verbose_name="Требуемое качество")
+	productivityCriterion = models.FloatField(
+		default=0.0, verbose_name="Требуемая продуктивность")  # не знаю, что с этим делать, по сути не нужно
 
-    money = models.IntegerField(default=0, verbose_name="Валюта")
-    health = models.IntegerField(default=0, verbose_name="Жизни")
-    energy = models.IntegerField(default=0, verbose_name="Энергия")
+	money = models.IntegerField(default=0, verbose_name="Валюта")
+	health = models.IntegerField(default=0, verbose_name="Жизни")
+	energy = models.IntegerField(default=0, verbose_name="Энергия")
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    done_at = models.DateTimeField(blank=True, null=True)
+	created_at = models.DateTimeField(auto_now_add=True)
+	done_at = models.DateTimeField(blank=True, null=True)
 
-    def __str__(self):
-        return str(self.title)
+	def __str__(self):
+		return str(self.title)
 
-    class Meta:
-        verbose_name = "соревнование"
-        verbose_name_plural = "соревнования"
+	class Meta:
+		verbose_name = "соревнование"
+		verbose_name_plural = "соревнования"
 
 
 class CompetitionRequest(models.Model):
-    REQUEST_STATUS_CHOICE = (
-        ("SENT", 'отправлено'),
-        ("ACCEPTED", 'принято'),
-        ("DISCARDED", 'отклонено'),
-    )
-    sender = models.OneToOneField(to=UserProfile, on_delete=models.CASCADE,
-                                  related_name='sender')  # Раиса настояла на неудалении этих запсей в бд
-    receiver = models.OneToOneField(to=UserProfile, on_delete=models.CASCADE, related_name='receiver')
-    send_time = models.DateTimeField(auto_now_add=True)
-    decay_time = models.DateTimeField(blank=False, null=False)
-    status = models.CharField(max_length=10, choices=REQUEST_STATUS_CHOICE, default='sent')
+	REQUEST_STATUS_CHOICE = (
+		("SENT", 'отправлено'),
+		("ACCEPTED", 'принято'),
+		("DISCARDED", 'отклонено'),
+	)
+	sender = models.OneToOneField(to=UserProfile, on_delete=models.CASCADE,
+	                              related_name='sender')  # Раиса настояла на неудалении этих запсей в бд
+	receiver = models.OneToOneField(to=UserProfile, on_delete=models.CASCADE, related_name='receiver')
+	send_time = models.DateTimeField(auto_now_add=True)
+	decay_time = models.DateTimeField(blank=False, null=False)
+	status = models.CharField(max_length=10, choices=REQUEST_STATUS_CHOICE, default='sent')
 
 
 ##############################################
@@ -627,121 +602,121 @@ class CompetitionRequest(models.Model):
 
 
 class Achievement(models.Model):
-    # IDs
+	# IDs
 
-    users = models.ManyToManyField(UserProfile, through='AchievementUserStatus',
-                                   through_fields=('achievement', 'user'))
+	users = models.ManyToManyField(UserProfile, through='AchievementUserStatus',
+	                               through_fields=('achievement', 'user'))
 
-    # IDs
+	# IDs
 
-    title = models.CharField(max_length=120, verbose_name="Название ачивки")
-    description = models.TextField(verbose_name="Описание ачивки")
-    image = models.ImageField(verbose_name="Картинка ачивки")
+	title = models.CharField(max_length=120, verbose_name="Название ачивки")
+	description = models.TextField(verbose_name="Описание ачивки")
+	image = models.ImageField(verbose_name="Картинка ачивки")
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+	created_at = models.DateTimeField(auto_now_add=True)
+	updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return str(self.title)
+	def __str__(self):
+		return str(self.title)
 
-    class Meta:
-        verbose_name = "достижение"
-        verbose_name_plural = "достижения"
+	class Meta:
+		verbose_name = "достижение"
+		verbose_name_plural = "достижения"
 
 
 class AchievementUserStatus(models.Model):
-    # IDs
+	# IDs
 
-    achievement = models.ForeignKey(
-        Achievement, on_delete=models.CASCADE, verbose_name="Ачивка")
-    user = models.ForeignKey(
-        UserProfile, on_delete=models.CASCADE, verbose_name="Пользователь", )
+	achievement = models.ForeignKey(
+		Achievement, on_delete=models.CASCADE, verbose_name="Ачивка")
+	user = models.ForeignKey(
+		UserProfile, on_delete=models.CASCADE, verbose_name="Пользователь", )
 
-    # IDs
+	# IDs
 
-    completed_at = models.DateTimeField(
-        auto_now_add=True, verbose_name="Время получения")
+	completed_at = models.DateTimeField(
+		auto_now_add=True, verbose_name="Время получения")
 
-    def __str__(self):
-        return str(self.id)
+	def __str__(self):
+		return str(self.id)
 
-    class Meta:
-        verbose_name = "статус получения достижения"
-        verbose_name_plural = "статусы получения достижений"
+	class Meta:
+		verbose_name = "статус получения достижения"
+		verbose_name_plural = "статусы получения достижений"
 
 
 class RequirenmentToGetAchieve(models.Model):
-    # IDs
+	# IDs
 
-    users = models.ManyToManyField(UserProfile, through='AchieveRequirenmentStatus',
-                                   through_fields=('requirenmentToGetAchieve', 'user'))
-    achievement = models.ForeignKey(
-        Achievement, on_delete=models.CASCADE, verbose_name="Ачивка")
+	users = models.ManyToManyField(UserProfile, through='AchieveRequirenmentStatus',
+	                               through_fields=('requirenmentToGetAchieve', 'user'))
+	achievement = models.ForeignKey(
+		Achievement, on_delete=models.CASCADE, verbose_name="Ачивка")
 
-    completedAchievement = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True,
-                                             verbose_name='Выполненная другая ачивка', )
-    completedTask = models.ForeignKey(Task, on_delete=models.CASCADE, verbose_name="Выполненная задача",
-                                      blank=True, null=True, )
-    completedWeeklyTask = models.ForeignKey(WeeklyTask, on_delete=models.CASCADE,
-                                            verbose_name="Выполненная еженедельная задача",
-                                            blank=True, null=True, )
-    completedMainQuest = models.ForeignKey(MainQuest, on_delete=models.CASCADE,
-                                           verbose_name="Выполненный основной квест",
-                                           blank=True, null=True, )
-    completedTest = models.ForeignKey('Test', on_delete=models.CASCADE,
-                                      verbose_name="Выполненный тест",
-                                      blank=True, null=True, )
+	completedAchievement = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True,
+	                                         verbose_name='Выполненная другая ачивка', )
+	completedTask = models.ForeignKey(Task, on_delete=models.CASCADE, verbose_name="Выполненная задача",
+	                                  blank=True, null=True, )
+	completedWeeklyTask = models.ForeignKey(WeeklyTask, on_delete=models.CASCADE,
+	                                        verbose_name="Выполненная еженедельная задача",
+	                                        blank=True, null=True, )
+	completedMainQuest = models.ForeignKey(MainQuest, on_delete=models.CASCADE,
+	                                       verbose_name="Выполненный основной квест",
+	                                       blank=True, null=True, )
+	completedTest = models.ForeignKey('Test', on_delete=models.CASCADE,
+	                                  verbose_name="Выполненный тест",
+	                                  blank=True, null=True, )
 
-    # IDs
+	# IDs
 
-    completeTime = models.DateTimeField(
-        blank=True, null=True, verbose_name="Время на выполнение")
+	completeTime = models.DateTimeField(
+		blank=True, null=True, verbose_name="Время на выполнение")
 
-    level = models.IntegerField(default=0, verbose_name="Требуемый уровень")
-    quality = models.FloatField(default=0.0, verbose_name="Требуемое качество")
-    productivity = models.FloatField(
-        default=0.0, verbose_name="Требуемая продуктивность")
-    competitionsCount = models.IntegerField(
-        default=0, verbose_name="Кол-во соревнований")
-    competitionWinsCount = models.IntegerField(
-        default=0, verbose_name="Кол-во выигранных соревнований")
+	level = models.IntegerField(default=0, verbose_name="Требуемый уровень")
+	quality = models.FloatField(default=0.0, verbose_name="Требуемое качество")
+	productivity = models.FloatField(
+		default=0.0, verbose_name="Требуемая продуктивность")
+	competitionsCount = models.IntegerField(
+		default=0, verbose_name="Кол-во соревнований")
+	competitionWinsCount = models.IntegerField(
+		default=0, verbose_name="Кол-во выигранных соревнований")
 
-    def __str__(self):
-        return str(self.id)
+	def __str__(self):
+		return str(self.id)
 
-    class Meta:
-        verbose_name = "требование для получения достижения"
-        verbose_name_plural = "требования для получения достижений"
+	class Meta:
+		verbose_name = "требование для получения достижения"
+		verbose_name_plural = "требования для получения достижений"
 
 
 class AchieveRequirenmentStatus(models.Model):
-    # IDs
+	# IDs
 
-    user = models.ForeignKey(
-        UserProfile, on_delete=models.CASCADE, verbose_name="Пользователь", )
-    requirenmentToGetAchieve = models.ForeignKey(RequirenmentToGetAchieve, on_delete=models.CASCADE,
-                                                 verbose_name="Требование для получения ачивки")
+	user = models.ForeignKey(
+		UserProfile, on_delete=models.CASCADE, verbose_name="Пользователь", )
+	requirenmentToGetAchieve = models.ForeignKey(RequirenmentToGetAchieve, on_delete=models.CASCADE,
+	                                             verbose_name="Требование для получения ачивки")
 
-    # IDs
+	# IDs
 
-    completeTime = models.DateTimeField(
-        blank=True, null=True, verbose_name="Время на выполнение")
-    isCompleted = models.BooleanField(default=False)
-    level = models.IntegerField(default=0, verbose_name="Прогресс уровня")
-    quality = models.FloatField(default=0.0, verbose_name="Прогресс качества")
-    productivity = models.FloatField(
-        default=0.0, verbose_name="Прогресс продуктивности")
-    competitionsCount = models.IntegerField(
-        default=0, verbose_name="Кол-во соревнований")
-    competitionWinsCount = models.IntegerField(
-        default=0, verbose_name="Кол-во выиграных соревнований")
+	completeTime = models.DateTimeField(
+		blank=True, null=True, verbose_name="Время на выполнение")
+	isCompleted = models.BooleanField(default=False)
+	level = models.IntegerField(default=0, verbose_name="Прогресс уровня")
+	quality = models.FloatField(default=0.0, verbose_name="Прогресс качества")
+	productivity = models.FloatField(
+		default=0.0, verbose_name="Прогресс продуктивности")
+	competitionsCount = models.IntegerField(
+		default=0, verbose_name="Кол-во соревнований")
+	competitionWinsCount = models.IntegerField(
+		default=0, verbose_name="Кол-во выиграных соревнований")
 
-    def __str__(self):
-        return str(self.id)
+	def __str__(self):
+		return str(self.id)
 
-    class Meta:
-        verbose_name = "статус получения достижения пользователем"
-        verbose_name_plural = "статусы получения достижений пользователями"
+	class Meta:
+		verbose_name = "статус получения достижения пользователем"
+		verbose_name_plural = "статусы получения достижений пользователями"
 
 
 ##############################################
@@ -750,227 +725,227 @@ class AchieveRequirenmentStatus(models.Model):
 
 
 class QuestionTheme(models.Model):
-    title = models.CharField(max_length=120, verbose_name="Название тематики")
-    description = models.TextField(verbose_name="Описание тематики")
+	title = models.CharField(max_length=120, verbose_name="Название тематики")
+	description = models.TextField(verbose_name="Описание тематики")
 
-    def __str__(self):
-        return str(self.title)
+	def __str__(self):
+		return str(self.title)
 
-    class Meta:
-        verbose_name = "тематика вопроса"
-        verbose_name_plural = "тематики вопросов"
+	class Meta:
+		verbose_name = "тематика вопроса"
+		verbose_name_plural = "тематики вопросов"
 
 
 class Question(models.Model):
-    EASY = 'easy'
-    MEDIUM = 'medium'
-    HARD = 'hard'
-    DIFFICULTY_TYPE_CHOICES = (
-        (EASY, 'Легко'),
-        (MEDIUM, 'Средне'),
-        (HARD, 'Сложно'),
-    )
+	EASY = 'easy'
+	MEDIUM = 'medium'
+	HARD = 'hard'
+	DIFFICULTY_TYPE_CHOICES = (
+		(EASY, 'Легко'),
+		(MEDIUM, 'Средне'),
+		(HARD, 'Сложно'),
+	)
 
-    ONE_CHOICE = 'one_choice'
-    MULTI_CHOICE = 'multi_choice'
-    ENTER_NUMBER = 'enter_number'
-    ENTER_TEXT = 'enter_text'
-    ANSWER_TYPE_CHOICES = (
-        (ONE_CHOICE, '1 выбор'),
-        (MULTI_CHOICE, 'Мультивыбор'),
-        (ENTER_NUMBER, 'Ввод числа'),
-        (ENTER_TEXT, 'Ввод текста'),
-    )
-    # IDs
+	ONE_CHOICE = 'one_choice'
+	MULTI_CHOICE = 'multi_choice'
+	ENTER_NUMBER = 'enter_number'
+	ENTER_TEXT = 'enter_text'
+	ANSWER_TYPE_CHOICES = (
+		(ONE_CHOICE, '1 выбор'),
+		(MULTI_CHOICE, 'Мультивыбор'),
+		(ENTER_NUMBER, 'Ввод числа'),
+		(ENTER_TEXT, 'Ввод текста'),
+	)
+	# IDs
 
-    questionTheme = models.ForeignKey(
-        QuestionTheme, on_delete=models.CASCADE, verbose_name="Тематика", )
+	questionTheme = models.ForeignKey(
+		QuestionTheme, on_delete=models.CASCADE, verbose_name="Тематика", )
 
-    # IDs
+	# IDs
 
-    difficulty = models.CharField(max_length=20, choices=DIFFICULTY_TYPE_CHOICES,
-                                  default=EASY, verbose_name="Сложность")
-    answerType = models.CharField(max_length=20, choices=ANSWER_TYPE_CHOICES,
-                                  default=ONE_CHOICE, verbose_name="Тип ответа")
+	difficulty = models.CharField(max_length=20, choices=DIFFICULTY_TYPE_CHOICES,
+	                              default=EASY, verbose_name="Сложность")
+	answerType = models.CharField(max_length=20, choices=ANSWER_TYPE_CHOICES,
+	                              default=ONE_CHOICE, verbose_name="Тип ответа")
 
-    title = models.CharField(max_length=120, verbose_name="Вопрос")
-    description = models.TextField(
-        verbose_name="Описание вопроса", blank=True, null=True)
-    image = models.ImageField(
-        verbose_name="Картинка для вопроса", blank=True, null=True)
-    tags = TaggableManager()
+	title = models.CharField(max_length=120, verbose_name="Вопрос")
+	description = models.TextField(
+		verbose_name="Описание вопроса", blank=True, null=True)
+	image = models.ImageField(
+		verbose_name="Картинка для вопроса", blank=True, null=True)
+	tags = TaggableManager()
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+	created_at = models.DateTimeField(auto_now_add=True)
+	updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return str(self.title)
+	def __str__(self):
+		return str(self.title)
 
-    class Meta:
-        verbose_name = "вопрос"
-        verbose_name_plural = "вопросы"
+	class Meta:
+		verbose_name = "вопрос"
+		verbose_name_plural = "вопросы"
 
 
 class Answer(models.Model):
-    # IDs
+	# IDs
 
-    question = models.ForeignKey(
-        Question, on_delete=models.CASCADE, verbose_name="Вопрос", related_name="qwe")
+	question = models.ForeignKey(
+		Question, on_delete=models.CASCADE, verbose_name="Вопрос", related_name="qwe")
 
-    # IDs
+	# IDs
 
-    text = models.CharField(max_length=120, verbose_name="Ответ", )
-    description = models.TextField(
-        verbose_name="Доп описание ответа", blank=True, null=True)
-    image = models.ImageField(
-        verbose_name="Картинка, дополняющая ответ", blank=True, null=True)
-    isCorrect = models.BooleanField(
-        default=False, verbose_name="Правильный ответ")
+	text = models.CharField(max_length=120, verbose_name="Ответ", )
+	description = models.TextField(
+		verbose_name="Доп описание ответа", blank=True, null=True)
+	image = models.ImageField(
+		verbose_name="Картинка, дополняющая ответ", blank=True, null=True)
+	isCorrect = models.BooleanField(
+		default=False, verbose_name="Правильный ответ")
 
-    def __str__(self):
-        return str(self.text)
+	def __str__(self):
+		return str(self.text)
 
-    class Meta:
-        verbose_name = "ответ"
-        verbose_name_plural = "ответы"
+	class Meta:
+		verbose_name = "ответ"
+		verbose_name_plural = "ответы"
 
 
 class Test(models.Model):
-    # IDs
+	# IDs
 
-    users = models.ManyToManyField(UserProfile, through='TestUser',
-                                   through_fields=('test', 'user'))
+	users = models.ManyToManyField(UserProfile, through='TestUser',
+	                               through_fields=('test', 'user'))
 
-    # IDs
+	# IDs
 
-    title = models.CharField(max_length=120, verbose_name="Название теста")
-    description = models.TextField(verbose_name="Описание теста")
-    pointsToComplete = models.IntegerField(
-        default=10, verbose_name="Кол-во баллов для зачета")
+	title = models.CharField(max_length=120, verbose_name="Название теста")
+	description = models.TextField(verbose_name="Описание теста")
+	pointsToComplete = models.IntegerField(
+		default=10, verbose_name="Кол-во баллов для зачета")
 
-    canLeave = models.BooleanField(
-        default=True, verbose_name="Можно покидать страницу теста")
-    canSkip = models.BooleanField(
-        default=True, verbose_name="Можно пропускать вопросы")
-    showAnswers = models.BooleanField(
-        default=True, verbose_name="Показывать ответы в конце теста")
+	canLeave = models.BooleanField(
+		default=True, verbose_name="Можно покидать страницу теста")
+	canSkip = models.BooleanField(
+		default=True, verbose_name="Можно пропускать вопросы")
+	showAnswers = models.BooleanField(
+		default=True, verbose_name="Показывать ответы в конце теста")
 
-    isInterview = models.BooleanField(
-        default=False, verbose_name="Тест для собеседования")
-    canSeeSpentTime = models.BooleanField(
-        default=False, verbose_name="Просмотр затраченного времени")
-    canSeeTestClosing = models.BooleanField(
-        default=False, verbose_name="Просмотр закрытия теста")
+	isInterview = models.BooleanField(
+		default=False, verbose_name="Тест для собеседования")
+	canSeeSpentTime = models.BooleanField(
+		default=False, verbose_name="Просмотр затраченного времени")
+	canSeeTestClosing = models.BooleanField(
+		default=False, verbose_name="Просмотр закрытия теста")
 
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Создан")
-    updated_at = models.DateTimeField(auto_now=True)
+	created_at = models.DateTimeField(auto_now_add=True, verbose_name="Создан")
+	updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return str(self.title)
+	def __str__(self):
+		return str(self.title)
 
-    class Meta:
-        verbose_name = "тест"
-        verbose_name_plural = "тесты"
+	class Meta:
+		verbose_name = "тест"
+		verbose_name_plural = "тесты"
 
 
 class TestBlock(models.Model):
-    # IDs
-    questionTheme = models.ForeignKey(
-        QuestionTheme, on_delete=models.CASCADE, verbose_name="Тематика", )
-    test = models.ForeignKey(
-        Test, on_delete=models.CASCADE, verbose_name="Тест", )
-    questions = models.ManyToManyField(
-        Question, verbose_name="Вопросы", related_name="qst")
+	# IDs
+	questionTheme = models.ForeignKey(
+		QuestionTheme, on_delete=models.CASCADE, verbose_name="Тематика", )
+	test = models.ForeignKey(
+		Test, on_delete=models.CASCADE, verbose_name="Тест", )
+	questions = models.ManyToManyField(
+		Question, verbose_name="Вопросы", related_name="qst")
 
-    # test = models.ForeignKey(
-    #     Test, on_delete=models.CASCADE, verbose_name="Тест", )
-    # questions = models.ManyToManyField(Question, verbose_name="", default=None)   зачем это?
-    # IDs
+	# test = models.ForeignKey(
+	#     Test, on_delete=models.CASCADE, verbose_name="Тест", )
+	# questions = models.ManyToManyField(Question, verbose_name="", default=None)   зачем это?
+	# IDs
 
-    questionsCount = models.IntegerField(
-        default=3, verbose_name="Кол-во вопросов")
-    blockWeight = models.FloatField(default=0.0, verbose_name="Вес блока")
+	questionsCount = models.IntegerField(
+		default=3, verbose_name="Кол-во вопросов")
+	blockWeight = models.FloatField(default=0.0, verbose_name="Вес блока")
 
-    created_at = models.DateTimeField(
-        auto_now_add=True, verbose_name="Время создания")
-    updated_at = models.DateTimeField(auto_now=True)
+	created_at = models.DateTimeField(
+		auto_now_add=True, verbose_name="Время создания")
+	updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return str(self.id)
+	def __str__(self):
+		return str(self.id)
 
-    class Meta:
-        verbose_name = "тестовый блок"
-        verbose_name_plural = "тестовые блоки"
+	class Meta:
+		verbose_name = "тестовый блок"
+		verbose_name_plural = "тестовые блоки"
 
 
 class TestUser(models.Model):
-    STARTED = 'started'
-    FAILED = 'failed'
-    DONE = 'done'
-    STATUS_TYPE_CHOICES = (
-        (STARTED, 'Начат'),
-        (FAILED, 'Провален'),
-        (DONE, 'Выполнен'),
-    )
+	STARTED = 'started'
+	FAILED = 'failed'
+	DONE = 'done'
+	STATUS_TYPE_CHOICES = (
+		(STARTED, 'Начат'),
+		(FAILED, 'Провален'),
+		(DONE, 'Выполнен'),
+	)
 
-    # IDs
+	# IDs
 
-    test = models.ForeignKey(
-        Test, on_delete=models.CASCADE, verbose_name="Тест", )
-    user = models.ForeignKey(
-        UserProfile, on_delete=models.CASCADE, verbose_name="Пользователь", )
-    answers = models.ManyToManyField(Question, through='TestUserAnswer',
-                                     through_fields=('testUser', 'question'), verbose_name="Ответы")
+	test = models.ForeignKey(
+		Test, on_delete=models.CASCADE, verbose_name="Тест", )
+	user = models.ForeignKey(
+		UserProfile, on_delete=models.CASCADE, verbose_name="Пользователь", )
+	answers = models.ManyToManyField(Question, through='TestUserAnswer',
+	                                 through_fields=('testUser', 'question'), verbose_name="Ответы")
 
-    # IDs
+	# IDs
 
-    status = models.CharField(max_length=20, choices=STATUS_TYPE_CHOICES,
-                              default=STARTED, verbose_name="Статус")
-    rightAnswersCount = models.IntegerField(
-        default=0, verbose_name="Кол-во правильных ответов")
-    completeTime = models.DateTimeField(
-        blank=True, null=True, verbose_name="Время выполнения")
-    points = models.IntegerField(
-        default=0, verbose_name="Кол-во набранных баллов")
-    hasLeftTest = models.BooleanField(
-        default=False, verbose_name="Покидал страницу теста")
+	status = models.CharField(max_length=20, choices=STATUS_TYPE_CHOICES,
+	                          default=STARTED, verbose_name="Статус")
+	rightAnswersCount = models.IntegerField(
+		default=0, verbose_name="Кол-во правильных ответов")
+	completeTime = models.DateTimeField(
+		blank=True, null=True, verbose_name="Время выполнения")
+	points = models.IntegerField(
+		default=0, verbose_name="Кол-во набранных баллов")
+	hasLeftTest = models.BooleanField(
+		default=False, verbose_name="Покидал страницу теста")
 
-    started_at = models.DateTimeField(
-        auto_now_add=True, verbose_name="Время старта теста")
-    done_at = models.DateTimeField(
-        blank=True, null=True, verbose_name="Покидал окончания теста")
+	started_at = models.DateTimeField(
+		auto_now_add=True, verbose_name="Время старта теста")
+	done_at = models.DateTimeField(
+		blank=True, null=True, verbose_name="Покидал окончания теста")
 
-    def __str__(self):
-        return str(self.id)
+	def __str__(self):
+		return str(self.id)
 
-    class Meta:
-        verbose_name = "результат теста"
-        verbose_name_plural = "результаты тестов"
+	class Meta:
+		verbose_name = "результат теста"
+		verbose_name_plural = "результаты тестов"
 
 
 class TestUserAnswer(models.Model):
-    # IDs
+	# IDs
 
-    testUser = models.ForeignKey(
-        TestUser, on_delete=models.CASCADE, verbose_name="Тест, начатый пользователем")
-    question = models.ForeignKey(
-        Question, on_delete=models.CASCADE, verbose_name="Вопрос")
+	testUser = models.ForeignKey(
+		TestUser, on_delete=models.CASCADE, verbose_name="Тест, начатый пользователем")
+	question = models.ForeignKey(
+		Question, on_delete=models.CASCADE, verbose_name="Вопрос")
 
-    # IDs
+	# IDs
 
-    text = models.CharField(max_length=120, verbose_name="Текст ответа")
-    isCorrect = models.BooleanField(
-        default=False, verbose_name="Ответ правильный")
+	text = models.CharField(max_length=120, verbose_name="Текст ответа")
+	isCorrect = models.BooleanField(
+		default=False, verbose_name="Ответ правильный")
 
-    created_at = models.DateTimeField(
-        auto_now_add=True, verbose_name="Время создания")
+	created_at = models.DateTimeField(
+		auto_now_add=True, verbose_name="Время создания")
 
-    def __str__(self):
-        return str(self.text)
+	def __str__(self):
+		return str(self.text)
 
-    class Meta:
-        verbose_name = "ответ пользователя"
-        verbose_name_plural = "ответы пользователей"
+	class Meta:
+		verbose_name = "ответ пользователя"
+		verbose_name_plural = "ответы пользователей"
 
 
 ##############################################
@@ -979,77 +954,77 @@ class TestUserAnswer(models.Model):
 
 
 class RequirementsToGetAccess(models.Model):
-    # IDs
+	# IDs
 
-    test = models.ForeignKey(
-        Test, on_delete=models.CASCADE, verbose_name="Тест", blank=True, null=True, )
-    task = models.ForeignKey(
-        Task, on_delete=models.CASCADE, verbose_name="Задача", blank=True, null=True, )
-    weeklyTask = models.ForeignKey(WeeklyTask, on_delete=models.CASCADE, verbose_name="Еженедельная задача",
-                                   blank=True, null=True, )
-    mainQuest = models.ForeignKey(MainQuest, on_delete=models.CASCADE, verbose_name="Основной квест",
-                                  blank=True, null=True, )
-    completedTest = models.ForeignKey(Test, on_delete=models.CASCADE, verbose_name="Выполненный тест", blank=True,
-                                      null=True, related_name='completedTest')
-    completedTask = models.ForeignKey(Task, on_delete=models.CASCADE, verbose_name="Выполненная задача", blank=True,
-                                      null=True, related_name='completedTask')
-    completedWeeklyTask = models.ForeignKey(Task, on_delete=models.CASCADE,
-                                            verbose_name="Выполненная еженедельная задача", blank=True,
-                                            null=True, related_name='completedWeeklyTask')
-    completedMainQuest = models.ForeignKey(MainQuest, on_delete=models.CASCADE,
-                                           verbose_name="Выполненный основной квест",
-                                           blank=True, null=True, related_name='completedMainQuest')
+	test = models.ForeignKey(
+		Test, on_delete=models.CASCADE, verbose_name="Тест", blank=True, null=True, )
+	task = models.ForeignKey(
+		Task, on_delete=models.CASCADE, verbose_name="Задача", blank=True, null=True, )
+	weeklyTask = models.ForeignKey(WeeklyTask, on_delete=models.CASCADE, verbose_name="Еженедельная задача",
+	                               blank=True, null=True, )
+	mainQuest = models.ForeignKey(MainQuest, on_delete=models.CASCADE, verbose_name="Основной квест",
+	                              blank=True, null=True, )
+	completedTest = models.ForeignKey(Test, on_delete=models.CASCADE, verbose_name="Выполненный тест", blank=True,
+	                                  null=True, related_name='completedTest')
+	completedTask = models.ForeignKey(Task, on_delete=models.CASCADE, verbose_name="Выполненная задача", blank=True,
+	                                  null=True, related_name='completedTask')
+	completedWeeklyTask = models.ForeignKey(Task, on_delete=models.CASCADE,
+	                                        verbose_name="Выполненная еженедельная задача", blank=True,
+	                                        null=True, related_name='completedWeeklyTask')
+	completedMainQuest = models.ForeignKey(MainQuest, on_delete=models.CASCADE,
+	                                       verbose_name="Выполненный основной квест",
+	                                       blank=True, null=True, related_name='completedMainQuest')
 
-    # IDs
+	# IDs
 
-    level = models.IntegerField(default=0, verbose_name="Требуемый уровень")
-    quality = models.FloatField(default=0.0, verbose_name="Требуемое качество")
-    productivity = models.FloatField(
-        default=0.0, verbose_name="Требуемая продуктивность")
+	level = models.IntegerField(default=0, verbose_name="Требуемый уровень")
+	quality = models.FloatField(default=0.0, verbose_name="Требуемое качество")
+	productivity = models.FloatField(
+		default=0.0, verbose_name="Требуемая продуктивность")
 
-    def __str__(self):
-        return str(self.id)
+	def __str__(self):
+		return str(self.id)
 
-    class Meta:
-        verbose_name = "требование для получения доступа"
-        verbose_name_plural = "требования для получения доступа"
+	class Meta:
+		verbose_name = "требование для получения доступа"
+		verbose_name_plural = "требования для получения доступа"
 
 
 class RequirementsToComplete(models.Model):
-    # IDs
+	# IDs
 
-    test = models.ForeignKey(
-        Test, on_delete=models.CASCADE, verbose_name="Тест", blank=True, null=True, )
-    task = models.ForeignKey(
-        Task, on_delete=models.CASCADE, verbose_name="Задача", blank=True, null=True, )
-    mainQuest = models.ForeignKey(MainQuest, on_delete=models.CASCADE, verbose_name="Основной квест",
-                                  blank=True, null=True, )
-    weeklyTask = models.ForeignKey(WeeklyTask, on_delete=models.CASCADE, verbose_name="Еженедельная задача",
-                                   blank=True, null=True, )
-    doneTest = models.ForeignKey(Test, on_delete=models.CASCADE, verbose_name="Выполненный тест", blank=True,
-                                 null=True, related_name='doneTest')
-    doneTask = models.ForeignKey(Task, on_delete=models.CASCADE, verbose_name="Выполненная задача", blank=True,
-                                 null=True, related_name='doneTask')
-    doneMainQuest = models.ForeignKey(MainQuest, on_delete=models.CASCADE,
-                                      verbose_name="Выполненный основной квест",
-                                      blank=True, null=True, related_name='doneMainQuest')
-    doneWeeklyTask = models.ForeignKey(Task, on_delete=models.CASCADE,
-                                       verbose_name="Выполненная еженедельная задача", blank=True,
-                                       null=True, related_name='doneWeeklyTask')
+	test = models.ForeignKey(
+		Test, on_delete=models.CASCADE, verbose_name="Тест", blank=True, null=True, )
+	task = models.ForeignKey(
+		Task, on_delete=models.CASCADE, verbose_name="Задача", blank=True, null=True, )
+	mainQuest = models.ForeignKey(MainQuest, on_delete=models.CASCADE, verbose_name="Основной квест",
+	                              blank=True, null=True, )
+	weeklyTask = models.ForeignKey(WeeklyTask, on_delete=models.CASCADE, verbose_name="Еженедельная задача",
+	                               blank=True, null=True, )
+	doneTest = models.ForeignKey(Test, on_delete=models.CASCADE, verbose_name="Выполненный тест", blank=True,
+	                             null=True, related_name='doneTest')
+	doneTask = models.ForeignKey(Task, on_delete=models.CASCADE, verbose_name="Выполненная задача", blank=True,
+	                             null=True, related_name='doneTask')
+	doneMainQuest = models.ForeignKey(MainQuest, on_delete=models.CASCADE,
+	                                  verbose_name="Выполненный основной квест",
+	                                  blank=True, null=True, related_name='doneMainQuest')
+	doneWeeklyTask = models.ForeignKey(Task, on_delete=models.CASCADE,
+	                                   verbose_name="Выполненная еженедельная задача", blank=True,
+	                                   null=True, related_name='doneWeeklyTask')
 
-    # IDs
+	# IDs
 
-    level = models.IntegerField(default=0, verbose_name="Требуемый уровень")
-    quality = models.FloatField(default=0.0, verbose_name="Требуемое качество")
-    productivity = models.FloatField(
-        default=0.0, verbose_name="Требуемая продуктивность")
+	level = models.IntegerField(default=0, verbose_name="Требуемый уровень")
+	quality = models.FloatField(default=0.0, verbose_name="Требуемое качество")
+	productivity = models.FloatField(
+		default=0.0, verbose_name="Требуемая продуктивность")
 
-    def __str__(self):
-        return str(self.id)
+	def __str__(self):
+		return str(self.id)
 
-    class Meta:
-        verbose_name = "требование для выполнения"
-        verbose_name_plural = "требования для выполнения"
+	class Meta:
+		verbose_name = "требование для выполнения"
+		verbose_name_plural = "требования для выполнения"
 
 
 ##############################################
@@ -1057,158 +1032,158 @@ class RequirementsToComplete(models.Model):
 ##############################################
 
 class ProductCategory(models.Model):
-    title = models.CharField(max_length=120, verbose_name="Название товара")
-    description = models.TextField(verbose_name="Описание товара")
+	title = models.CharField(max_length=120, verbose_name="Название товара")
+	description = models.TextField(verbose_name="Описание товара")
 
-    def __str__(self):
-        return str(self.title)
+	def __str__(self):
+		return str(self.title)
 
-    class Meta:
-        verbose_name = "категория товара"
-        verbose_name_plural = "категории товаров"
+	class Meta:
+		verbose_name = "категория товара"
+		verbose_name_plural = "категории товаров"
 
 
 class Product(models.Model):
-    # IDs
+	# IDs
 
-    productCategory = models.ForeignKey(
-        ProductCategory, on_delete=models.CASCADE, verbose_name="Категория товара")
+	productCategory = models.ForeignKey(
+		ProductCategory, on_delete=models.CASCADE, verbose_name="Категория товара")
 
-    # IDs
+	# IDs
 
-    title = models.CharField(max_length=120, verbose_name="Название товара")
-    description = models.TextField(verbose_name="Описание товара")
-    count = models.IntegerField(default=0, verbose_name="Кол-во товара")
-    photo = models.ImageField(verbose_name="Фото товара")
+	title = models.CharField(max_length=120, verbose_name="Название товара")
+	description = models.TextField(verbose_name="Описание товара")
+	count = models.IntegerField(default=0, verbose_name="Кол-во товара")
+	photo = models.ImageField(verbose_name="Фото товара")
 
-    created_at = models.DateTimeField(
-        auto_now_add=True, verbose_name="Время создания")
-    updated_at = models.DateTimeField(auto_now=True)
+	created_at = models.DateTimeField(
+		auto_now_add=True, verbose_name="Время создания")
+	updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return str(self.title)
+	def __str__(self):
+		return str(self.title)
 
-    class Meta:
-        verbose_name = "товар"
-        verbose_name_plural = "товары"
+	class Meta:
+		verbose_name = "товар"
+		verbose_name_plural = "товары"
 
 
 class RequirementsToBuyProduct(models.Model):
-    # IDs
+	# IDs
 
-    product = models.ForeignKey(
-        Product, on_delete=models.CASCADE, verbose_name="Категория товара")
-    completedTest = models.ForeignKey(
-        Test, on_delete=models.CASCADE, verbose_name="Тест", blank=True, null=True, )
-    completedTask = models.ForeignKey(
-        Task, on_delete=models.CASCADE, verbose_name="Задача", blank=True, null=True, )
-    completedWeeklyTask = models.ForeignKey(WeeklyTask, on_delete=models.CASCADE, verbose_name="Еженедельная задача",
-                                            blank=True, null=True, )
-    completedMainQuest = models.ForeignKey(MainQuest, on_delete=models.CASCADE, verbose_name="Основной квест",
-                                           blank=True, null=True, )
+	product = models.ForeignKey(
+		Product, on_delete=models.CASCADE, verbose_name="Категория товара")
+	completedTest = models.ForeignKey(
+		Test, on_delete=models.CASCADE, verbose_name="Тест", blank=True, null=True, )
+	completedTask = models.ForeignKey(
+		Task, on_delete=models.CASCADE, verbose_name="Задача", blank=True, null=True, )
+	completedWeeklyTask = models.ForeignKey(WeeklyTask, on_delete=models.CASCADE, verbose_name="Еженедельная задача",
+	                                        blank=True, null=True, )
+	completedMainQuest = models.ForeignKey(MainQuest, on_delete=models.CASCADE, verbose_name="Основной квест",
+	                                       blank=True, null=True, )
 
-    # IDs
+	# IDs
 
-    level = models.IntegerField(default=0, verbose_name="Требуемый уровень")
-    # quality = models.FloatField(default=0.0, verbose_name="Требуемое качество")
-    # productivity = models.FloatField(
-    #     default=0.0, verbose_name="Требуемая продуктивность")
-    # Данные атрибуты не успользуются при работе на стороне клиента
+	level = models.IntegerField(default=0, verbose_name="Требуемый уровень")
+	# quality = models.FloatField(default=0.0, verbose_name="Требуемое качество")
+	# productivity = models.FloatField(
+	#     default=0.0, verbose_name="Требуемая продуктивность")
+	# Данные атрибуты не успользуются при работе на стороне клиента
 
-    money = models.IntegerField(default=0, verbose_name="Кол-во Валюты")
+	money = models.IntegerField(default=0, verbose_name="Кол-во Валюты")
 
-    health = models.IntegerField(default=0, verbose_name="Кол-во Жизней")
-    energy = models.IntegerField(default=0, verbose_name="Кол-во Энергии")
+	health = models.IntegerField(default=0, verbose_name="Кол-во Жизней")
+	energy = models.IntegerField(default=0, verbose_name="Кол-во Энергии")
 
-    # Данные атрибуты не успользуются при работе на стороне клиента
+	# Данные атрибуты не успользуются при работе на стороне клиента
 
-    def __str__(self):
-        return str(self.id)
+	def __str__(self):
+		return str(self.id)
 
-    class Meta:
-        verbose_name = "требование для получения товара"
-        verbose_name_plural = "требования для получения товаров"
+	class Meta:
+		verbose_name = "требование для получения товара"
+		verbose_name_plural = "требования для получения товаров"
 
 
 class CategoryClothes(models.Model):
-    S = 's'
-    M = 'm'
-    XL = 'xl'
-    SIZE_TYPE_CHOICES = (
-        (S, 'S'),
-        (M, 'M'),
-        (XL, 'XL'),
-    )
+	S = 's'
+	M = 'm'
+	XL = 'xl'
+	SIZE_TYPE_CHOICES = (
+		(S, 'S'),
+		(M, 'M'),
+		(XL, 'XL'),
+	)
 
-    MALE = 'male'
-    FEMALE = 'female'
-    ALL = 'all'
-    GENDER_CHOICES = (
-        (MALE, 'мужское'),
-        (FEMALE, 'женское'),
-        (ALL, 'для всех'),
-    )
+	MALE = 'male'
+	FEMALE = 'female'
+	ALL = 'all'
+	GENDER_CHOICES = (
+		(MALE, 'мужское'),
+		(FEMALE, 'женское'),
+		(ALL, 'для всех'),
+	)
 
-    TSHIRT = 'tshirt'
-    SWEATER = 'sweater'
-    JEANS = 'jeans'
-    CAP = 'cap'
-    CLOTHES_TYPE_CHOICES = (
-        (TSHIRT, 'футболка'),
-        (SWEATER, 'свитер'),
-        (JEANS, 'джинсы'),
-        (CAP, 'кепка'),
-    )
-    # IDs
+	TSHIRT = 'tshirt'
+	SWEATER = 'sweater'
+	JEANS = 'jeans'
+	CAP = 'cap'
+	CLOTHES_TYPE_CHOICES = (
+		(TSHIRT, 'футболка'),
+		(SWEATER, 'свитер'),
+		(JEANS, 'джинсы'),
+		(CAP, 'кепка'),
+	)
+	# IDs
 
-    product = models.OneToOneField(
-        Product, on_delete=models.CASCADE, verbose_name="Товар")
+	product = models.OneToOneField(
+		Product, on_delete=models.CASCADE, verbose_name="Товар")
 
-    # IDs
+	# IDs
 
-    size = models.CharField(max_length=20, choices=SIZE_TYPE_CHOICES,
-                            default=S, verbose_name="Размер")
-    gender = models.CharField(max_length=20, choices=GENDER_CHOICES,
-                              default=MALE, verbose_name="Пол")
-    clothesType = models.CharField(max_length=20, choices=CLOTHES_TYPE_CHOICES,
-                                   default=TSHIRT, verbose_name="Тип одежды")
-    color = models.CharField(max_length=7, verbose_name="Цвет")
+	size = models.CharField(max_length=20, choices=SIZE_TYPE_CHOICES,
+	                        default=S, verbose_name="Размер")
+	gender = models.CharField(max_length=20, choices=GENDER_CHOICES,
+	                          default=MALE, verbose_name="Пол")
+	clothesType = models.CharField(max_length=20, choices=CLOTHES_TYPE_CHOICES,
+	                               default=TSHIRT, verbose_name="Тип одежды")
+	color = models.CharField(max_length=7, verbose_name="Цвет")
 
-    def __str__(self):
-        return str(self.id)
+	def __str__(self):
+		return str(self.id)
 
-    class Meta:
-        verbose_name = "описание товара - одежды"
-        verbose_name_plural = "описания товаров - одежды"
+	class Meta:
+		verbose_name = "описание товара - одежды"
+		verbose_name_plural = "описания товаров - одежды"
 
 
 class Purchase(models.Model):
-    PENDING = 'pending'
-    PAID = 'paid'
-    EXPECTS = 'expects'
-    RECEIVED = 'received'
-    PURCHASE_STATUS_CHOICES = (
-        (PENDING, 'оформляется'),
-        (PAID, 'оплачен'),
-        (EXPECTS, 'можно забрать'),
-        (RECEIVED, 'получен'),
-    )
-    # IDs
+	PENDING = 'pending'
+	PAID = 'paid'
+	EXPECTS = 'expects'
+	RECEIVED = 'received'
+	PURCHASE_STATUS_CHOICES = (
+		(PENDING, 'оформляется'),
+		(PAID, 'оплачен'),
+		(EXPECTS, 'можно забрать'),
+		(RECEIVED, 'получен'),
+	)
+	# IDs
 
-    user = models.ForeignKey(
-        UserProfile, on_delete=models.CASCADE, verbose_name="Пользователь")
-    products = models.ManyToManyField(Product, verbose_name="Товары")
+	user = models.ForeignKey(
+		UserProfile, on_delete=models.CASCADE, verbose_name="Пользователь")
+	products = models.ManyToManyField(Product, verbose_name="Товары")
 
-    # IDs
+	# IDs
 
-    productCount = models.IntegerField(
-        default=0, verbose_name="Кол-во покупаемых товаров")
-    status = models.CharField(max_length=20, choices=PURCHASE_STATUS_CHOICES,
-                              default=PENDING, verbose_name="Размер")
+	productCount = models.IntegerField(
+		default=0, verbose_name="Кол-во покупаемых товаров")
+	status = models.CharField(max_length=20, choices=PURCHASE_STATUS_CHOICES,
+	                          default=PENDING, verbose_name="Размер")
 
-    def __str__(self):
-        return str(self.id)
+	def __str__(self):
+		return str(self.id)
 
-    class Meta:
-        verbose_name = "покупка"
-        verbose_name_plural = "покупки"
+	class Meta:
+		verbose_name = "покупка"
+		verbose_name_plural = "покупки"

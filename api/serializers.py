@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from . import models
-from .models import MainQuest, MainQuestTree
 
 
 class EmptySerializer(serializers.Serializer):
@@ -79,14 +78,14 @@ class TaskSerializer(serializers.ModelSerializer):
 
 class QuestSerializer(serializers.ModelSerializer):
     class Meta:
-        model = MainQuest
+        model = models.MainQuest
         fields = ["id", "tasks", "difficulty", "title", "description",
                   "accessLevel", "money", "health", "energy", "is_active", "time_left"]
 
 
 class QuestTreeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = MainQuestTree
+        model = models.MainQuestTree
         fields = ["id", "mainQuest", "task", "parentTask"]
 
 

@@ -18,9 +18,6 @@ from . import models
 
 from django.http import HttpResponse, JsonResponse
 
-from .models import UserProfile, MainQuest, MainQuestTree, Task
-from .serializers import QuestSerializer, TaskSerializer
-
 
 class JobPositionViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.JobPositionSerializer
@@ -468,18 +465,18 @@ def get_weekly_tasks(request):
 @permission_classes([IsAuthenticated])
 def get_quests(request):
     if request.method == 'GET':
-        user = UserProfile.objects.get(id=request.user.id)
-        quests = MainQuest.objects.all().filter(division=user.division)
+        user = models.UserProfile.objects.get(id=request.user.id)
+        quests = models.MainQuest.objects.all().filter(division=user.division)
         active_quests = [x for x in quests if x.is_active is True]
-        quest_serializer = QuestSerializer(active_quests, many=True)
+        quest_serializer = serializers.QuestSerializer(active_quests, many=True)
         for quest in quest_serializer.data:  # прогоняем каждый квест
-            tasks_trees = MainQuestTree.objects.all().filter(mainQuest=quest['id'])
-            tasks = Task.objects.filter(id__in=[task_tree.task.id for task_tree in tasks_trees])
-            serializer = TaskSerializer(tasks, many=True)
+            tasks_trees = models.MainQuestTree.objects.all().filter(mainQuest=quest['id'])
+            tasks = models.Task.objects.filter(id__in=[task_tree.task.id for task_tree in tasks_trees])
+            serializer = serializers.TaskSerializer(tasks, many=True)
             quest['tasks'] = serializer.data
             for task in serializer.data:
-                sub_tasks = Task.objects.all().filter(parent=task['id'])
-                sub_tasks_serializer = TaskSerializer(sub_tasks, many=True)
+                sub_tasks = models.Task.objects.all().filter(parent=task['id'])
+                sub_tasks_serializer = serializers.TaskSerializer(sub_tasks, many=True)
                 task['subTasks'] = sub_tasks_serializer.data
         return Response(quest_serializer.data)
 
