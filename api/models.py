@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from taggit.managers import TaggableManager
@@ -463,11 +464,19 @@ class MainQuest(models.Model):
 
 	# IDs
 
-	difficulty = models.CharField(max_length=20, choices=DIFFICULTY_TYPE_CHOICES,
-	                              default=EASY, verbose_name="Сложность")
-	title = models.CharField(max_length=120, verbose_name="Называние")
+	difficulty = models.CharField(max_length=20, choices=DIFFICULTY_TYPE_CHOICES, default=EASY, verbose_name="Сложность")
+	title = models.CharField(max_length=120, verbose_name="Название")
 	description = models.TextField(verbose_name="Описание")
-	deadline = models.IntegerField(default=0, verbose_name="Дедлайн")
+	deadline = models.DateTimeField(verbose_name="Дедлайн", default=timezone.now)
+
+	@property
+	def is_active(self):
+		return timezone.now() < self.deadline if self.deadline else False
+
+	@property
+	def time_left(self):
+		return self.deadline - timezone.now() if self.deadline else False
+
 	accessLevel = models.IntegerField(
 		default=0, verbose_name="Уровень доступа")
 	tasksCount = models.IntegerField(
@@ -495,8 +504,6 @@ class MainQuestTree(models.Model):
 	task = models.ForeignKey(Task, on_delete=models.CASCADE, )
 	parentTask = models.ForeignKey(
 		Task, on_delete=models.CASCADE, related_name='parentTask')
-	childTask = models.ForeignKey(
-		Task, on_delete=models.CASCADE, related_name='childTask')
 
 	# IDs
 
