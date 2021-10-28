@@ -14,35 +14,31 @@ from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, Ou
 
 from . import serializers
 
-from .models import JobPosition, Division, QuestionTheme, Statistics, UserProfile, Task, WeeklyTask, TaskUserStatus, \
-	Team, \
-	Competition, Product, RequirementsToBuyProduct, Test, Question, Answer, TestBlock, Achievement, \
-	RequirenmentToGetAchieve, \
-	AchieveRequirenmentStatus, AchievementUserStatus, Purchase, TestUser, TestUserAnswer
+from . import models
 
 from django.http import HttpResponse, JsonResponse
 
 
 class JobPositionViewSet(viewsets.ModelViewSet):
 	serializer_class = serializers.JobPositionSerializer
-	queryset = JobPosition.objects.all()
+	queryset = models.JobPosition.objects.all()
 
 
 class DivisionViewSet(viewsets.ModelViewSet):
 	serializer_class = serializers.DivisionSerializer
-	queryset = Division.objects.all()
+	queryset = models.Division.objects.all()
 
 
 class QuestionThemeViewSet(viewsets.ModelViewSet):
 	permission_classes = (AllowAny,)
 	serializer_class = serializers.QuestionThemeSerializer
-	queryset = QuestionTheme.objects.all()
+	queryset = models.QuestionTheme.objects.all()
 
 
 class UserProfileViewSet(viewsets.ModelViewSet):
 	permission_classes = (AllowAny,)
 	serializer_class = serializers.UserProfileSerializer
-	queryset = UserProfile.objects.all()
+	queryset = models.UserProfile.objects.all()
 
 	def get_permissions(self):
 		if self.action == 'retrieve' or self.action == 'update':
@@ -72,7 +68,7 @@ def update_user_money_energy(request):
 		return Response(serializer.data)
 
 	if request.method == 'PUT':
-		user = UserProfile.objects.get(id=request.user.id)
+		user = models.UserProfile.objects.get(id=request.user.id)
 		user.energy += request.data.get('energy')
 		user.money += request.data.get('money')
 		user.save()
@@ -92,61 +88,61 @@ class ProductViewSet(viewsets.ModelViewSet):
 	# For prod use IsAuthenticated . AllowAny using for Debug
 	permission_classes = (AllowAny,)
 	serializer_class = serializers.ProductSerializer
-	queryset = Product.objects.all().filter(count__gt=0)
+	queryset = models.Product.objects.all().filter(count__gt=0)
 
 
 class TestsViewSet(viewsets.ModelViewSet):
 	permission_classes = (AllowAny,)
 	serializer_class = serializers.TestsSerializer
-	queryset = Test.objects.all()
+	queryset = models.Test.objects.all()
 
 
 class TestUserViewSet(viewsets.ModelViewSet):
 	permission_classes = (AllowAny,)
 	serializer_class = serializers.TestUserSerializer
-	queryset = TestUser.objects.all()
+	queryset = models.TestUser.objects.all()
 
 
 class TestBlockViewSet(viewsets.ModelViewSet):
 	permission_classes = (AllowAny,)
 	serializer_class = serializers.TestBlockSerializer
-	queryset = TestBlock.objects.all()
+	queryset = models.TestBlock.objects.all()
 
 
 class QuestionsViewSet(viewsets.ModelViewSet):
 	permission_classes = (AllowAny,)
 	serializer_class = serializers.QuestionsSerializer
-	queryset = Question.objects.all()
+	queryset = models.Question.objects.all()
 
 
 class AnswersViewSet(viewsets.ModelViewSet):
 	permission_classes = (AllowAny,)
 	serializer_class = serializers.AnswersSerializer
-	queryset = Answer.objects.all()
+	queryset = models.Answer.objects.all()
 
 
 class AchievementViewSet(viewsets.ModelViewSet):
 	permission_classes = (AllowAny,)
 	serializer_class = serializers.AchievementSerializer
-	queryset = Achievement.objects.all()
+	queryset = models.Achievement.objects.all()
 
 
 class RequirenmentToGetAchieveViewSet(viewsets.ModelViewSet):
 	permission_classes = (AllowAny,)
 	serializer_class = serializers.RequirenmentToGetAchieveSerializer
-	queryset = RequirenmentToGetAchieve.objects.all()
+	queryset = models.RequirenmentToGetAchieve.objects.all()
 
 
 class AchieveRequirenmentStatusViewSet(viewsets.ModelViewSet):
 	permission_classes = (AllowAny,)
 	serializer_class = serializers.AchieveRequirenmentStatusSerializer
-	queryset = AchieveRequirenmentStatus.objects.all()
+	queryset = models.AchieveRequirenmentStatus.objects.all()
 
 
 class AchievementUserStatusViewSet(viewsets.ModelViewSet):
 	permission_classes = (AllowAny,)
 	serializer_class = serializers.AchievementUserStatusSerializer
-	queryset = AchievementUserStatus.objects.all()
+	queryset = models.AchievementUserStatus.objects.all()
 
 
 @api_view(['GET'])
@@ -155,7 +151,7 @@ class AchievementUserStatusViewSet(viewsets.ModelViewSet):
 # @ensure_csrf_cookie
 def userFilterForCompetition(request):
 	if request.method == 'GET':
-		tests = Test.objects.exclude(users=request.user.id).all()
+		tests = models.Test.objects.exclude(users=request.user.id).all()
 		serializer = serializers.TestsSerializer(tests, many=True)
 		return JsonResponse(serializer.data, safe=False)
 
@@ -172,7 +168,7 @@ def unresolved_test(request):
 	# serializer без user
 	##################
 	if request.method == 'GET':
-		tests = Test.objects.exclude(users=request.user.id).all()
+		tests = models.Test.objects.exclude(users=request.user.id).all()
 		serializer = serializers.TestsWithoutUsersSerializer(tests, many=True)
 		return JsonResponse(serializer.data, safe=False)
 
@@ -191,13 +187,13 @@ def users_select(request):
 	if request.method == 'GET':
 		if request.data.get('name', '') and request.data.get('surname', ''):
 			# user = UserProfile.objects.filter(name__icontains=request.data.get('name'), surname__icontains=request.data.get('surname')).order_by('-rating').all()[:10]
-			user = UserProfile.objects.filter(name__icontains=request.data.get('name'),
-			                                  surname__icontains=request.data.get('surname')).all()[:10]
+			user = models.UserProfile.objects.filter(name__icontains=request.data.get('name'),
+			                                         surname__icontains=request.data.get('surname')).all()[:10]
 		elif request.data.get('name', ''):
-			user = UserProfile.objects.filter(name__contains=request.data.get('name')).all()[:10]
+			user = models.UserProfile.objects.filter(name__contains=request.data.get('name')).all()[:10]
 			# user = UserProfile.objects.filter(name__icontains=request.data.get('name')).order_by('-rating').all()[:10]
 		else:
-			user = UserProfile.objects.all()[:10]
+			user = models.UserProfile.objects.all()[:10]
 			# user = UserProfile.objects.order_by('-rating').all()[:10]
 		serializer = serializers.UserProfileSerializer(user, many=True)
 		return JsonResponse(serializer.data, safe=False)
@@ -217,7 +213,7 @@ def test_questions(request):
 		question_without_choice_id = []
 		# all_data это массив первый элемент которого тестблок внутри которого вопросы второй элемент массива это ответы
 		all_data = []
-		test_block = TestBlock.objects.filter(
+		test_block = models.TestBlock.objects.filter(
 			test=request.data.get('test_id')).all()
 		serializer = serializers.TestBlockQuestionsSerializer(test_block, many=True)
 		# заполняем массив question_id айдишниками вопросов в нужном тесте (через каждый test_block)
@@ -229,9 +225,9 @@ def test_questions(request):
 				else:
 					question_without_choice_id.append(item2["id"])
 
-		answers_choice = Answer.objects.filter(
+		answers_choice = models.Answer.objects.filter(
 			question__in=question_choice_id).all()
-		answers_without_choice = Answer.objects.filter(
+		answers_without_choice = models.Answer.objects.filter(
 			question__in=question_without_choice_id).all()
 		serializer2 = serializers.AnswersWithoutFlagSerializer(answers_choice, many=True)
 		serializer3 = serializers.AnswersIdSerializer(answers_without_choice, many=True)
@@ -252,7 +248,7 @@ def test_post(request):
     """
 	# TODO controll transactios
 	if request.method == 'POST':
-		user = UserProfile.objects.get(id=request.user.id)
+		user = models.UserProfile.objects.get(id=request.user.id)
 		right_answers = 0
 		wrong_answers = 0
 		true_questions_simple = []
@@ -261,7 +257,7 @@ def test_post(request):
 		false_questions_multi = []
 		true_questions_text = []
 		false_questions_text = []
-		test = Test.objects.get(
+		test = models.Test.objects.get(
 			id=request.data.get("test_id"))
 		status = ''
 		points_to_complete = test.pointsToComplete
@@ -272,7 +268,7 @@ def test_post(request):
 		# ###############
 		request_answers_simple = request.data.get("answers_simple")
 		if request_answers_simple:
-			answers_simple = Answer.objects.filter(
+			answers_simple = models.Answer.objects.filter(
 				id__in=request_answers_simple).values("isCorrect", "question")
 			for answer_simple in answers_simple:
 				if answer_simple.get("isCorrect"):
@@ -293,7 +289,7 @@ def test_post(request):
 			request_answers_multi_questions = [
 				a.get("question_id") for a in request_answers_multi
 			]
-			true_answers_multi = Answer.objects.filter(
+			true_answers_multi = models.Answer.objects.filter(
 				question__in=request_answers_multi_questions).filter(isCorrect=True).values("id", "isCorrect",
 			                                                                                "question")
 			for request_answer_multi in request_answers_multi:
@@ -320,7 +316,7 @@ def test_post(request):
 			request_answers_text_questions = [
 				a.get("question_id") for a in request_answers_text
 			]
-			true_answers_text = Answer.objects.filter(
+			true_answers_text = models.Answer.objects.filter(
 				question__in=request_answers_text_questions).filter(isCorrect=True).values("id", "isCorrect",
 			                                                                               "question", "text")
 			for request_answer_text in request_answers_text:
@@ -342,31 +338,31 @@ def test_post(request):
 		else:
 			status = "Провален"
 
-		testUser = TestUser(test=test, user=user, status=status,
-		                    rightAnswersCount=right_answers, points=right_answers)
+		testUser = models.TestUser(test=test, user=user, status=status,
+		                           rightAnswersCount=right_answers, points=right_answers)
 		testUser.save()
 		for true_question_simple in true_questions_simple:
-			testUserAnswer = TestUserAnswer(
+			testUserAnswer = models.TestUserAnswer(
 				testUser=testUser, question_id=true_question_simple, isCorrect=True)
 			testUserAnswer.save()
 		for false_question_simple in false_questions_simple:
-			testUserAnswer = TestUserAnswer(
+			testUserAnswer = models.TestUserAnswer(
 				testUser=testUser, question_id=false_question_simple, isCorrect=False)
 			testUserAnswer.save()
 		for true_question_multi in true_questions_multi:
-			testUserAnswer = TestUserAnswer(
+			testUserAnswer = models.TestUserAnswer(
 				testUser=testUser, question_id=true_question_multi, isCorrect=True)
 			testUserAnswer.save()
 		for false_question_multi in false_questions_multi:
-			testUserAnswer = TestUserAnswer(
+			testUserAnswer = models.TestUserAnswer(
 				testUser=testUser, question_id=false_question_multi, isCorrect=False)
 			testUserAnswer.save()
 		for true_question_text in true_questions_text:
-			testUserAnswer = TestUserAnswer(
+			testUserAnswer = models.TestUserAnswer(
 				testUser=testUser, question_id=true_question_text, isCorrect=True)
 			testUserAnswer.save()
 		for false_question_text in false_questions_text:
-			testUserAnswer = TestUserAnswer(
+			testUserAnswer = models.TestUserAnswer(
 				testUser=testUser, question_id=false_question_text, isCorrect=False)
 			testUserAnswer.save()
 
@@ -393,7 +389,7 @@ def shop(request):
     """
 	# Выводит товары которые есть в наличии и их стоимость
 	if request.method == 'GET':
-		products = RequirementsToBuyProduct.objects.filter(
+		products = models.RequirementsToBuyProduct.objects.filter(
 			product__count=1).all().prefetch_related('product')
 		serializer = serializers.RequirementsToBuyProductSerializer(products, many=True)
 		return JsonResponse(serializer.data, safe=False)
@@ -401,8 +397,8 @@ def shop(request):
 	# TODO controll transactios
 	if request.method == 'PUT':
 		summary_cost = 0
-		user = UserProfile.objects.get(id=request.user.id)
-		products_req = RequirementsToBuyProduct.objects.filter(
+		user = models.UserProfile.objects.get(id=request.user.id)
+		products_req = models.RequirementsToBuyProduct.objects.filter(
 			id__in=request.data.get('ids')).all().prefetch_related('product')
 		for product_req in products_req:
 			if product_req.product.count <= 0:
@@ -414,8 +410,8 @@ def shop(request):
 				return Response(data="You dont have money")
 		user.money -= summary_cost
 		user.save()
-		products = Product.objects.all()
-		p = Purchase(user=request.user)
+		products = models.Product.objects.all()
+		p = models.Purchase(user=request.user)
 		p.save()
 		p.products.set(products)
 		for product in products:
@@ -426,25 +422,25 @@ def shop(request):
 
 class StatisticsViewSet(viewsets.ModelViewSet):
 	serializer_class = serializers.StatisticsSerializer
-	queryset = Statistics.objects.all()
+	queryset = models.Statistics.objects.all()
 
 
 class TeamsViewSet(viewsets.ModelViewSet):
 	serializer_class = serializers.TeamSerializer
-	queryset = Team.objects.all()
+	queryset = models.Team.objects.all()
 
 
 class TaskViewSet(viewsets.ModelViewSet):
 	serializer_class = serializers.TaskSerializer
-	queryset = Task.objects.all()
+	queryset = models.Task.objects.all()
 
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_daily_tasks(request):
 	if request.method == 'GET':
-		user = UserProfile.objects.get(id=request.user.id)
-		tasks = Task.objects.all().filter(taskType="daily").exclude(
+		user = models.UserProfile.objects.get(id=request.user.id)
+		tasks = models.Task.objects.all().filter(taskType="daily").exclude(
 			~Q(parent=None)).exclude(
 			~Q(weekly=None)).filter(division=user.division)
 		serializer = serializers.TaskSerializer(tasks, many=True)
@@ -455,11 +451,11 @@ def get_daily_tasks(request):
 @permission_classes([IsAuthenticated])
 def get_weekly_tasks(request):
 	if request.method == 'GET':
-		user = UserProfile.objects.get(id=request.user.id)
-		weeklyTasks = WeeklyTask.objects.all().filter(division=user.division)
+		user = models.UserProfile.objects.get(id=request.user.id)
+		weeklyTasks = models.WeeklyTask.objects.all().filter(division=user.division)
 		serializer = serializers.WeeklyTaskSerializer(weeklyTasks, many=True)
 		for weeklyTask in serializer.data:
-			subTasks = Task.objects.all().filter(weekly=weeklyTask['id'])
+			subTasks = models.Task.objects.all().filter(weekly=weeklyTask['id'])
 			subSerializer = serializers.TaskSerializer(subTasks, many=True)
 			weeklyTask['subTasks'] = subSerializer.data
 		return Response(serializer.data)
@@ -470,13 +466,13 @@ def get_weekly_tasks(request):
 def get_quests(request):
 	if request.method == 'GET':
 
-		user = UserProfile.objects.get(id=request.user.id)
-		quests = Task.objects.all().filter(taskType="quest").exclude(
+		user = models.UserProfile.objects.get(id=request.user.id)
+		quests = models.Task.objects.all().filter(taskType="quest").exclude(
 			~Q(parent=None)).exclude(
 			~Q(weekly=None)).filter(division=user.division)
 		serializer = serializers.TaskSerializer(quests, many=True)
 		for quest in serializer.data:
-			subTasks = Task.objects.all().filter(parent=quest['id'])
+			subTasks = models.Task.objects.all().filter(parent=quest['id'])
 			subSerializer = serializers.TaskSerializer(subTasks, many=True)
 			quest['subTasks'] = subSerializer.data
 		return Response(serializer.data)
@@ -484,12 +480,12 @@ def get_quests(request):
 
 class WeeklyTaskViewSet(viewsets.ModelViewSet):
 	serializer_class = serializers.WeeklyTaskSerializer
-	queryset = WeeklyTask.objects.all()
+	queryset = models.WeeklyTask.objects.all()
 
 
 class TaskUserStatusViewSet(viewsets.ModelViewSet):
 	serializer_class = serializers.TaskUserStatusSerializer
-	queryset = TaskUserStatus.objects.all()
+	queryset = models.TaskUserStatus.objects.all()
 
 
 class LogoutView(APIView):

@@ -1,5 +1,5 @@
 from django.contrib import admin
-# from django.contrib.auth.models import Group, User
+from django.contrib.auth.models import Group, User
 from django.contrib.auth.admin import GroupAdmin, UserAdmin
 from .models import UserProfile, MainQuest, Task, WeeklyTask, Division, JobPosition, Team, \
     MainQuest, Question, QuestionTheme, Test, TestUser, TestUserAnswer, TestBlock, Achievement, \
