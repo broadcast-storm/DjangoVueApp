@@ -12,54 +12,54 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
 
-from .serializers import JobPositionSerializer, DivisionSerializer, \
-    EmptySerializer, UserProfileSerializer, UserGetListSerializer, UserGetSerializer, StatisticsSerializer, TaskSerializer, TaskUserStatusSerializer, WeeklyTaskSerializer, \
-    TeamSerializer, ProductSerializer, RequirementsToBuyProductSerializer, TestsSerializer, QuestionsSerializer, \
-    AnswersSerializer, TestBlockSerializer, AchievementSerializer, RequirenmentToGetAchieveSerializer, AchieveRequirenmentStatusSerializer, \
-    AchievementUserStatusSerializer, CompetitionSerializer, UserCompetitionSerializer, TestUserSerializer, QuestionThemeSerializer, TestBlockQuestionsSerializer, AnswersWithoutFlagSerializer, AnswersIdSerializer, TestsWithoutUsersSerializer
-from .models import JobPosition, Division, QuestionTheme, Statistics, UserProfile, Task, WeeklyTask, TaskUserStatus, Team, \
-    Competition, Product, RequirementsToBuyProduct, Test, Question, Answer, TestBlock, Achievement, RequirenmentToGetAchieve, \
-    AchieveRequirenmentStatus, AchievementUserStatus, Purchase, TestUser, TestUserAnswer
+from . import serializers
+
+from .models import JobPosition, Division, QuestionTheme, Statistics, UserProfile, Task, WeeklyTask, TaskUserStatus, \
+	Team, \
+	Competition, Product, RequirementsToBuyProduct, Test, Question, Answer, TestBlock, Achievement, \
+	RequirenmentToGetAchieve, \
+	AchieveRequirenmentStatus, AchievementUserStatus, Purchase, TestUser, TestUserAnswer
+
 from django.http import HttpResponse, JsonResponse
 
 
 class JobPositionViewSet(viewsets.ModelViewSet):
-    serializer_class = JobPositionSerializer
-    queryset = JobPosition.objects.all()
+	serializer_class = serializers.JobPositionSerializer
+	queryset = JobPosition.objects.all()
 
 
 class DivisionViewSet(viewsets.ModelViewSet):
-    serializer_class = DivisionSerializer
-    queryset = Division.objects.all()
+	serializer_class = serializers.DivisionSerializer
+	queryset = Division.objects.all()
 
 
 class QuestionThemeViewSet(viewsets.ModelViewSet):
-    permission_classes = (AllowAny,)
-    serializer_class = QuestionThemeSerializer
-    queryset = QuestionTheme.objects.all()
+	permission_classes = (AllowAny,)
+	serializer_class = serializers.QuestionThemeSerializer
+	queryset = QuestionTheme.objects.all()
 
 
 class UserProfileViewSet(viewsets.ModelViewSet):
-    permission_classes = (AllowAny,)
-    # serializer_class = UserProfileSerializer
-    queryset = UserProfile.objects.all()
+	permission_classes = (AllowAny,)
+	serializer_class = serializers.UserProfileSerializer
+	queryset = UserProfile.objects.all()
 
-    def get_permissions(self):
-        if self.action == 'retrieve' or self.action == 'update':
-            permission_classes = [IsAuthenticated]
-        else:
-            permission_classes = [IsAuthenticated]
-        return [permission() for permission in permission_classes]
+	def get_permissions(self):
+		if self.action == 'retrieve' or self.action == 'update':
+			permission_classes = [IsAuthenticated]
+		else:
+			permission_classes = [IsAuthenticated]
+		return [permission() for permission in permission_classes]
 
-    def get_serializer_class(self):
-        if self.action == 'list':
-            return UserGetListSerializer
-        elif self.action == 'retrieve':
-            return UserGetSerializer
-        elif self.action == 'update':
-            return UserProfileSerializer
-        else:
-            return EmptySerializer
+	def get_serializer_class(self):
+		if self.action == 'list':
+			return serializers.UserGetListSerializer
+		elif self.action == 'retrieve':
+			return serializers.UserGetSerializer
+		elif self.action == 'update':
+			return serializers.UserProfileSerializer
+		else:
+			return serializers.EmptySerializer
 
 
 @api_view(['GET', 'PUT'])
@@ -67,86 +67,86 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 @permission_classes([AllowAny])
 # @ensure_csrf_cookie
 def update_user_money_energy(request):
-    if request.method == 'GET':
-        serializer = UserProfileSerializer(id=request.user.id)
-        return Response(serializer.data)
+	if request.method == 'GET':
+		serializer = serializers.UserProfileSerializer(id=request.user.id)
+		return Response(serializer.data)
 
-    if request.method == 'PUT':
-        user = UserProfile.objects.get(id=request.user.id)
-        user.energy += request.data.get('energy')
-        user.money += request.data.get('money')
-        user.save()
+	if request.method == 'PUT':
+		user = UserProfile.objects.get(id=request.user.id)
+		user.energy += request.data.get('energy')
+		user.money += request.data.get('money')
+		user.save()
 
-        return Response(data="Done")
-    #
-    # if request.method == 'PUT':
-    #     serializer = UserProfileSerializer(user, request.data)
-    #     if serializer.is_valid():
-    #         print(serializer.validated_data['password'])
-    #         serializer.save()
-    #         return Response(serializer.data)
-    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+		return Response(data="Done")
+	#
+	# if request.method == 'PUT':
+	#     serializer = UserProfileSerializer(user, request.data)
+	#     if serializer.is_valid():
+	#         print(serializer.validated_data['password'])
+	#         serializer.save()
+	#         return Response(serializer.data)
+	#     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ProductViewSet(viewsets.ModelViewSet):
-    # For prod use IsAuthenticated . AllowAny using for Debug
-    permission_classes = (AllowAny,)
-    serializer_class = ProductSerializer
-    queryset = Product.objects.all().filter(count__gt=0)
+	# For prod use IsAuthenticated . AllowAny using for Debug
+	permission_classes = (AllowAny,)
+	serializer_class = serializers.ProductSerializer
+	queryset = Product.objects.all().filter(count__gt=0)
 
 
 class TestsViewSet(viewsets.ModelViewSet):
-    permission_classes = (AllowAny,)
-    serializer_class = TestsSerializer
-    queryset = Test.objects.all()
+	permission_classes = (AllowAny,)
+	serializer_class = serializers.TestsSerializer
+	queryset = Test.objects.all()
 
 
 class TestUserViewSet(viewsets.ModelViewSet):
-    permission_classes = (AllowAny,)
-    serializer_class = TestUserSerializer
-    queryset = TestUser.objects.all()
+	permission_classes = (AllowAny,)
+	serializer_class = serializers.TestUserSerializer
+	queryset = TestUser.objects.all()
 
 
 class TestBlockViewSet(viewsets.ModelViewSet):
-    permission_classes = (AllowAny,)
-    serializer_class = TestBlockSerializer
-    queryset = TestBlock.objects.all()
+	permission_classes = (AllowAny,)
+	serializer_class = serializers.TestBlockSerializer
+	queryset = TestBlock.objects.all()
 
 
 class QuestionsViewSet(viewsets.ModelViewSet):
-    permission_classes = (AllowAny,)
-    serializer_class = QuestionsSerializer
-    queryset = Question.objects.all()
+	permission_classes = (AllowAny,)
+	serializer_class = serializers.QuestionsSerializer
+	queryset = Question.objects.all()
 
 
 class AnswersViewSet(viewsets.ModelViewSet):
-    permission_classes = (AllowAny,)
-    serializer_class = AnswersSerializer
-    queryset = Answer.objects.all()
+	permission_classes = (AllowAny,)
+	serializer_class = serializers.AnswersSerializer
+	queryset = Answer.objects.all()
 
 
 class AchievementViewSet(viewsets.ModelViewSet):
-    permission_classes = (AllowAny,)
-    serializer_class = AchievementSerializer
-    queryset = Achievement.objects.all()
+	permission_classes = (AllowAny,)
+	serializer_class = serializers.AchievementSerializer
+	queryset = Achievement.objects.all()
 
 
 class RequirenmentToGetAchieveViewSet(viewsets.ModelViewSet):
-    permission_classes = (AllowAny,)
-    serializer_class = RequirenmentToGetAchieveSerializer
-    queryset = RequirenmentToGetAchieve.objects.all()
+	permission_classes = (AllowAny,)
+	serializer_class = serializers.RequirenmentToGetAchieveSerializer
+	queryset = RequirenmentToGetAchieve.objects.all()
 
 
 class AchieveRequirenmentStatusViewSet(viewsets.ModelViewSet):
-    permission_classes = (AllowAny,)
-    serializer_class = AchieveRequirenmentStatusSerializer
-    queryset = AchieveRequirenmentStatus.objects.all()
+	permission_classes = (AllowAny,)
+	serializer_class = serializers.AchieveRequirenmentStatusSerializer
+	queryset = AchieveRequirenmentStatus.objects.all()
 
 
 class AchievementUserStatusViewSet(viewsets.ModelViewSet):
-    permission_classes = (AllowAny,)
-    serializer_class = AchievementUserStatusSerializer
-    queryset = AchievementUserStatus.objects.all()
+	permission_classes = (AllowAny,)
+	serializer_class = serializers.AchievementUserStatusSerializer
+	queryset = AchievementUserStatus.objects.all()
 
 
 @api_view(['GET'])
@@ -154,10 +154,10 @@ class AchievementUserStatusViewSet(viewsets.ModelViewSet):
 @permission_classes([AllowAny])
 # @ensure_csrf_cookie
 def userFilterForCompetition(request):
-    if request.method == 'GET':
-        tests = Test.objects.exclude(users=request.user.id).all()
-        serializer = TestsSerializer(tests, many=True)
-        return JsonResponse(serializer.data, safe=False)
+	if request.method == 'GET':
+		tests = Test.objects.exclude(users=request.user.id).all()
+		serializer = serializers.TestsSerializer(tests, many=True)
+		return JsonResponse(serializer.data, safe=False)
 
 
 @api_view(['GET'])
@@ -165,359 +165,353 @@ def userFilterForCompetition(request):
 @permission_classes([AllowAny])
 # @ensure_csrf_cookie
 def unresolved_test(request):
-    """
+	"""
     Get запрос возвращает все соревнования без пользователей
     """
-    ##################
-    # serializer без user
-    ##################
-    if request.method == 'GET':
-        tests = Test.objects.exclude(users=request.user.id).all()
-        serializer = TestsWithoutUsersSerializer(tests, many=True)
-        return JsonResponse(serializer.data, safe=False)
+	##################
+	# serializer без user
+	##################
+	if request.method == 'GET':
+		tests = Test.objects.exclude(users=request.user.id).all()
+		serializer = serializers.TestsWithoutUsersSerializer(tests, many=True)
+		return JsonResponse(serializer.data, safe=False)
+
 
 @api_view(['GET'])
 # For prod use IsAuthenticated . AllowAny using for Debug
 @permission_classes([AllowAny])
 # @ensure_csrf_cookie
 def users_select(request):
-    """
+	"""
     Поиск будет case sensetive будут искаться подстроки в строке
     Get запрос возвращает 10 пользователей
     Возможна фильтрация по имени, необходимо передать name
     После передачи имени можно передать фамилию surname
     """
-    if request.method == 'GET':
-        if request.data.get('name', '') and request.data.get('surname', ''):
-            #user = UserProfile.objects.filter(name__icontains=request.data.get('name'), surname__icontains=request.data.get('surname')).order_by('-rating').all()[:10]
-            user = UserProfile.objects.filter(name__icontains=request.data.get('name'), surname__icontains=request.data.get('surname')).all()[:10]
-        elif request.data.get('name', ''):
-            user = UserProfile.objects.filter(name__contains=request.data.get('name')).all()[:10]
-            #user = UserProfile.objects.filter(name__icontains=request.data.get('name')).order_by('-rating').all()[:10]
-        else:
-            user = UserProfile.objects.all()[:10]
-            #user = UserProfile.objects.order_by('-rating').all()[:10]
-        serializer = UserProfileSerializer(user, many=True)
-        return JsonResponse(serializer.data, safe=False)
+	if request.method == 'GET':
+		if request.data.get('name', '') and request.data.get('surname', ''):
+			# user = UserProfile.objects.filter(name__icontains=request.data.get('name'), surname__icontains=request.data.get('surname')).order_by('-rating').all()[:10]
+			user = UserProfile.objects.filter(name__icontains=request.data.get('name'),
+			                                  surname__icontains=request.data.get('surname')).all()[:10]
+		elif request.data.get('name', ''):
+			user = UserProfile.objects.filter(name__contains=request.data.get('name')).all()[:10]
+			# user = UserProfile.objects.filter(name__icontains=request.data.get('name')).order_by('-rating').all()[:10]
+		else:
+			user = UserProfile.objects.all()[:10]
+			# user = UserProfile.objects.order_by('-rating').all()[:10]
+		serializer = serializers.UserProfileSerializer(user, many=True)
+		return JsonResponse(serializer.data, safe=False)
+
 
 @api_view(['GET'])
 # For prod use IsAuthenticated . AllowAny using for Debug
 @permission_classes([AllowAny])
 # @ensure_csrf_cookie
 def test_questions(request):
+	"""
+    Возвращает впоросы у определенного теста и ответы без подсвечивания правильного, если вопросы без вариантов ответа,
+    тогда ответ не отправяется. требует переменную test_id в которую нужно записать id у теста
     """
-    Возвращает впоросы у определенного теста и ответы без подсвечивания правильного, если вопросы без вариантов ответа, тогда ответ не отправяется. требует переменную test_id в которую нужно записать id у теста
-    """
-    if request.method == 'GET':
-        question_choice_id = []
-        question_without_choice_id = []
-        # all_data это массив первый элемент которого тестблок внутри которого вопросы второй элемент массива это ответы
-        all_data = []
-        test_block = TestBlock.objects.filter(
-            test=request.data.get('test_id')).all()
-        serializer = TestBlockQuestionsSerializer(test_block, many=True)
-        # заполняем массив question_id айдишниками вопросов в нужном тесте (через каждый test_block)
-        # Не отправляет ответы для вопросов с вводом текста и числа
-        for item in serializer.data:
-            for item2 in item['questions']:
-                if item2["answerType"] == "one_choice" or item2["answerType"] == "multi_choice":
-                    question_choice_id.append(item2["id"])
-                else:
-                    question_without_choice_id.append(item2["id"])
+	if request.method == 'GET':
+		question_choice_id = []
+		question_without_choice_id = []
+		# all_data это массив первый элемент которого тестблок внутри которого вопросы второй элемент массива это ответы
+		all_data = []
+		test_block = TestBlock.objects.filter(
+			test=request.data.get('test_id')).all()
+		serializer = serializers.TestBlockQuestionsSerializer(test_block, many=True)
+		# заполняем массив question_id айдишниками вопросов в нужном тесте (через каждый test_block)
+		# Не отправляет ответы для вопросов с вводом текста и числа
+		for item in serializer.data:
+			for item2 in item['questions']:
+				if item2["answerType"] == "one_choice" or item2["answerType"] == "multi_choice":
+					question_choice_id.append(item2["id"])
+				else:
+					question_without_choice_id.append(item2["id"])
 
-        answers_choice = Answer.objects.filter(
-            question__in=question_choice_id).all()
-        answers_without_choice = Answer.objects.filter(
-            question__in=question_without_choice_id).all()
-        serializer2 = AnswersWithoutFlagSerializer(answers_choice, many=True)
-        serializer3 = AnswersIdSerializer(answers_without_choice, many=True)
-        all_data = (serializer.data, serializer2.data, serializer3.data)
-        return JsonResponse(all_data, safe=False)
+		answers_choice = Answer.objects.filter(
+			question__in=question_choice_id).all()
+		answers_without_choice = Answer.objects.filter(
+			question__in=question_without_choice_id).all()
+		serializer2 = serializers.AnswersWithoutFlagSerializer(answers_choice, many=True)
+		serializer3 = serializers.AnswersIdSerializer(answers_without_choice, many=True)
+		all_data = (serializer.data, serializer2.data, serializer3.data)
+		return JsonResponse(all_data, safe=False)
 
 
-@ api_view(['POST'])
+@api_view(['POST'])
 # For prod use IsAuthenticated . AllowAny using for Debug
-@ permission_classes([AllowAny])
+@permission_classes([AllowAny])
 # @ensure_csrf_cookie
 def test_post(request):
-    """
+	"""
     Post запрос который завершает тест, засчитывает ответы, добавляет выигранные деньги, энергию
     Требует answers_simple список c id ответов
     Требует answers_multi список списков с id ответов 
     Требует answers_text текстовый ответ 
     """
-    # TODO controll transactios
-    if request.method == 'POST':
-        user = UserProfile.objects.get(id=request.user.id)
-        right_answers = 0
-        wrong_answers = 0
-        true_questions_simple = []
-        false_questions_simple = []
-        true_questions_multi = []
-        false_questions_multi = []
-        true_questions_text = []
-        false_questions_text = []
-        test = Test.objects.get(
-            id=request.data.get("test_id"))
-        status = ''
-        points_to_complete = test.pointsToComplete
-        print(points_to_complete)
+	# TODO controll transactios
+	if request.method == 'POST':
+		user = UserProfile.objects.get(id=request.user.id)
+		right_answers = 0
+		wrong_answers = 0
+		true_questions_simple = []
+		false_questions_simple = []
+		true_questions_multi = []
+		false_questions_multi = []
+		true_questions_text = []
+		false_questions_text = []
+		test = Test.objects.get(
+			id=request.data.get("test_id"))
+		status = ''
+		points_to_complete = test.pointsToComplete
+		print(points_to_complete)  # это ещё нужно?
 
-        ######################
-        # SIMPLE QUESTION
-        # ###############
-        request_answers_simple = request.data.get("answers_simple")
-        if request_answers_simple:
-            answers_simple = Answer.objects.filter(
-                id__in=request_answers_simple).values("isCorrect", "question")
-            for answer_simple in answers_simple:
-                if answer_simple.get("isCorrect"):
-                    true_questions_simple.append(
-                        answer_simple.get("question"))
-                    right_answers += 1
-                else:
-                    false_questions_simple.append(
-                        answer_simple.get("question"))
-                    wrong_answers += 1
-            print(true_questions_simple)
+		######################
+		# SIMPLE QUESTION
+		# ###############
+		request_answers_simple = request.data.get("answers_simple")
+		if request_answers_simple:
+			answers_simple = Answer.objects.filter(
+				id__in=request_answers_simple).values("isCorrect", "question")
+			for answer_simple in answers_simple:
+				if answer_simple.get("isCorrect"):
+					true_questions_simple.append(
+						answer_simple.get("question"))
+					right_answers += 1
+				else:
+					false_questions_simple.append(
+						answer_simple.get("question"))
+					wrong_answers += 1
+			print(true_questions_simple)
 
-        ######################
-        # MULTI QUESTION
-        # ###############
-        request_answers_multi = request.data.get("answers_multi")
-        if request_answers_multi:
-            request_answers_multi_questions = [
-                a.get("question_id") for a in request_answers_multi
-            ]
-            true_answers_multi = Answer.objects.filter(
-                question__in=request_answers_multi_questions).filter(isCorrect=True).values("id", "isCorrect", "question")
-            for request_answer_multi in request_answers_multi:
-                true_answers_array = []
-                for true_answer_multi in true_answers_multi:
-                    if true_answer_multi.get("question") == request_answer_multi.get("question_id"):
-                        true_answers_array.append(
-                            str(true_answer_multi.get("id")))
-                if true_answers_array == request_answer_multi.get("answer_id"):
-                    true_questions_multi.append(
-                        request_answer_multi.get("question_id"))
-                    right_answers += 1
-                else:
-                    false_questions_multi.append(
-                        request_answer_multi.get("question_id"))
-                    wrong_answers += 1
-                true_answers_array.clear()
+		######################
+		# MULTI QUESTION
+		# ###############
+		request_answers_multi = request.data.get("answers_multi")
+		if request_answers_multi:
+			request_answers_multi_questions = [
+				a.get("question_id") for a in request_answers_multi
+			]
+			true_answers_multi = Answer.objects.filter(
+				question__in=request_answers_multi_questions).filter(isCorrect=True).values("id", "isCorrect",
+			                                                                                "question")
+			for request_answer_multi in request_answers_multi:
+				true_answers_array = []
+				for true_answer_multi in true_answers_multi:
+					if true_answer_multi.get("question") == request_answer_multi.get("question_id"):
+						true_answers_array.append(
+							str(true_answer_multi.get("id")))
+				if true_answers_array == request_answer_multi.get("answer_id"):
+					true_questions_multi.append(
+						request_answer_multi.get("question_id"))
+					right_answers += 1
+				else:
+					false_questions_multi.append(
+						request_answer_multi.get("question_id"))
+					wrong_answers += 1
+				true_answers_array.clear()
 
-        ######################
-        # TEXT QUESTION
-        # ###############
-        request_answers_text = request.data.get("answers_text")
-        if request_answers_text:
-            request_answers_text_questions = [
-                a.get("question_id") for a in request_answers_text
-            ]
-            true_answers_text = Answer.objects.filter(
-                question__in=request_answers_text_questions).filter(isCorrect=True).values("id", "isCorrect", "question", "text")
-            for request_answer_text in request_answers_text:
-                true_answer = None
-                for true_answer_text in true_answers_text:
-                    if true_answer_text.get("question") == request_answer_text.get("question_id"):
-                        true_answer = str(true_answer_text.get("text"))
-                if true_answer == str(request_answer_text.get("answer_text")):
-                    true_questions_text.append(
-                        request_answer_text.get("question_id"))
-                    right_answers += 1
-                else:
-                    false_questions_text.append(
-                        request_answer_text.get("question_id"))
-                    wrong_answers += 1
-                true_answer = None
-        if points_to_complete <= right_answers:
-            status = "Выполнен"
-        else:
-            status = "Провален"
+		######################
+		# TEXT QUESTION
+		# ###############
+		request_answers_text = request.data.get("answers_text")
+		if request_answers_text:
+			request_answers_text_questions = [
+				a.get("question_id") for a in request_answers_text
+			]
+			true_answers_text = Answer.objects.filter(
+				question__in=request_answers_text_questions).filter(isCorrect=True).values("id", "isCorrect",
+			                                                                               "question", "text")
+			for request_answer_text in request_answers_text:
+				true_answer = None
+				for true_answer_text in true_answers_text:
+					if true_answer_text.get("question") == request_answer_text.get("question_id"):
+						true_answer = str(true_answer_text.get("text"))
+				if true_answer == str(request_answer_text.get("answer_text")):
+					true_questions_text.append(
+						request_answer_text.get("question_id"))
+					right_answers += 1
+				else:
+					false_questions_text.append(
+						request_answer_text.get("question_id"))
+					wrong_answers += 1
+				true_answer = None
+		if points_to_complete <= right_answers:
+			status = "Выполнен"
+		else:
+			status = "Провален"
 
-        testUser = TestUser(test=test, user=user, status=status,
-                            rightAnswersCount=right_answers, points=right_answers)
-        testUser.save()
-        for true_question_simple in true_questions_simple:
-            testUserAnswer = TestUserAnswer(
-                testUser=testUser, question_id=true_question_simple, isCorrect=True)
-            testUserAnswer.save()
-        for false_question_simple in false_questions_simple:
-            testUserAnswer = TestUserAnswer(
-                testUser=testUser, question_id=false_question_simple, isCorrect=False)
-            testUserAnswer.save()
-        for true_question_multi in true_questions_multi:
-            testUserAnswer = TestUserAnswer(
-                testUser=testUser, question_id=true_question_multi, isCorrect=True)
-            testUserAnswer.save()
-        for false_question_multi in false_questions_multi:
-            testUserAnswer = TestUserAnswer(
-                testUser=testUser, question_id=false_question_multi, isCorrect=False)
-            testUserAnswer.save()
-        for true_question_text in true_questions_text:
-            testUserAnswer = TestUserAnswer(
-                testUser=testUser, question_id=true_question_text, isCorrect=True)
-            testUserAnswer.save()
-        for false_question_text in false_questions_text:
-            testUserAnswer = TestUserAnswer(
-                testUser=testUser, question_id=false_question_text, isCorrect=False)
-            testUserAnswer.save()
+		testUser = TestUser(test=test, user=user, status=status,
+		                    rightAnswersCount=right_answers, points=right_answers)
+		testUser.save()
+		for true_question_simple in true_questions_simple:
+			testUserAnswer = TestUserAnswer(
+				testUser=testUser, question_id=true_question_simple, isCorrect=True)
+			testUserAnswer.save()
+		for false_question_simple in false_questions_simple:
+			testUserAnswer = TestUserAnswer(
+				testUser=testUser, question_id=false_question_simple, isCorrect=False)
+			testUserAnswer.save()
+		for true_question_multi in true_questions_multi:
+			testUserAnswer = TestUserAnswer(
+				testUser=testUser, question_id=true_question_multi, isCorrect=True)
+			testUserAnswer.save()
+		for false_question_multi in false_questions_multi:
+			testUserAnswer = TestUserAnswer(
+				testUser=testUser, question_id=false_question_multi, isCorrect=False)
+			testUserAnswer.save()
+		for true_question_text in true_questions_text:
+			testUserAnswer = TestUserAnswer(
+				testUser=testUser, question_id=true_question_text, isCorrect=True)
+			testUserAnswer.save()
+		for false_question_text in false_questions_text:
+			testUserAnswer = TestUserAnswer(
+				testUser=testUser, question_id=false_question_text, isCorrect=False)
+			testUserAnswer.save()
 
-        user.money += right_answers*2000
-        user.energy += right_answers*10000
-        user.save()
-        response = {
-            "money": right_answers*2000,
-            "energy": right_answers*10000,
-            "right_answers": right_answers,
-            "total_questions": right_answers+wrong_answers
-        }
-        return Response(data=response)
+		user.money += right_answers * 2000
+		user.energy += right_answers * 10000
+		user.save()
+		response = {
+			"money": right_answers * 2000,
+			"energy": right_answers * 10000,
+			"right_answers": right_answers,
+			"total_questions": right_answers + wrong_answers
+		}
+		return Response(data=response)
 
 
-@ api_view(['GET', 'PUT'])
+@api_view(['GET', 'PUT'])
 # For prod use IsAuthenticated . AllowAny using for Debug
-@ permission_classes([AllowAny])
+@permission_classes([AllowAny])
 # @ensure_csrf_cookie
 def shop(request):
-    """
+	"""
     GET запрос - выводит товары которые есть в наличии и их стоимость
     POST запрос требует переменную массив ids в которой прописаны id товаров на покупку
     """
-    # Выводит товары которые есть в наличии и их стоимость
-    if request.method == 'GET':
-        products = RequirementsToBuyProduct.objects.filter(
-            product__count=1).all().prefetch_related('product')
-        serializer = RequirementsToBuyProductSerializer(products, many=True)
-        return JsonResponse(serializer.data, safe=False)
+	# Выводит товары которые есть в наличии и их стоимость
+	if request.method == 'GET':
+		products = RequirementsToBuyProduct.objects.filter(
+			product__count=1).all().prefetch_related('product')
+		serializer = serializers.RequirementsToBuyProductSerializer(products, many=True)
+		return JsonResponse(serializer.data, safe=False)
 
-    # TODO controll transactios
-    if request.method == 'PUT':
-        summary_cost = 0
-        user = UserProfile.objects.get(id=request.user.id)
-        products_req = RequirementsToBuyProduct.objects.filter(
-            id__in=request.data.get('ids')).all().prefetch_related('product')
-        for product_req in products_req:
-            if product_req.product.count <= 0:
-                return Response(data="Product out of stock")
-            if product_req.level > user.level:
-                return Response(data="You need higher level")
-            summary_cost += product_req.money
-            if summary_cost > user.money:
-                return Response(data="You dont have money")
-        user.money -= summary_cost
-        user.save()
-        products = Product.objects.all()
-        p = Purchase(user=request.user)
-        p.save()
-        p.products.set(products)
-        for product in products:
-            product.count -= 1
-            product.save()
-        return Response(data="Done")
+	# TODO controll transactios
+	if request.method == 'PUT':
+		summary_cost = 0
+		user = UserProfile.objects.get(id=request.user.id)
+		products_req = RequirementsToBuyProduct.objects.filter(
+			id__in=request.data.get('ids')).all().prefetch_related('product')
+		for product_req in products_req:
+			if product_req.product.count <= 0:
+				return Response(data="Product out of stock")
+			if product_req.level > user.level:
+				return Response(data="You need higher level")
+			summary_cost += product_req.money
+			if summary_cost > user.money:
+				return Response(data="You dont have money")
+		user.money -= summary_cost
+		user.save()
+		products = Product.objects.all()
+		p = Purchase(user=request.user)
+		p.save()
+		p.products.set(products)
+		for product in products:
+			product.count -= 1
+			product.save()
+		return Response(data="Done")
 
-
-# Привязка страниц
-
-def competition():
-    return
-
-
-def nameFunction():
-    return
-
-
-# /Привязка страниц
 
 class StatisticsViewSet(viewsets.ModelViewSet):
-    serializer_class = StatisticsSerializer
-    queryset = Statistics.objects.all()
+	serializer_class = serializers.StatisticsSerializer
+	queryset = Statistics.objects.all()
 
 
 class TeamsViewSet(viewsets.ModelViewSet):
-    serializer_class = TeamSerializer
-    queryset = Team.objects.all()
+	serializer_class = serializers.TeamSerializer
+	queryset = Team.objects.all()
 
 
 class TaskViewSet(viewsets.ModelViewSet):
-    serializer_class = TaskSerializer
-    queryset = Task.objects.all()
+	serializer_class = serializers.TaskSerializer
+	queryset = Task.objects.all()
 
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_daily_tasks(request):
-    if request.method == 'GET':
-        user = UserProfile.objects.get(id=request.user.id)
-        tasks = Task.objects.all().filter(taskType="daily").exclude(
-            ~Q(parent=None)).exclude(
-            ~Q(weekly=None)).filter(division=user.division)
-        serializer = TaskSerializer(tasks, many=True)
-        return Response(serializer.data)
+	if request.method == 'GET':
+		user = UserProfile.objects.get(id=request.user.id)
+		tasks = Task.objects.all().filter(taskType="daily").exclude(
+			~Q(parent=None)).exclude(
+			~Q(weekly=None)).filter(division=user.division)
+		serializer = serializers.TaskSerializer(tasks, many=True)
+		return Response(serializer.data)
 
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_weekly_tasks(request):
-    if request.method == 'GET':
-        user = UserProfile.objects.get(id=request.user.id)
-        weeklyTasks = WeeklyTask.objects.all().filter(division=user.division)
-        serializer = WeeklyTaskSerializer(weeklyTasks, many=True)
-        for weeklyTask in serializer.data:
-            subTasks = Task.objects.all().filter(weekly=weeklyTask['id'])
-            subSerializer = TaskSerializer(subTasks, many=True)
-            weeklyTask['subTasks'] = subSerializer.data
-        return Response(serializer.data)
+	if request.method == 'GET':
+		user = UserProfile.objects.get(id=request.user.id)
+		weeklyTasks = WeeklyTask.objects.all().filter(division=user.division)
+		serializer = serializers.WeeklyTaskSerializer(weeklyTasks, many=True)
+		for weeklyTask in serializer.data:
+			subTasks = Task.objects.all().filter(weekly=weeklyTask['id'])
+			subSerializer = serializers.TaskSerializer(subTasks, many=True)
+			weeklyTask['subTasks'] = subSerializer.data
+		return Response(serializer.data)
 
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_quests(request):
-    if request.method == 'GET':
+	if request.method == 'GET':
 
-        user = UserProfile.objects.get(id=request.user.id)
-        quests = Task.objects.all().filter(taskType="quest").exclude(
-            ~Q(parent=None)).exclude(
-            ~Q(weekly=None)).filter(division=user.division)
-        serializer = TaskSerializer(quests, many=True)
-        for quest in serializer.data:
-            subTasks = Task.objects.all().filter(parent=quest['id'])
-            subSerializer = TaskSerializer(subTasks, many=True)
-            quest['subTasks'] = subSerializer.data
-        return Response(serializer.data)
+		user = UserProfile.objects.get(id=request.user.id)
+		quests = Task.objects.all().filter(taskType="quest").exclude(
+			~Q(parent=None)).exclude(
+			~Q(weekly=None)).filter(division=user.division)
+		serializer = serializers.TaskSerializer(quests, many=True)
+		for quest in serializer.data:
+			subTasks = Task.objects.all().filter(parent=quest['id'])
+			subSerializer = serializers.TaskSerializer(subTasks, many=True)
+			quest['subTasks'] = subSerializer.data
+		return Response(serializer.data)
 
 
 class WeeklyTaskViewSet(viewsets.ModelViewSet):
-    serializer_class = WeeklyTaskSerializer
-    queryset = WeeklyTask.objects.all()
+	serializer_class = serializers.WeeklyTaskSerializer
+	queryset = WeeklyTask.objects.all()
 
 
 class TaskUserStatusViewSet(viewsets.ModelViewSet):
-    serializer_class = TaskUserStatusSerializer
-    queryset = TaskUserStatus.objects.all()
+	serializer_class = serializers.TaskUserStatusSerializer
+	queryset = TaskUserStatus.objects.all()
 
 
 class LogoutView(APIView):
-    permission_classes = (AllowAny,)
+	permission_classes = (AllowAny,)
 
-    def post(self, request):
-        try:
-            token = RefreshToken(request.data["refresh_token"])
-            token.blacklist()
+	def post(self, request):
+		try:
+			token = RefreshToken(request.data["refresh_token"])
+			token.blacklist()
 
-            return Response(status=status.HTTP_205_RESET_CONTENT)
-        except Exception as e:
-            print(e)
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+			return Response(status=status.HTTP_205_RESET_CONTENT)
+		except Exception as e:
+			print(e)
+			return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class LogoutAllView(APIView):
-    permission_classes = (AllowAny,)
+	permission_classes = (AllowAny,)
 
-    def post(self, request):
-        tokens = OutstandingToken.objects.filter(user_id=request.user.id)
-        for token in tokens:
-            t, _ = BlacklistedToken.objects.get_or_create(token=token)
+	def post(self, request):
+		tokens = OutstandingToken.objects.filter(user_id=request.user.id)
+		for token in tokens:
+			t, _ = BlacklistedToken.objects.get_or_create(token=token)
 
-        return Response(status=status.HTTP_205_RESET_CONTENT)
+		return Response(status=status.HTTP_205_RESET_CONTENT)

@@ -1,17 +1,16 @@
 from django.contrib import admin
-from django.contrib.auth.models import Group, User
+# from django.contrib.auth.models import Group, User
 from django.contrib.auth.admin import GroupAdmin, UserAdmin
-from .models import UserProfile, MainQuest, Task, WeeklyTask, Division, JobPosition, Team, Statistics, \
-    MainQuest, Question, QuestionTheme, Test, TestUser, TestUserAnswer, TestBlock, Achievement, RequirenmentToGetAchieve, \
-    Product, RequirementsToBuyProduct, ProductCategory, CategoryClothes, Purchase, Answer
+from .models import UserProfile, MainQuest, Task, WeeklyTask, Division, JobPosition, Team, \
+    MainQuest, Question, QuestionTheme, Test, TestUser, TestUserAnswer, TestBlock, Achievement, \
+    RequirenmentToGetAchieve, Product, RequirementsToBuyProduct, ProductCategory, Answer
 from django.db import models
 from django.db.models import Q
 from django import forms
 from django.urls import resolve
 from django.utils.safestring import mark_safe
-from django import forms
 
-from django.contrib import admin
+
 from django.contrib.admin import ModelAdmin, TabularInline
 # from .models import Category, Product, ProductSliderImage
 

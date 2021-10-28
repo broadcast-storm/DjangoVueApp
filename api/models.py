@@ -871,9 +871,9 @@ class TestBlock(models.Model):
     questions = models.ManyToManyField(
         Question, verbose_name="Вопросы", related_name="qst")
 
-    test = models.ForeignKey(
-        Test, on_delete=models.CASCADE, verbose_name="Тест", )
-    questions = models.ManyToManyField(Question, verbose_name="", default=None)
+    # test = models.ForeignKey(
+    #     Test, on_delete=models.CASCADE, verbose_name="Тест", )
+    # questions = models.ManyToManyField(Question, verbose_name="", default=None)   зачем это?
     # IDs
 
     questionsCount = models.IntegerField(
