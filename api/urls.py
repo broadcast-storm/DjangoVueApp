@@ -47,7 +47,8 @@ urlpatterns = [
     path('get-quests', views.get_quests, name='get-quests'),
     path('get-daily-tasks', views.get_daily_tasks, name='get-daily-tasks'),
     path('get-weekly-tasks', views.get_weekly_tasks, name='get-weekly-tasks'),
-    path('users-select', views.users_select, name='users_select') ]
+    path('users-select', views.users_select, name='users_select'),
+    path('competition-request', views.competition_request, name='competition_request')]
 
 
 # path('competition/currentcompetitions', currentcompetitions, name = 'currentcompetitions')

@@ -145,6 +145,32 @@ class AchievementUserStatusViewSet(viewsets.ModelViewSet):
     queryset = models.AchievementUserStatus.objects.all()
 
 
+@api_view(['POST', 'GET'])
+# For prod use IsAuthenticated . AllowAny using for Debug
+@permission_classes([AllowAny])
+# @ensure_csrf_cookie
+def competition_request(request):
+    if request.method == 'GET':
+        cr = models.CompetitionRequest.objects.all()
+        serializer = serializers.CompetitionRequestSerializer(cr, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+    if request.method == 'POST':
+        if request.data.get("receiver_id") is None:
+            return Response(data="Please give receiver id in body")
+        if request.user.id is None:
+            return Response(data="You should be authorized")
+        if request.data.get("receiver_id") == request.user.id:
+            return Response(data="You can't create competition for yourself")
+        sender = models.UserProfile.objects.get(id=request.user.id)
+        receiver = models.UserProfile.objects.get(id=request.data.get("receiver_id"))
+        cr = models.CompetitionRequest(sender=sender, receiver=receiver)
+        cr.save()
+        un = models.UserNotification(user=receiver, message="У вас есть новый запрос на соревнование", title="Соревнования")
+        un.save()
+        return Response(data="Done")
+
+
 @api_view(['GET'])
 # For prod use IsAuthenticated . AllowAny using for Debug
 @permission_classes([AllowAny])
