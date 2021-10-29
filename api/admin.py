@@ -218,7 +218,7 @@ class TasksInline(admin.StackedInline):
 
 
 class MainQuestAdmin(admin.ModelAdmin):
-    list_display = ('title', 'description', 'accessLevel')
+    list_display = ('title', 'description', 'accessLevel', 'time_left', 'is_active')
     search_fields = ('title',)
     fieldsets = ((None, {
         'fields': (
