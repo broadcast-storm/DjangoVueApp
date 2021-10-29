@@ -559,7 +559,8 @@ class UserNotification(models.Model):
     user = models.ForeignKey("UserProfile", verbose_name='Уведомление пользователя', related_name='user',
                              on_delete=models.CASCADE, null=True)
     title = models.CharField(max_length=255, verbose_name='Название уведомления', null=False, default="nothing here")
-    message = models.CharField(max_length=255, verbose_name='Сообщение', null=False, blank=False, default="nothing here")
+    message = models.CharField(max_length=255, verbose_name='Сообщение', null=False, blank=False,
+                               default="nothing here")
     status = models.CharField(max_length=16, verbose_name='Статус уведомления', choices=NOTIFICATION_STATUS_CHOICE,
                               default='VIEWED')
 
@@ -574,7 +575,7 @@ class Competition(models.Model):
     # users = models.ManyToManyField(UserProfile)
 
     winner = models.ForeignKey(
-        UserProfile, on_delete=models.CASCADE, related_name='winner',
+        UserProfile, on_delete=models.SET_NULL, related_name='winner',
         null=True)
 
     # IDs
@@ -583,21 +584,14 @@ class Competition(models.Model):
     isCompleted = models.BooleanField(default=False)
     deadline = models.DateTimeField(blank=True, null=True)
 
-    levelCriterion = models.IntegerField(
-        default=0, verbose_name="Требуемый уровень")
-    qualityCriterion = models.FloatField(
-        default=0.0, verbose_name="Требуемое качество")
-    productivityCriterion = models.FloatField(
-        default=0.0, verbose_name="Требуемая продуктивность")  # не знаю, что с этим делать, по сути не нужно
-
     money = models.IntegerField(default=0, verbose_name="Валюта")
     health = models.IntegerField(default=0, verbose_name="Жизни")
     energy = models.IntegerField(default=0, verbose_name="Энергия")
 
     created_at = models.DateTimeField(auto_now_add=True)
     done_at = models.DateTimeField(blank=True, null=True)
-    request = models.ForeignKey('CompetitionRequest', on_delete=models.DO_NOTHING,
-                                verbose_name='Запрос на участие в соревновании', null=True)
+    request = models.OneToOneField('CompetitionRequest', on_delete=models.DO_NOTHING,
+                                   verbose_name='Запрос на участие в соревновании', null=True)
 
     def __str__(self):
         return str(self.title)

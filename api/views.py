@@ -1,5 +1,8 @@
 import jwt
-import datetime
+from datetime import datetime
+
+from django.utils.timezone import make_aware
+
 from rest_framework import viewsets, status
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.response import Response
@@ -166,10 +169,44 @@ def competition_request(request):
         receiver = models.UserProfile.objects.get(id=request.data.get("receiver_id"))
         cr = models.CompetitionRequest(sender=sender, receiver=receiver)
         cr.save()
-        un = models.UserNotification(user=receiver, message="У вас есть новый запрос на соревнование", title="Соревнования")
+        un = models.UserNotification(user=receiver, message="У вас есть новый запрос на соревнование",
+                                     title="Соревнования")
         un.save()
         return Response(data="Done")
 
+
+@api_view(['POST'])
+# For prod use IsAuthenticated . AllowAny using for Debug
+@permission_classes([AllowAny])
+# @ensure_csrf_cookie
+def start_competition(request):
+    if request.method == 'POST':
+        if request.data.get("receiver_answer") is None:
+            return Response(data="Please give receiver answer in body")
+        if request.data.get("competition_id") is None:
+            return Response(data="Please give competition id in body")
+        if request.data.get("title") is None:
+            return Response(data="Please give title in body")
+        if request.data.get("deadline") is None:
+            return Response(data="Please give deadline in unix timestamp in body")
+        cr = models.CompetitionRequest.objects.get(id=request.data.get("competition_id"))
+        cr.status = request.data.get("receiver_answer")
+        cr.save()
+        c = models.Competition(title=request.data.get("title"),
+                               deadline=make_aware(datetime.fromtimestamp(request.data.get("deadline"))),
+                               request=cr)
+        c.save()
+        return Response(data="done")
+
+@api_view(['GET'])
+# For prod use IsAuthenticated . AllowAny using for Debug
+@permission_classes([AllowAny])
+# @ensure_csrf_cookie
+def competition(request):
+    if request.method == 'GET':
+        c = models.Competition.objects.all()
+        serializer = serializers.CompetitionSerializer(c, many=True)
+        return JsonResponse(serializer.data, safe=False)
 
 @api_view(['GET'])
 # For prod use IsAuthenticated . AllowAny using for Debug
