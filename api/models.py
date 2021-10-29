@@ -542,6 +542,15 @@ class MainQuestStatus(models.Model):
         verbose_name_plural = "статусы основных квестов пользователей"
 
 
+
+
+class UserNotification(models.Model):
+    user = models.ManyToManyField(UserProfile, verbose_name='Уведомление пользователя')
+    title = models.CharField(max_length=256, verbose_name='Название уведомления')
+    theme = models.CharField(max_length=256, verbose_name='Тема уведомления')
+    status = models.CharField(max_length=32, verbose_name='Статус уведомления')
+
+
 ##############################################
 # СОРЕВНОВАНИЯ
 ##############################################
@@ -550,9 +559,9 @@ class Competition(models.Model):
     # IDs
 
     # users = models.ManyToManyField(UserProfile)
-    
+
     winner = models.ForeignKey(
-        UserProfile, on_delete=models.CASCADE, related_name='winner', null=True) # Таблица не должна удалятся
+        UserProfile, on_delete=models.CASCADE, related_name='winner', null=True) # Таблица не должна удаляться
 
     # IDs
 
@@ -574,12 +583,16 @@ class Competition(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     done_at = models.DateTimeField(blank=True, null=True)
 
+    request = models.ForeignKey('CompetitionRequest', on_delete=models.DO_NOTHING, verbose_name='Запрос на участие в соревновании', null=True)
+
     def __str__(self):
         return str(self.title)
 
     class Meta:
         verbose_name = "соревнование"
         verbose_name_plural = "соревнования"
+
+
 
 
 class CompetitionRequest(models.Model):
@@ -589,25 +602,25 @@ class CompetitionRequest(models.Model):
 
     REQUEST_STATUS_CHOICE = (
         (SENT, 'Отправлено'),
-        (ACCEPTED, 'accepted'),
-        (DISCARDED, 'отклонено'),
+        (ACCEPTED, 'Принято'),
+        (DISCARDED, 'Отклонено'),
     )
-    sender = models.OneToOneField(to=UserProfile, on_delete=models.CASCADE, related_name='sender')
-    receiver = models.OneToOneField(to=UserProfile, on_delete=models.CASCADE, related_name='receiver')
+    sender = models.OneToOneField(to=UserProfile, on_delete=models.CASCADE, related_name='sender', verbose_name='Создатель')
+    receiver = models.OneToOneField(to=UserProfile, on_delete=models.CASCADE, related_name='receiver', verbose_name='Соперник')
     send_time = models.DateTimeField(auto_now_add=True)
     decay_time = models.DateTimeField(blank=False, null=False)
     status = models.CharField(max_length=10, choices=REQUEST_STATUS_CHOICE, default='sent')
 
 
+#
 class CompetitionUser(models.Model):
-
     competition = models.ForeignKey(
         'Competition', on_delete=models.CASCADE, related_name='competition_id')
     first_user = models.ForeignKey(
         'UserProfile', on_delete=models.CASCADE, related_name='first_name')
     second_user = models.ForeignKey(
         'UserProfile', on_delete=models.CASCADE, related_name='second_name')
-    request = models.ManyToManyField(CompetitionRequest, verbose_name='Запрос на участие в соревновании')
+
 
 ##############################################
 # ДОСТИЖЕНИЯ
