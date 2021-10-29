@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
@@ -568,7 +570,7 @@ class Competition(models.Model):
 
     winner = models.ForeignKey(
         UserProfile, on_delete=models.CASCADE, related_name='winner',
-        null=True)  # Раиса настояла на неудалении таблиц из БД
+        null=True)
 
     # IDs
 
@@ -589,7 +591,7 @@ class Competition(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     done_at = models.DateTimeField(blank=True, null=True)
-    request = models.ForeignKey('CompetitionRequest', on_delete=models.DO_NOTHING, verbose_name='Запрос на участие в соревновании', null=True)
+    request = models.ForeignKey('CompetitionRequest', on_delete=models.DO_NOTHING, verbose_name='Запрос на участие в соревновании')
 
     def __str__(self):
         return str(self.title)
@@ -605,11 +607,10 @@ class CompetitionRequest(models.Model):
         ("ACCEPTED", 'принято'),
         ("DISCARDED", 'отклонено'),
     )
-    sender = models.OneToOneField(to=UserProfile, on_delete=models.CASCADE,
-                                  related_name='sender')  # Раиса настояла на неудалении этих запсей в бд
-    receiver = models.OneToOneField(to=UserProfile, on_delete=models.CASCADE, related_name='receiver')
+    sender = models.ForeignKey(to=UserProfile, on_delete=models.CASCADE, related_name='sender')
+    receiver = models.ForeignKey(to=UserProfile, on_delete=models.CASCADE, related_name='receiver')
     send_time = models.DateTimeField(auto_now_add=True)
-    decay_time = models.DateTimeField(blank=False, null=False)
+    decay_time = models.DateTimeField(blank=False, null=False, default=datetime.now() + timedelta(days=4))
     status = models.CharField(max_length=10, choices=REQUEST_STATUS_CHOICE, default='sent')
 
 
