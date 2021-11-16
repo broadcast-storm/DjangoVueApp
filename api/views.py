@@ -153,6 +153,13 @@ class AchievementUserStatusViewSet(viewsets.ModelViewSet):
 @permission_classes([AllowAny])
 # @ensure_csrf_cookie
 def competition_request(request):
+    """
+    Get запрос возвращает все соревнования
+
+    Post создает запись в таблице CompetitionRequest. Возвращает строку "done" если все хорошо, либо строку с ошибкой
+    Требует receiver_id в body- id человека которому отправляют запрос
+    Требует title в body - название соревнования
+    """
     if request.method == 'GET':
         cr = models.CompetitionRequest.objects.all()
         serializer = serializers.CompetitionRequestSerializer(cr, many=True)
@@ -165,10 +172,15 @@ def competition_request(request):
             return Response(data="You should be authorized")
         if request.data.get("receiver_id") == request.user.id:
             return Response(data="You can't create competition for yourself")
+        if request.data.get("title") is None:
+            return Response(data="Please give title in body")
+        # получаем отправителя и получателя
         sender = models.UserProfile.objects.get(id=request.user.id)
         receiver = models.UserProfile.objects.get(id=request.data.get("receiver_id"))
-        cr = models.CompetitionRequest(sender=sender, receiver=receiver)
+        # создаем запрос на соревнование
+        cr = models.CompetitionRequest(sender=sender, receiver=receiver, title=request.data.get("title"))
         cr.save()
+        # создаем уведомление получателю
         un = models.UserNotification(user=receiver, message="У вас есть новый запрос на соревнование",
                                      title="Соревнования")
         un.save()
@@ -180,39 +192,85 @@ def competition_request(request):
 @permission_classes([AllowAny])
 # @ensure_csrf_cookie
 def start_competition(request):
+    """
+    Post создает запись в таблице Competition, меняет статус в таблице CompetitionRequest.
+    Возвращает строку "done" если все хорошо, либо строку с ошибкой
+    Требует receiver_answer в body, Значения могут быть: "ACCEPTED", "DISCARDED" - ответ пользователя
+    Требует competition_id в body - id соревнования
+    Требует notification_id в body - id уведомления
+    """
     if request.method == 'POST':
         if request.data.get("receiver_answer") is None:
             return Response(data="Please give receiver answer in body")
         if request.data.get("competition_id") is None:
             return Response(data="Please give competition id in body")
-        if request.data.get("title") is None:
-            return Response(data="Please give title in body")
-        if request.data.get("deadline") is None:
-            return Response(data="Please give deadline in unix timestamp in body")
+        ##########
+        # на случай если дедлайн можно будет двигать. По дефолту дедлайн после принятия 30 дней
+        # if request.data.get("deadline") is None:
+        #     return Response(data="Please give deadline in unix timestamp in body")
+        # deadline = make_aware(datetime.fromtimestamp(request.data.get("deadline")))
+        ##########
+        # берем наш запрос на соревнования и меняем его статус
         cr = models.CompetitionRequest.objects.get(id=request.data.get("competition_id"))
         cr.status = request.data.get("receiver_answer")
         cr.save()
-        c = models.Competition(title=request.data.get("title"),
-                               deadline=make_aware(datetime.fromtimestamp(request.data.get("deadline"))),
-                               request=cr)
-        c.save()
+        # создет соревнование если приняли CompetitionRequest
+        if request.data.get("receiver_answer") == "ACCEPTED":
+            c = models.Competition(request=cr)
+            c.save()
         return Response(data="done")
+
+
+@api_view(['GET','POST'])
+# For prod use IsAuthenticated . AllowAny using for Debug
+@permission_classes([AllowAny])
+# @ensure_csrf_cookie
+def notification(request):
+    """
+    Get запрос возвращает все непросмотренные уведомления у текущего пользователя
+
+    Post меняет статус в таблице UserNotification.
+    Возвращает строку "done" если все хорошо, либо строку с ошибкой
+    Требует notification_id в body - id уведомления
+    """
+    if request.method == 'GET':
+        user = models.UserProfile.objects.get(id=request.user.id)
+        un = models.UserNotification.objects.filter(user=user, status="NOT VIEWED").all()
+        serializer = serializers.UserNotificationSerializer(un, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+    if request.method == 'POST':
+        if request.data.get("notification_id") is None:
+            return Response(data="Please give notification id in body")
+        # Меняем статус уведомления
+        un = models.UserNotification.objects.get(id=request.data.get("notification_id"))
+        un.status = "VIEWED"
+        un.save()
+        return Response(data="done")
+
 
 @api_view(['GET'])
 # For prod use IsAuthenticated . AllowAny using for Debug
 @permission_classes([AllowAny])
 # @ensure_csrf_cookie
 def competition(request):
+    """
+    Get запрос возвращает все соревнования
+    """
     if request.method == 'GET':
         c = models.Competition.objects.all()
         serializer = serializers.CompetitionSerializer(c, many=True)
         return JsonResponse(serializer.data, safe=False)
+
 
 @api_view(['GET'])
 # For prod use IsAuthenticated . AllowAny using for Debug
 @permission_classes([AllowAny])
 # @ensure_csrf_cookie
 def userFilterForCompetition(request):
+    # ??????????????????????????????????????????????????????????
+    # Возвращает все тесты которые не решил текущий пользователь????????????
+    # ??????????????????????????????????????????????????????????
     if request.method == 'GET':
         tests = models.Test.objects.exclude(users=request.user.id).all()
         serializer = serializers.TestsSerializer(tests, many=True)
@@ -225,7 +283,7 @@ def userFilterForCompetition(request):
 # @ensure_csrf_cookie
 def unresolved_test(request):
     """
-    Get запрос возвращает все соревнования без пользователей
+    Get запрос возвращает все тесты без пользователей
     """
     ##################
     # serializer без user
@@ -250,15 +308,17 @@ def users_select(request):
     if request.method == 'GET':
         if request.data.get('name', '') and request.data.get('surname', ''):
             # user = UserProfile.objects.filter(name__icontains=request.data.get('name'), surname__icontains=request.data.get('surname')).order_by('-rating').all()[:10]
-            user = models.UserProfile.objects.filter(name__icontains=request.data.get('name'),
-                                                     surname__icontains=request.data.get('surname')).all()[:10]
+            user = models.UserProfile.objects.exclude(id=request.user.id).filter(
+                name__icontains=request.data.get('name'),
+                surname__icontains=request.data.get('surname')).all()[:10]
         elif request.data.get('name', ''):
-            user = models.UserProfile.objects.filter(name__contains=request.data.get('name')).all()[:10]
+            user = models.UserProfile.objects.exclude(id=request.user.id).filter(
+                name__contains=request.data.get('name')).all()[:10]
             # user = UserProfile.objects.filter(name__icontains=request.data.get('name')).order_by('-rating').all()[:10]
         else:
-            user = models.UserProfile.objects.all()[:10]
+            user = models.UserProfile.objects.exclude(id=request.user.id).all()[:10]
             # user = UserProfile.objects.order_by('-rating').all()[:10]
-        serializer = serializers.UserProfileSerializer(user, many=True)
+        serializer = serializers.UserCompetitionSerializer(user, many=True)
         return JsonResponse(serializer.data, safe=False)
 
 

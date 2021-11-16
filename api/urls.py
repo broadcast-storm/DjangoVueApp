@@ -50,7 +50,9 @@ urlpatterns = [
     path('users-select', views.users_select, name='users_select'),
     path('competition-request', views.competition_request, name='competition_request'),
     path('start-competition', views.start_competition, name='start_competition'),
-    path('competition', views.competition, name='competition')]
+    path('competition', views.competition, name='competition'),
+    path('notification', views.notification, name='notification')
+]
 
 
 # path('competition/currentcompetitions', currentcompetitions, name = 'currentcompetitions')
