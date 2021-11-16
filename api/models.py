@@ -562,7 +562,7 @@ class UserNotification(models.Model):
     message = models.CharField(max_length=255, verbose_name='Сообщение', null=False, blank=False,
                                default="nothing here")
     status = models.CharField(max_length=16, verbose_name='Статус уведомления', choices=NOTIFICATION_STATUS_CHOICE,
-                              default='VIEWED')
+                              default='NOT VIEWED')
 
 
 ##############################################
@@ -580,9 +580,8 @@ class Competition(models.Model):
 
     # IDs
 
-    title = models.CharField(max_length=120)
     isCompleted = models.BooleanField(default=False)
-    deadline = models.DateTimeField(blank=True, null=True)
+    deadline = models.DateTimeField(blank=False, null=False, default=datetime.now() + timedelta(days=30))
 
     money = models.IntegerField(default=0, verbose_name="Валюта")
     health = models.IntegerField(default=0, verbose_name="Жизни")
@@ -607,6 +606,7 @@ class CompetitionRequest(models.Model):
         ("ACCEPTED", 'принято'),
         ("DISCARDED", 'отклонено'),
     )
+    title = models.CharField(max_length=120)
     sender = models.ForeignKey(to=UserProfile, on_delete=models.CASCADE, related_name='sender')
     receiver = models.ForeignKey(to=UserProfile, on_delete=models.CASCADE, related_name='receiver')
     send_time = models.DateTimeField(auto_now_add=True)
