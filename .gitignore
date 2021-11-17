@@ -4,6 +4,7 @@ node_modules
 /dist
 __pycache__/
 *.py[cod]
+env/
 venv/
 *.sqlite3
 media/**.*

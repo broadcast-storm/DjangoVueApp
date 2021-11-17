@@ -230,3 +230,9 @@ class UserNotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.UserNotification
         fields = '__all__'
+
+
+class UserProfileForCompetitionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.UserProfile
+        fields = ['level', 'quality', 'productivity']

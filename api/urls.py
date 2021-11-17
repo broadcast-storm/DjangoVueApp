@@ -51,7 +51,9 @@ urlpatterns = [
     path('competition-request', views.competition_request, name='competition_request'),
     path('start-competition', views.start_competition, name='start_competition'),
     path('competition', views.competition, name='competition'),
-    path('notification', views.notification, name='notification')
+    path('notification', views.notification, name='notification'),
+    path('competition-possible-enemies', views.competition_possible_enemies, name='competition-possible-enemies'),
+    path('competition-user-data', views.competition_user_data,name='competition-user-data')
 ]
 
 

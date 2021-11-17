@@ -148,6 +148,34 @@ class AchievementUserStatusViewSet(viewsets.ModelViewSet):
     queryset = models.AchievementUserStatus.objects.all()
 
 
+@api_view(['GET'])
+# For prod use IsAuthenticated . AllowAny using for Debug
+@permission_classes([AllowAny])
+# @ensure_csrf_cookie
+def competition_possible_enemies(request):
+    if request.user.id is None:
+        return Response(data="You should be authorized")
+    # получаем уровень пользователя
+    user_level = models.UserProfile.objects.get(id=request.user.id).level
+    # находим пользователей у которых уровень отличен на +-3 и исключаем пользователя, запрашивающего данные
+    possible_enemies = models.UserProfile.objects.filter(level__range=[user_level-3, user_level+3]).exclude(id=request.user.id)
+    data = serializers.UserProfileSerializer(possible_enemies, many=True).data
+    return Response(data)
+
+
+@api_view(['GET'])
+# For prod use IsAuthenticated . AllowAny using for Debug
+@permission_classes([AllowAny])
+# @ensure_csrf_cookie
+def competition_user_data(request):
+    if request.user.id is None:
+        return Response(data="You should be authorized")
+    # находим пользователя по id
+    user = models.UserProfile.objects.get(id=request.user.id)
+    data = serializers.UserProfileForCompetitionSerializer(user).data
+    return Response(data)
+
+
 @api_view(['POST', 'GET'])
 # For prod use IsAuthenticated . AllowAny using for Debug
 @permission_classes([AllowAny])
@@ -366,8 +394,8 @@ def test_post(request):
     """
     Post запрос который завершает тест, засчитывает ответы, добавляет выигранные деньги, энергию
     Требует answers_simple список c id ответов
-    Требует answers_multi список списков с id ответов 
-    Требует answers_text текстовый ответ 
+    Требует answers_multi список списков с id ответов
+    Требует answers_text текстовый ответ
     """
     # TODO controll transactios
     if request.method == 'POST':
