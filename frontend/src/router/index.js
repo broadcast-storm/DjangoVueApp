@@ -57,6 +57,17 @@ const routes = [
                             'competition-router': true,
                         },
                     },
+                    {
+                        path:
+                            routesList.competitionsPage.children
+                                .MainCompetitions.path,
+                        components: {
+                            'competition-router': () =>
+                                import(
+                                    '@/views/MainViews/Competitions/MainCompetitions.vue'
+                                ),
+                        },
+                    },
                 ],
                 meta: {
                     requiersAuthentication: true,

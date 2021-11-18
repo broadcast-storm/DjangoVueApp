@@ -12,13 +12,17 @@ const routesList = {
         header: 'Соревнования',
         children: {
             SearchCompetitions: {
-                path: '',
+                path: 'search',
                 header: 'Соревнования',
             },
             CurrentCompetitions: {
                 path: 'versus',
                 header: 'Соревнования',
             },
+            MainCompetitions: {
+                path: '',
+                header:'Соревнования'
+            }
         },
     },
     statisticsPage: {

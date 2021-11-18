@@ -1,5 +1,6 @@
 <template>
     <div class="competition">
+        <!-- ПОИСК -->
         <div class="competition__search">
             <div>
                 <div class="search__item">
@@ -13,99 +14,176 @@
                         type="text"
                         placeholder="Имя и Фамилия"
                     />
-                    <SearchSvg class="input__svg" />
+                    <SearchSvg @click="openWindow()" class="input__svg" />
+                </div>
+            </div>
+            <div class="competition__indicators">
+                <h3 class='indicators__title'>Мои показатели:</h3>
+                <div class='indicators'>
+                    <p class="competition__indicator">
+                        <img class='indicators__image' src="@/assets/img/competitions/indicator__productivity.png" alt="img">
+                        <span>85%</span>
+                    </p>
+                    <p class="competition__indicator">
+                        <img class='indicators__image' src="@/assets/img/competitions/indicator__quality.png" alt="img">
+                        <span>75</span>
+                    </p>
+                    <p class="competition__indicator">
+                        <img class='indicators__image' src="@/assets/img/competitions/indicator__level.png" alt="img">
+                        <span>88</span>
+                    </p>
                 </div>
             </div>
         </div>
-        <div class='competition__versus'>
-            <div class="competition__user">
-                <div class="user__profile">
-                    <div class="profile__image">
-                        <img
-                            src="@/assets/img/competitions/UserPhoto.jpg"
-                            class="user-image"
-                            alt=""
-                        />
-                    </div>
-                    <div class="profile__information">
-                        <div class="information__name">
-                            <h3 class="information__title">
-                                Александра Пушкина
-                            </h3>
-                            <p class="information__subtitle">
-                                состоит в команде ВКЦэхи
-                            </p>
-                        </div>
-                        <div class="information__description">
-                            <p class="information__indicator">
-                                Продуктивность
-                                <span class="desctiption-bold">85%</span>
-                            </p>
-                            <p class="information__indicator">
-                                Качество
-                                <span class="desctiption-bold">85%</span>
-                            </p>
-                            <p class="information__indicator">
-                                Текущий уровень
-                                <span class="desctiption-bold">85%</span>
-                            </p>
-                        </div>
+        <div class="competition__about">
+            <h2 class="about__title competition__title">Как проходят соревнования?</h2>
+            <p class="about__description">Lorem ipsum, dolor sit amet consectetur adipisicing elit. In, iste maiores sint, unde soluta sed explicabo necessitatibus ipsa veniam ipsum ipsam hic deserunt accusantium quasi ad quam aliquam ea itaque, molestiae iure! Dolor nostrum harum maiores officiis minima pariatur praesentium atque repellat natus. Excepturi nulla mollitia iure tempore. Voluptatem deserunt est quos beatae quasi debitis, maiores quibusdam asperiores numquam laborum totam necessitatibus illum quis sequi voluptatibus impedit optio, ducimus explicabo vel. Soluta nemo eum assumenda blanditiis, quaerat culpa corporis voluptatem itaque, amet ipsam vero doloremque qui hic illo saepe laboriosam. Temporibus accusantium laborum ea fuga similique dicta nisi minima nobis.</p>
+        </div>
+        <div class="competition__myCompetition">
+            <h2 class="myCompetition__title competition__title">Мои соревнования</h2>
+            <table class="myCompetition__table">
+                <thead>
+                    <tr class="table__row">
+                        <th class="row__id">#</th>
+                        <th class="">Соревнование</th>
+                        <th class="">Исход</th>
+                        <th class="">Критерий</th>
+                        <th class="">Показатель</th>
+                        <th class="">Противник</th>
+                        <th class="">Выигрыш</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="table__row">
+                        <td class="row__id">
+                            1
+                        </td>
+                        <td class="row__logo">
+                            <img class='competition__logo' src="@/assets/img/competitions/competition__logo.jpg" alt="logo">
+                            Бой телепузиков
+                        </td>
+                        <td class="row__result result__win">
+                            <p>Выигрыш</p>
+                        </td>
+                        <td class="">
+                            Продуктивность
+                        </td>
+                        <td class="">
+                            88 vs 67
+                        </td>
+                        <td class="row__enemy">
+                            <img class='enemy__logo' src="@/assets/img/competitions/enemy__logo.jpg" alt="pht">
+                            Evan Flores
+                        </td>
+                        <td class="">
+                            $452.85
+                        </td>
+                    </tr>
+                    <tr class="table__row">
+                        <td class="row__id">
+                            2
+                        </td>
+                        <td class="row__logo">
+                            <img class='competition__logo' src="@/assets/img/competitions/competition__logo.jpg" alt="logo">
+                            Бой телепузиков
+                        </td>
+                        <td class="row__result result__losing">
+                            <p>Проигрыш</p>
+                        </td>
+                        <td class="">
+                            Качество
+                        </td>
+                        <td class="">
+                            13 vs 67
+                        </td>
+                        <td class="row__enemy">
+                            <img class='enemy__logo' src="@/assets/img/competitions/enemy__logo.jpg" alt="pht">
+                            Steven Flores
+                        </td>
+                        <td class="">
+                            $412.85
+                        </td>
+                    </tr>
+                    <tr class="table__row">
+                        <td class="row__id">
+                            3
+                        </td>
+                        <td class="row__logo">
+                            <img class='competition__logo' src="@/assets/img/competitions/competition__logo.jpg" alt="logo">
+                            Атака ведьм
+                        </td>
+                        <td class="row__result result__draw">
+                            <p>Ничья</p>
+                        </td>
+                        <td class="">
+                            Уровень
+                        </td>
+                        <td class="">
+                            13 vs 67
+                        </td>
+                        <td class="row__enemy">
+                            <img class='enemy__logo' src="@/assets/img/competitions/enemy__logo.jpg" alt="pht">
+                            Steven Flores
+                        </td>
+                        <td class="">
+                            $412.85
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class='competition__control'>
+            <div class="control__pages">
+                <button><img src="@/assets/img/competitions/arrow__left.png" alt="arrow left"></button>
+                <div>
+                    <input type=number value='1' class='select__page'>
+                    /
+                    <span class='select__pages'>10</span></div>
+                <button><img src="@/assets/img/competitions/arrow__right.png" alt="arrow riht"></button>
+            </div>
+            <div class="control__pagesCount">
+                <label for='pagesCount'>Показывать на странице</label>
+                <input id='pagesCount' type="number" value='6'>
+            </div>
+        </div>
+        <!-- <div class="competition-profile">
+            <div class="profile">
+                <div class="profile__image">
+                    <img
+                        src="@/assets/img/competitions/UserPhoto.jpg"
+                        class="user-image"
+                        alt=""
+                    />
+                </div>
+                <div class="profile__information">
+                    <div class="information__name">
+                        <h3 class="information__title">Джонатан Смирнов</h3>
+                        <p class="information__subtitle">
+                            состоит в команде Пирожков
+                        </p>
                     </div>
                 </div>
             </div>
-            <h1 class='versus'>VS</h1>
-            <div class="competition__user">
-                <div class="user__profile">
-                    <div class="profile__image">
-                        <img
-                            src="@/assets/img/competitions/UserPhoto.jpg"
-                            class="user-image"
-                            alt=""
-                        />
-                    </div>
-                    <div class="profile__information">
-                        <div class="information__name">
-                            <h3 class="information__title">
-                                Александра Пушкина
-                            </h3>
-                            <p class="information__subtitle">
-                                состоит в команде ВКЦэхи
-                            </p>
-                        </div>
-                        <div class="information__description">
-                            <p class="information__indicator">
-                                Продуктивность
-                                <span class="desctiption-bold">85%</span>
-                            </p>
-                            <p class="information__indicator">
-                                Качество
-                                <span class="desctiption-bold">85%</span>
-                            </p>
-                            <p class="information__indicator">
-                                Текущий уровень
-                                <span class="desctiption-bold">85%</span>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class='user__actions user__actions_center'>
-            <button  @click="openWindow()">Начать соревнование</button>
-        </div>
+            <button class="competition-button" @click="openWindow()">
+                Начать соревнование
+            </button>
+        </div> -->
         <ModalCompetitions :status="status" />
-        <!-- КОНЕЦ СОРЕВНОВАНИЯ -->
     </div>
 </template>
 
 <script>
 import SearchSvg from '@/assets/icons/search.svg'
+//import ExitSvg from '@/assets/icons/exit.svg'
 import ModalCompetitions from '@/components/ModalCompetitions'
+import routesList from '@/router/routesList'
+
 export default {
     name: 'Competitions',
     components: {
         SearchSvg,
-        ModalCompetitions
+        ModalCompetitions,
+        //ExitSvg,
     },
     props: {},
     data() {
@@ -117,13 +195,17 @@ export default {
     },
     methods: {
         openWindow: function() {
-            this.status = !this.status
+            this.$router.push(routesList.competitionsPage.path + '/' + routesList.competitionsPage.children.SearchCompetitions.path)
         },
     },
 }
 </script>
 
 <style lang="scss" scoped>
+.competition-header {
+    margin-left: 20px;
+    margin-top: 40px;
+}
 .header {
     &__text {
         display: flex;
@@ -133,37 +215,38 @@ export default {
         color: #545969;
     }
 }
+.competition-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 85%;
+    margin-left: 20px;
+    margin-top: 40px;
+}
+.content {
+    &__block {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 502px;
+        height: 287px;
+        border: 1px solid #545969;
+    }
+
+    &__split {
+        font-weight: bold;
+        font-size: 48px;
+        color: #545969;
+    }
+}
 .profile {
+    display: flex;
+
     &__information {
         display: flex;
         flex-direction: column;
         justify-content: space-around;
-        font-size: 18px;
         margin-left: 20px;
-    }
-}
-.user {
-    &__profile {
-        display: flex;
-        flex-direction: row;
-    }
-    &__actions {
-        margin-top: 20px;
-        button {
-            cursor: pointer;
-            width: 449px;
-            padding: 5.5px 0;
-            background-color: #5F66A9;
-            border: none;
-            color: white;
-            font-size: 24px;
-            border-radius: 8px;
-            box-shadow: 0 5px 5px gray;
-        }
-        &_center {
-            margin-right: 10%;
-            align-self: center;
-        }
     }
 }
 .user-image {
@@ -187,6 +270,7 @@ export default {
     &__subtitle {
         //font-family: HelveticaNeueCyr;
         font-style: normal;
+        font-weight: 550;
         font-size: 18px;
         line-height: 18px;
         margin-top: 10px;
@@ -195,6 +279,7 @@ export default {
 }
 .indicators {
     display: flex;
+    margin-top: 12px;
     &__title {
         font-weight: 700;
         font-size: 18px;
@@ -253,20 +338,6 @@ export default {
         margin-top: 30px;
         display: flex;
         justify-content: space-between;
-    }
-    &__user {
-        margin-top: 50px;
-    }
-    &__versus {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 90%;
-        .versus {
-            font-size: 72px;
-            font-weight: 700;
-            color: #545969;
-        }
     }
 }
 .myCompetition {
@@ -554,3 +625,4 @@ export default {
     }
 }
 </style>
+
