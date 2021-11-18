@@ -200,7 +200,7 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
-        background: #26bcc2;
+        background:#5F66A9;
         color: #fff;
         font-size: 64px;
         width: 72px;
@@ -256,7 +256,7 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
-        background: #26bcc2;
+        background: #5F66A9;
         color: #fff;
         font-size: 64px;
         width: 72px;

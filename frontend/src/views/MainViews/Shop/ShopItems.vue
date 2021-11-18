@@ -13,8 +13,15 @@
                     "
                     >{{ currentInstrument }}</span
                 >
-                <span class="span_class">Товаров на странице: </span>
-                <input v-model="size" class="input_item_size" type="number" />
+
+                <span class="span_size">
+                    <span class="span_class">Товаров на странице: </span>
+                    <input
+                        v-model="size"
+                        class="input_item_size"
+                        type="number"
+                    />
+                </span>
                 <div
                     class="instruments-selection"
                     :class="{
@@ -117,11 +124,9 @@
         </div>
         <div class="filters">
             <div class="filter_text">Поиск:</div>
-            <input
-                v-model="searchText"
-                class="input_item_find"
-                type="text"
-            /><s class="input_svg" />
+            <input v-model="searchText" class="input_item_find" type="text" /><s
+                class="input_svg"
+            />
             <div class="filter_text">Цена:</div>
             <div class="filter_text_price">От До</div>
             <div>
@@ -156,13 +161,7 @@ export default {
         CheckMark,
         ShopState,
     },
-    props: {
-        size: {
-            type: Number,
-            required: false,
-            default: 3,
-        },
-    },
+
     data() {
         return {
             maxPrice: 99999,
@@ -171,6 +170,7 @@ export default {
             sort: 'ascendingValue',
             instruments: false,
             pageNumber: 0,
+            size: 2,
         }
     },
     computed: {
@@ -230,7 +230,7 @@ export default {
         },
         paginatedData() {
             const start = this.pageNumber * this.size,
-                end = start + this.size
+                end = Number(start) + Number(this.size)
             return this.orderedItems.slice(start, end)
         },
     },
@@ -374,7 +374,7 @@ export default {
                         border-radius: 100px;
                         border: none;
                         outline: none;
-                        background: #26bcc2;
+                        background: #5F66A9;
                         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
                         cursor: pointer;
                         &_icon {
@@ -451,9 +451,10 @@ export default {
     width: 200px;
     height: 33px;
     margin-bottom: 10px;
+    cursor: pointer;
 
     &:hover {
-        cursor: pointer;
+        border: 2px solid #4c62b4;
     }
     &:focus ~ .input__hint {
         opacity: 0;
@@ -470,12 +471,13 @@ export default {
     border-radius: 1px;
     border-block-color: black;
     width: 25px;
-    height: 33px;
-    margin-bottom: 10px;
+    height: 20px;
+    margin-bottom: 15px;
     text-align: center;
+    cursor: pointer;
 
     &:hover {
-        cursor: pointer;
+        border: 2px solid #4c62b4;
     }
     &:focus ~ .input__hint {
         opacity: 0;
@@ -484,38 +486,55 @@ export default {
 }
 input[type='number'] {
     -moz-appearance: textfield;
+    &:hover {
+        border: 2px solid #4c62b4;
+    }
 }
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
 }
-.span_class {
-    margin-left: 280px;
+
+.span_size {
+    float: right;
+    margin-right: 15px;
 }
+
 .button_for_slide_r {
     font-style: normal;
     font-weight: normal;
     font-size: 18px;
-    margin-top: 5px;
+    margin-top: 15px;
     margin-bottom: 5px;
     width: 200px;
     height: 30px;
     border-radius: 1.5px;
-    border-block-color: black;
-    background-color: beige;
+    border: none;
+    cursor: pointer;
+    background-color: white;
+    :hover {
+        border: 2px solid #4c62b4;
+    }
 }
 .button_for_slide_l {
     font-style: normal;
     font-weight: normal;
     font-size: 18px;
-    margin-top: 5px;
+    margin-top: 15px;
     margin-bottom: 5px;
     margin-right: 423px;
     width: 200px;
     height: 30px;
     border-radius: 1.5px;
-    border-block-color: black;
-    background-color: beige;
+    border: none;
+    cursor: pointer;
+    background-color: white;
+}
+.button_for_slide_l:hover {
+    border: 2px solid #4c62b4;
+}
+.button_for_slide_r:hover {
+    border: 2px solid #4c62b4;
 }
 </style>

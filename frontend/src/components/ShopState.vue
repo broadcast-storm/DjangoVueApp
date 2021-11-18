@@ -8,12 +8,14 @@
             </div>
             <div class="stats__level">Текущий уровень: {{ user.level }}</div>
         </div>
-        <router-link class="shop__cart" to="/shop/cart">
-            Корзина<CartSvg class="cart-icon" />
-            <span v-if="cart.length != 0" class="cart-number">{{
-                cart.length
-            }}</span>
-        </router-link>
+        <div class="animation">
+            <router-link class="shop__cart" to="/shop/cart">
+                Корзина<CartSvg class="cart-icon" />
+                <span v-if="cart.length != 0" class="cart-number">{{
+                    cart.length
+                }}</span>
+            </router-link>
+        </div>
     </div>
 </template>
 
@@ -49,6 +51,11 @@ export default {
     height: 34px;
     width: 34px;
     padding-right: 4px;
+}
+.animation :hover {
+    border: 2px solid #4c62b4;
+    overflow: hidden;
+    cursor: pointer;
 }
 .shop {
     &__state {
@@ -95,29 +102,32 @@ export default {
             line-height: 16px;
             color: #545969;
             text-decoration: none;
-            cursor: pointer;
-            .cart-number {
-                position: absolute;
-                width: 24px;
-                height: 24px;
-                bottom: 31px;
-                left: 156px;
-                margin-left: 75px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                font-size: 20px;
-                line-height: 16px;
-                color: #fff;
-                background-color: #26bcc2;
-                border-radius: 30px;
-            }
-            .cart-icon {
-                width: 59.4px;
-                height: 60px;
-                margin-left: 80px;
-                padding-left: 4px;
-            }
+        }
+        .shop__cart :hover {
+            border: initial;
+        }
+
+        .cart-number {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            bottom: 31px;
+            left: 156px;
+            margin-left: 75px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            line-height: 16px;
+            color: #fff;
+            background-color: #5F66A9;
+            border-radius: 30px;
+        }
+        .cart-icon {
+            width: 59.4px;
+            height: 60px;
+            margin-left: 80px;
+            padding-left: 4px;
         }
     }
 }

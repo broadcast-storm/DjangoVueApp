@@ -96,7 +96,7 @@ export default {
     align-items: center;
     padding: 28px 33px 28px 140px;
     &__page-name {
-        width: 157px;
+        width: 300px;
         height: 30px;
         font-family: 'Advent Pro', sans-serif;
         font-size: 36px;

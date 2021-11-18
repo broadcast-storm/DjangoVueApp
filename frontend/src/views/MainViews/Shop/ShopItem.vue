@@ -105,7 +105,7 @@ export default {
         height: calc(100vh - 90px);
     }
     &__item {
-        background: #fff;
+        background: rgb(131, 19, 19);
         box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.25),
             -2px 4px 8px rgba(0, 0, 0, 0.25);
         display: flex;
