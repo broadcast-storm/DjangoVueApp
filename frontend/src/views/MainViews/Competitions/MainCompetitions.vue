@@ -1,7 +1,81 @@
 <template>
     <div class="competition">
-        <!-- ПОИСК -->
-        <div class="competition__search">
+        <!-- Versus -->
+        <div v-if="versus" class='competition__versus'>
+            <div class="competition__user">
+                <div class="user__profile">
+                    <div class="profile__image">
+                        <img
+                            src="@/assets/img/competitions/UserPhoto.jpg"
+                            class="user-image"
+                            alt=""
+                        />
+                    </div>
+                    <div class="profile__information">
+                        <div class="information__name">
+                            <h3 class="information__title">
+                                Александра Пушкина
+                            </h3>
+                            <p class="information__subtitle">
+                                состоит в команде ВКЦэхи
+                            </p>
+                        </div>
+                        <div class="information__description">
+                            <p class="information__indicator">
+                                Продуктивность
+                                <span class="desctiption-bold">85%</span>
+                            </p>
+                            <p class="information__indicator">
+                                Качество
+                                <span class="desctiption-bold">85%</span>
+                            </p>
+                            <p class="information__indicator">
+                                Текущий уровень
+                                <span class="desctiption-bold">85%</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h1 class='versus'>VS</h1>
+            <div class="competition__user">
+                <div class="user__profile">
+                    <div class="profile__image">
+                        <img
+                            src="@/assets/img/competitions/UserPhoto.jpg"
+                            class="user-image"
+                            alt=""
+                        />
+                    </div>
+                    <div class="profile__information">
+                        <div class="information__name">
+                            <h3 class="information__title">
+                                Александра Пушкина
+                            </h3>
+                            <p class="information__subtitle">
+                                состоит в команде ВКЦэхи
+                            </p>
+                        </div>
+                        <div class="information__description">
+                            <p class="information__indicator">
+                                Продуктивность
+                                <span class="desctiption-bold">85%</span>
+                            </p>
+                            <p class="information__indicator">
+                                Качество
+                                <span class="desctiption-bold">85%</span>
+                            </p>
+                            <p class="information__indicator">
+                                Текущий уровень
+                                <span class="desctiption-bold">85%</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Поиск -->
+        <div v-else class="competition__search">
             <div>
                 <div class="search__item">
                     <label for='competitions__input'>Поиск соперника</label>
@@ -146,28 +220,6 @@
                 <input id='pagesCount' type="number" value='6'>
             </div>
         </div>
-        <!-- <div class="competition-profile">
-            <div class="profile">
-                <div class="profile__image">
-                    <img
-                        src="@/assets/img/competitions/UserPhoto.jpg"
-                        class="user-image"
-                        alt=""
-                    />
-                </div>
-                <div class="profile__information">
-                    <div class="information__name">
-                        <h3 class="information__title">Джонатан Смирнов</h3>
-                        <p class="information__subtitle">
-                            состоит в команде Пирожков
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <button class="competition-button" @click="openWindow()">
-                Начать соревнование
-            </button>
-        </div> -->
         <ModalCompetitions :status="status" />
     </div>
 </template>
@@ -191,6 +243,7 @@ export default {
             status: false,
             test_page: false,
             user: '',
+            versus: localStorage.getItem('versus')
         }
     },
     methods: {
@@ -338,6 +391,45 @@ export default {
         margin-top: 30px;
         display: flex;
         justify-content: space-between;
+    }
+    &__user {
+        margin-top: 50px;
+    }
+    &__versus {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 90%;
+        .versus {
+            font-size: 72px;
+            font-weight: 700;
+            color: #545969;
+        }
+    }
+}
+
+.user {
+    &__profile {
+        display: flex;
+        flex-direction: row;
+    }
+    &__actions {
+        margin-top: 20px;
+        button {
+            cursor: pointer;
+            width: 449px;
+            padding: 5.5px 0;
+            background-color: #5F66A9;
+            border: none;
+            color: white;
+            font-size: 24px;
+            border-radius: 8px;
+            box-shadow: 0 5px 5px gray;
+        }
+        &_center {
+            margin-right: 10%;
+            align-self: center;
+        }
     }
 }
 .myCompetition {

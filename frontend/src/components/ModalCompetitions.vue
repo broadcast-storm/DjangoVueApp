@@ -45,7 +45,8 @@ export default {
     methods: {
         startCompetition: function() {
             this.status = !this.status
-            this.$router.push(routesList.competitionsPage.path + '/' + routesList.competitionsPage.children.CurrentCompetitions.path)
+            this.$router.push(routesList.competitionsPage.path)
+            localStorage.setItem('versus',true)
         },
     },
 }
