@@ -1,5 +1,4 @@
 <template>
-
     <div class="header-container">
         <h1 class="header-container__page-name">
             {{ pageName }}
@@ -15,21 +14,36 @@
                 <CoinSvg class="user-statistics__icon" />
                 <span
                     class="user-statistics__text user-statistics__text_color_yellow"
-                    >{{ String(statistics.money).replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ') }}</span
+                    >{{
+                        String(statistics.money).replace(
+                            /(\d)(?=(\d\d\d)+([^\d]|$))/g,
+                            '$1 '
+                        )
+                    }}</span
                 >
             </div>
             <div class="user-statistics__stat-block">
                 <LightningSvg class="user-statistics__icon" />
                 <span
                     class="user-statistics__text user-statistics__text_color_green"
-                    >{{ String(statistics.energy).replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ') }}</span
+                    >{{
+                        String(statistics.energy).replace(
+                            /(\d)(?=(\d\d\d)+([^\d]|$))/g,
+                            '$1 '
+                        )
+                    }}</span
                 >
             </div>
             <div class="user-statistics__stat-block">
                 <HeartSvg class="user-statistics__icon" />
                 <span
                     class="user-statistics__text user-statistics__text_color_red"
-                    >{{ String(statistics.health).replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ') }}</span
+                    >{{
+                        String(statistics.health).replace(
+                            /(\d)(?=(\d\d\d)+([^\d]|$))/g,
+                            '$1 '
+                        )
+                    }}</span
                 >
             </div>
         </div>
@@ -83,7 +97,7 @@ export default {
 
 <style lang="scss" scoped>
 .header-container {
-    background-color: #5F66A9;
+    background-color: #5f66a9;
     width: 100%;
     height: 91px;
     position: absolute;
@@ -102,7 +116,7 @@ export default {
         font-size: 36px;
         font-weight: 600;
         line-height: 28px;
-        color: #F0F3FE;
+        color: #f0f3fe;
     }
 
     .user-statistics {
@@ -125,13 +139,13 @@ export default {
 
             &_color {
                 &_red {
-                    color: #FF8A8A;
+                    color: #ff8a8a;
                 }
                 &_yellow {
-                    color: #EDD92A;
+                    color: #edd92a;
                 }
                 &_green {
-                    color: #B0DCF5;
+                    color: #b0dcf5;
                 }
             }
         }

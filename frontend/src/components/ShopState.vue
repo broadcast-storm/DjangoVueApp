@@ -120,7 +120,7 @@ export default {
             font-size: 20px;
             line-height: 16px;
             color: #fff;
-            background-color: #5F66A9;
+            background-color: #5f66a9;
             border-radius: 30px;
         }
         .cart-icon {

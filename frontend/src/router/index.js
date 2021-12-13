@@ -75,8 +75,7 @@ const routes = [
             {
                 path: routesList.ratingPage.path,
                 components: {
-                    'main-router': () =>
-                        import('@/views/MainViews/Rating.vue'),
+                    'main-router': () => import('@/views/MainViews/Rating.vue'),
                 },
                 meta: {
                     requiersAuthentication: true,
