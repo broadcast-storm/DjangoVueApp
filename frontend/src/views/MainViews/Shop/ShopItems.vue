@@ -374,7 +374,7 @@ export default {
                         border-radius: 100px;
                         border: none;
                         outline: none;
-                        background: #5F66A9;
+                        background: #5f66a9;
                         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
                         cursor: pointer;
                         &_icon {
