@@ -3,55 +3,102 @@
         <main class="main">
             <div class="rating-menu">
                 <div class="command-type">
-                    <a
-                        class="command-type-link"
+                    <div
+                        class="command-type__tab"
                         :class="{
-                            'command-type-link__active':
-                                showIndividualRating === true,
+                            'command-type__tab-active': showIndividualRating,
                         }"
                         @click="showIndividualRating = true"
-                        >Индивидуальный</a
                     >
-                    <a
-                        class="command-type-link"
+                        <Union class="union-icon" />
+                        Индивидуальный
+                    </div>
+                    <div
                         :class="{
-                            'command-type-link__active':
-                                showIndividualRating === false,
+                            'command-type__triangle-right': showIndividualRating,
+                            'command-type__triangle-left': !showIndividualRating,
+                        }"
+                    ></div>
+                    <div
+                        class="command-type__tab"
+                        :class="{
+                            'command-type__tab-active': !showIndividualRating,
                         }"
                         @click="showIndividualRating = false"
-                        >Командный</a
                     >
+                        <Group class="group-icon" />
+                        Командный
+                    </div>
                 </div>
-                <div class="period">
-                    <span class="period__arrow">
-                        <PeriodArrowSvg class="period__arrow__svg" />
-                    </span>
-                    <p class="period__info">за неделю</p>
-                    <span class="period__arrow">
-                        <PeriodArrowSvg class="period__arrow__svg to-right" />
-                    </span>
+                <div class="rating-sort">
+                    Показать за:
+                    <div
+                        class="selected-method"
+                        @click="showSelection = !showSelection"
+                    >
+                        {{ getCurrentSortMethod
+                        }}<ArrowDown class="arrow-icon" />
+                    </div>
+                </div>
+                <div v-if="showSelection" class="selection">
+                    <div
+                        class="selection-method"
+                        @click="
+                            currentSortMethod = 'day'
+                            showSelection = !showSelection
+                        "
+                    >
+                        день
+                    </div>
+                    <div
+                        class="selection-method"
+                        @click="
+                            currentSortMethod = 'week'
+                            showSelection = !showSelection
+                        "
+                    >
+                        неделя
+                    </div>
+                    <div
+                        class="selection-method"
+                        @click="
+                            currentSortMethod = 'month'
+                            showSelection = !showSelection
+                        "
+                    >
+                        месяц
+                    </div>
                 </div>
             </div>
             <RatingList
                 v-if="showIndividualRating"
                 :ratings="individualRaiting"
+                :sort="currentSortMethod"
             />
-            <RatingList v-else :ratings="teamRaiting" />
+            <RatingList
+                v-else
+                :ratings="teamRaiting"
+                :sort="currentSortMethod"
+            />
         </main>
     </div>
 </template>
 
 <script>
-import PeriodArrowSvg from '@/assets/icons/raiting/period-arrow.svg'
 import RatingList from '@/components/Rating/RatingList'
+import Group from '@/assets/icons/raiting/group.svg'
+import Union from '@/assets/icons/raiting/union.svg'
+import ArrowDown from '@/assets/icons/raiting/arrow-down.svg'
 import { mapGetters } from 'vuex'
 
 export default {
     name: 'Raiting',
-    components: { PeriodArrowSvg, RatingList },
+    components: { RatingList, Group, Union, ArrowDown },
     data() {
         return {
             showIndividualRating: true,
+            showSelection: false,
+            currentSortMethod: 'month',
         }
     },
     computed: {
@@ -68,6 +115,21 @@ export default {
         },
         isLoading: function() {
             return this.getIsLoading
+        },
+        getCurrentSortMethod: function() {
+            let c
+            switch (this.currentSortMethod) {
+                case 'day':
+                    c = 'день'
+                    break
+                case 'week':
+                    c = 'неделя'
+                    break
+                case 'month':
+                    c = 'месяц'
+                    break
+            }
+            return c
         },
     },
 }
@@ -87,22 +149,103 @@ export default {
 }
 .rating-menu {
     padding: 25px 70px;
+    flex-direction: column;
     display: flex;
     justify-content: space-between;
     .command-type {
-        width: 420px;
+        width: 585px;
         display: flex;
-        justify-content: space-between;
         color: #545969;
         font-size: 24px;
-        .command-type-link {
-            padding-bottom: 8px;
-            color: #545969;
-            text-decoration: none;
+        border: 1px solid #545969;
+        box-sizing: border-box;
+        margin-bottom: 19px;
+        &__tab {
+            font-weight: bold;
+            font-size: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 68px;
+            padding-right: 25px;
+            padding-left: 25px;
             cursor: pointer;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            .union-icon {
+                width: 25px;
+                position: relative;
+                top: 3.5px;
+                margin-right: 14px;
+                path {
+                    fill: #000;
+                }
+            }
+            .group-icon {
+                width: 42px;
+                margin-right: 14px;
+            }
         }
-        .command-type-link__active {
-            border-bottom: 2px solid #545969;
+        &__triangle-right {
+            width: 0;
+            height: 0;
+            border-top: 68px solid #545969;
+            border-right: 36px solid transparent;
+        }
+        &__triangle-left {
+            width: 0;
+            height: 0;
+            border-bottom: 68px solid #545969;
+            border-left: 36px solid transparent;
+        }
+        &__tab-active {
+            background: #545969;
+            color: #dee2f4;
+        }
+    }
+    .rating-sort {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        font-size: 18px;
+        color: #545969;
+        .selected-method {
+            background: #ffffff;
+            box-shadow: inset 0px -2px 5px rgba(0, 0, 0, 0.25);
+            border-radius: 10px;
+            padding: 9px 14px 9px 23px;
+            color: #6a6d76;
+            margin-left: 11px;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            .arrow-icon {
+                height: 12px;
+                width: 20px;
+                margin-left: 16px;
+            }
+        }
+    }
+    .selection {
+        margin-left: 120px;
+        background: #ffffff;
+        color: #6a6d76;
+        width: 120px;
+        &-method {
+            font-size: 18px;
+            padding-left: 23px;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
     }
 }

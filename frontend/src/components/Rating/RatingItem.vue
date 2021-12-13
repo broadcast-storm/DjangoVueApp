@@ -1,6 +1,6 @@
 <template>
     <fragment>
-        <div class="row__num">{{ rating.id }}</div>
+        <div class="row__num">{{ index + 1 }}</div>
         <div class="row__info">
             <img class="row__img" :src="rating.img" alt="" />
             <div class="row__wrap">
@@ -12,7 +12,14 @@
                 >
                 <p class="row__raiting">
                     Рейтинг
-                    {{ rating.raitingValue }}
+
+                    {{
+                        sort === 'month'
+                            ? rating.ratingMonth
+                            : sort === 'week'
+                            ? rating.ratingWeek
+                            : rating.ratingDay
+                    }}
                 </p>
             </div>
         </div>
@@ -30,6 +37,14 @@ export default {
             type: Object,
             default: () => {},
         },
+        sort: {
+            type: String,
+            default: 'month',
+        },
+        index: {
+            type: Number,
+            default: 1,
+        },
     },
 }
 </script>
@@ -40,16 +55,19 @@ export default {
         &:nth-child(1) {
             .row__num {
                 background-color: #ebe31d;
+                font-size: 48px;
             }
         }
         &:nth-child(2) {
             .row__num {
                 background-color: #99a4a5;
+                font-size: 48px;
             }
         }
         &:nth-child(3) {
             .row__num {
                 background-color: #be8e10;
+                font-size: 48px;
             }
         }
     }
@@ -58,9 +76,9 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
-        background: #26bcc2;
+        background: #5f66a9;
         color: #fff;
-        font-size: 48px;
+        font-size: 36px;
         width: 81px;
         height: 88px;
     }

@@ -1,8 +1,12 @@
 <template>
     <div class="rating-table">
         <div class="row">
-            <div v-for="raiting in ratings" :key="raiting.id" class="row__item">
-                <RatingItem :rating="raiting" />
+            <div
+                v-for="(raiting, index) in sortedRatings"
+                :key="index"
+                class="row__item"
+            >
+                <RatingItem :index="index" :rating="raiting" :sort="sort" />
             </div>
         </div>
     </div>
@@ -18,6 +22,27 @@ export default {
         ratings: {
             type: Array,
             default: () => [],
+        },
+        sort: {
+            type: String,
+            default: 'month',
+        },
+    },
+    computed: {
+        sortedRatings: function() {
+            let c = this.ratings
+            switch (this.sort) {
+                case 'month':
+                    c = c.sort((a, b) => b.ratingMonth - a.ratingMonth)
+                    break
+                case 'day':
+                    c = c.sort((a, b) => b.ratingDay - a.ratingDay)
+                    break
+                case 'week':
+                    c = c.sort((a, b) => b.ratingWeek - a.ratingWeek)
+                    break
+            }
+            return c
         },
     },
 }
