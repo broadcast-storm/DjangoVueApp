@@ -1,3 +1,6 @@
+from datetime import datetime, timedelta
+
+from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from taggit.managers import TaggableManager
@@ -369,7 +372,7 @@ class Task(models.Model):
         UserProfile, through='TaskUserStatus', through_fields=('task', 'user'), )
 
     division = models.ForeignKey(
-        Division, on_delete=models.CASCADE, verbose_name="Подразделение", blank=True, null=True,)
+        Division, on_delete=models.CASCADE, verbose_name="Подразделение", blank=True, null=True, )
 
     # IDs
 
@@ -443,7 +446,6 @@ class TaskUserStatus(models.Model):
 
 
 class MainQuest(models.Model):
-
     EASY = 'easy'
     MEDIUM = 'medium'
     HARD = 'hard'
@@ -464,11 +466,20 @@ class MainQuest(models.Model):
 
     # IDs
 
-    difficulty = models.CharField(max_length=20, choices=DIFFICULTY_TYPE_CHOICES,
-                                  default=EASY, verbose_name="Сложность")
-    title = models.CharField(max_length=120, verbose_name="Называние")
+    difficulty = models.CharField(max_length=20, choices=DIFFICULTY_TYPE_CHOICES, default=EASY,
+                                  verbose_name="Сложность")
+    title = models.CharField(max_length=120, verbose_name="Название")
     description = models.TextField(verbose_name="Описание")
-    deadline = models.IntegerField(default=0, verbose_name="Дедлайн")
+    deadline = models.DateTimeField(verbose_name="Дедлайн", default=timezone.now)
+
+    @property
+    def is_active(self):
+        return timezone.now() < self.deadline if self.deadline else False
+
+    @property
+    def time_left(self):
+        return self.deadline - timezone.now() if self.deadline else False
+
     accessLevel = models.IntegerField(
         default=0, verbose_name="Уровень доступа")
     tasksCount = models.IntegerField(
@@ -496,8 +507,6 @@ class MainQuestTree(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE, )
     parentTask = models.ForeignKey(
         Task, on_delete=models.CASCADE, related_name='parentTask')
-    childTask = models.ForeignKey(
-        Task, on_delete=models.CASCADE, related_name='childTask')
 
     # IDs
 
@@ -542,6 +551,20 @@ class MainQuestStatus(models.Model):
         verbose_name_plural = "статусы основных квестов пользователей"
 
 
+class UserNotification(models.Model):
+    NOTIFICATION_STATUS_CHOICE = (
+        ("VIEWED", 'просмотрено'),
+        ("NOT VIEWED", 'не просмотрено')
+    )
+    user = models.ForeignKey("UserProfile", verbose_name='Уведомление пользователя', related_name='user',
+                             on_delete=models.CASCADE, null=True)
+    title = models.CharField(max_length=255, verbose_name='Название уведомления', null=False, default="nothing here")
+    message = models.CharField(max_length=255, verbose_name='Сообщение', null=False, blank=False,
+                               default="nothing here")
+    status = models.CharField(max_length=16, verbose_name='Статус уведомления', choices=NOTIFICATION_STATUS_CHOICE,
+                              default='NOT VIEWED')
+
+
 ##############################################
 # СОРЕВНОВАНИЯ
 ##############################################
@@ -550,21 +573,15 @@ class Competition(models.Model):
     # IDs
 
     # users = models.ManyToManyField(UserProfile)
+
     winner = models.ForeignKey(
-        UserProfile, on_delete=models.CASCADE, related_name='winner')
+        UserProfile, on_delete=models.SET_NULL, related_name='winner',
+        null=True)
 
     # IDs
 
-    title = models.CharField(max_length=120)
     isCompleted = models.BooleanField(default=False)
-    deadline = models.DateTimeField(blank=True, null=True)
-
-    levelCriterion = models.IntegerField(
-        default=0, verbose_name="Требуемый уровень")
-    qualityCriterion = models.FloatField(
-        default=0.0, verbose_name="Требуемое качество")
-    productivityCriterion = models.FloatField(
-        default=0.0, verbose_name="Требуемая продуктивность")
+    deadline = models.DateTimeField(blank=False, null=False, default=datetime.now() + timedelta(days=30))
 
     money = models.IntegerField(default=0, verbose_name="Валюта")
     health = models.IntegerField(default=0, verbose_name="Жизни")
@@ -572,6 +589,8 @@ class Competition(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     done_at = models.DateTimeField(blank=True, null=True)
+    request = models.OneToOneField('CompetitionRequest', on_delete=models.DO_NOTHING,
+                                   verbose_name='Запрос на участие в соревновании', null=True)
 
     def __str__(self):
         return str(self.title)
@@ -581,14 +600,19 @@ class Competition(models.Model):
         verbose_name_plural = "соревнования"
 
 
-class CompetitionUser(models.Model):
+class CompetitionRequest(models.Model):
+    REQUEST_STATUS_CHOICE = (
+        ("SENT", 'отправлено'),
+        ("ACCEPTED", 'принято'),
+        ("DISCARDED", 'отклонено'),
+    )
+    title = models.CharField(max_length=120)
+    sender = models.ForeignKey(to=UserProfile, on_delete=models.CASCADE, related_name='sender')
+    receiver = models.ForeignKey(to=UserProfile, on_delete=models.CASCADE, related_name='receiver')
+    send_time = models.DateTimeField(auto_now_add=True)
+    decay_time = models.DateTimeField(blank=False, null=False, default=datetime.now() + timedelta(days=4))
+    status = models.CharField(max_length=10, choices=REQUEST_STATUS_CHOICE, default='sent')
 
-    competition = models.ForeignKey(
-        'Competition', on_delete=models.CASCADE, related_name='competition_id')
-    first_user = models.ForeignKey(
-        'UserProfile', on_delete=models.CASCADE, related_name='first_name')
-    second_user = models.ForeignKey(
-        'UserProfile', on_delete=models.CASCADE, related_name='second_name')
 
 ##############################################
 # ДОСТИЖЕНИЯ
@@ -843,7 +867,6 @@ class Test(models.Model):
 
 
 class TestBlock(models.Model):
-
     # IDs
     questionTheme = models.ForeignKey(
         QuestionTheme, on_delete=models.CASCADE, verbose_name="Тематика", )
@@ -852,9 +875,9 @@ class TestBlock(models.Model):
     questions = models.ManyToManyField(
         Question, verbose_name="Вопросы", related_name="qst")
 
-    test = models.ForeignKey(
-        Test, on_delete=models.CASCADE, verbose_name="Тест", )
-    questions = models.ManyToManyField(Question, verbose_name="", default=None)
+    # test = models.ForeignKey(
+    #     Test, on_delete=models.CASCADE, verbose_name="Тест", )
+    # questions = models.ManyToManyField(Question, verbose_name="", default=None)   зачем это?
     # IDs
 
     questionsCount = models.IntegerField(
@@ -1089,6 +1112,7 @@ class RequirementsToBuyProduct(models.Model):
 
     health = models.IntegerField(default=0, verbose_name="Кол-во Жизней")
     energy = models.IntegerField(default=0, verbose_name="Кол-во Энергии")
+
     # Данные атрибуты не успользуются при работе на стороне клиента
 
     def __str__(self):
@@ -1159,7 +1183,7 @@ class Purchase(models.Model):
     PURCHASE_STATUS_CHOICES = (
         (PENDING, 'оформляется'),
         (PAID, 'оплачен'),
-        (EXPECTS, 'оможно забрать'),
+        (EXPECTS, 'можно забрать'),
         (RECEIVED, 'получен'),
     )
     # IDs
@@ -1178,7 +1202,6 @@ class Purchase(models.Model):
     def __str__(self):
         return str(self.id)
 
-
-class Meta:
-    verbose_name = "покупка"
-    verbose_name_plural = "покупки"
+    class Meta:
+        verbose_name = "покупка"
+        verbose_name_plural = "покупки"

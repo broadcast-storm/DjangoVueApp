@@ -275,7 +275,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #26bcc2;
+    background: #5F66A9;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 8px;
     width: 449px;
@@ -341,7 +341,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #26bcc2;
+    background: #5F66A9;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 8px;
     width: 249px;

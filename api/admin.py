@@ -1,17 +1,16 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group, User
 from django.contrib.auth.admin import GroupAdmin, UserAdmin
-from .models import UserProfile, MainQuest, Task, WeeklyTask, Division, JobPosition, Team, Statistics, \
-    MainQuest, Question, QuestionTheme, Test, TestUser, TestUserAnswer, TestBlock, Achievement, RequirenmentToGetAchieve, \
-    Product, RequirementsToBuyProduct, ProductCategory, CategoryClothes, Purchase, Answer
+from .models import UserProfile, MainQuest, Task, WeeklyTask, Division, JobPosition, Team, \
+    MainQuest, Question, QuestionTheme, Test, TestUser, TestUserAnswer, TestBlock, Achievement, \
+    RequirenmentToGetAchieve, Product, RequirementsToBuyProduct, ProductCategory, Answer
 from django.db import models
 from django.db.models import Q
 from django import forms
 from django.urls import resolve
 from django.utils.safestring import mark_safe
-from django import forms
 
-from django.contrib import admin
+
 from django.contrib.admin import ModelAdmin, TabularInline
 # from .models import Category, Product, ProductSliderImage
 
@@ -113,6 +112,7 @@ class SubTask(admin.StackedInline):
         'title',
         'description',
         'isTeamTask',
+        'deadline',
         ('money',
          'health',
          'energy'),
@@ -147,6 +147,7 @@ class TaskAdmin(admin.ModelAdmin):
             'title',
             'description',
             'isTeamTask',
+            'deadline',
             ('money',
              'health',
              'energy'),
@@ -207,8 +208,17 @@ class WeeklyTaskAdmin(admin.ModelAdmin):
     filter_horizontal = ()
 
 
+class TasksInline(admin.StackedInline):
+    extra = 0
+    model = MainQuest.tasks.through
+    fields = (
+        ('task',
+         'parentTask')
+    )
+
+
 class MainQuestAdmin(admin.ModelAdmin):
-    list_display = ('title', 'description', 'accessLevel')
+    list_display = ('title', 'description', 'accessLevel', 'time_left', 'is_active')
     search_fields = ('title',)
     fieldsets = ((None, {
         'fields': (
@@ -226,6 +236,7 @@ class MainQuestAdmin(admin.ModelAdmin):
              'updated_at'),
         )
     }))
+    inlines = [TasksInline, ]
     list_filter = ('title', 'accessLevel')
     filter_horizontal = ()
     readonly_fields = ('created_at', 'updated_at')

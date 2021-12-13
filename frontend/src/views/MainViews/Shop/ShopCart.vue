@@ -228,7 +228,7 @@ export default {
                 border-radius: 100px;
                 border: none;
                 outline: none;
-                background: #26bcc2;
+                background: #5F66A9;
                 box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
                 cursor: pointer;
                 &_icon {
@@ -284,7 +284,7 @@ export default {
                 }
             }
             &-buy {
-                background: #26bcc2;
+                background: #5F66A9;
                 height: 36px;
                 width: 174px;
                 box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
