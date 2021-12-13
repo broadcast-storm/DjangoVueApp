@@ -72,7 +72,7 @@ export default {
 
 <style lang="scss" scoped>
 .wrapper {
-    height: 100vh;
+    min-height: 100vh;
 }
 .tests-container {
     padding: 140px 0 0 60px;
