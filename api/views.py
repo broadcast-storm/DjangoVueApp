@@ -45,9 +45,9 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action == 'retrieve' or self.action == 'update':
-            permission_classes = [IsAuthenticated]
+            permission_classes = [AllowAny]
         else:
-            permission_classes = [IsAuthenticated]
+            permission_classes = [AllowAny]
         return [permission() for permission in permission_classes]
 
     def get_serializer_class(self):
@@ -587,7 +587,7 @@ class TaskViewSet(viewsets.ModelViewSet):
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def get_daily_tasks(request):
     if request.method == 'GET':
         user = models.UserProfile.objects.get(id=request.user.id)
@@ -599,7 +599,7 @@ def get_daily_tasks(request):
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def get_weekly_tasks(request):
     if request.method == 'GET':
         user = models.UserProfile.objects.get(id=request.user.id)
@@ -613,7 +613,7 @@ def get_weekly_tasks(request):
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def get_quests(request):
     if request.method == 'GET':
         user = models.UserProfile.objects.get(id=request.user.id)
