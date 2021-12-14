@@ -53,7 +53,7 @@ urlpatterns = [
     path('competition', views.competition, name='competition'),
     path('notification', views.notification, name='notification'),
     path('competition-possible-enemies', views.competition_possible_enemies, name='competition-possible-enemies'),
-    path('competition-user-data', views.competition_user_data,name='competition-user-data')
+    path('competition-user-data', views.competition_user_data, name='competition-user-data'),
 ]
 
 
