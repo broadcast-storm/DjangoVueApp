@@ -1,15 +1,15 @@
 import axios from 'axios'
 import {
-    COMPETITION_REQUEST_FETCHING,
-    COMPETITION_REQUEST_SUCCESS,
-    COMPETITION_REQUEST_ERROR,
-} from '@/store/action-types/competition'
+    COMPETITIONS_REQUEST_FETCHING,
+    COMPETITIONS_REQUEST_SUCCESS,
+    COMPETITIONS_REQUEST_ERROR,
+} from '@/store/action-types/competitions'
 
 const actions = {
-    [COMPETITION_REQUEST_FETCHING]: async ({ commit, rootState }) => {
+    [COMPETITIONS_REQUEST_FETCHING]: async ({ commit, rootState }) => {
         try {
             const token = rootState.tokens.accessToken
-            commit(COMPETITION_REQUEST_FETCHING)
+            commit(COMPETITIONS_REQUEST_FETCHING)
             const response = await axios.get(`/api/competition`, {
                 headers: {
                     'Content-Type': 'application/json',
@@ -17,11 +17,11 @@ const actions = {
                 },
             })
             console.log(response.data)
-            commit(COMPETITION_REQUEST_SUCCESS, {
+            commit(COMPETITIONS_REQUEST_SUCCESS, {
                 newProfileInfo: response.data,
             })
         } catch (error) {
-            commit(COMPETITION_REQUEST_ERROR, error)
+            commit(COMPETITIONS_REQUEST_ERROR, error)
             throw error
         }
     }

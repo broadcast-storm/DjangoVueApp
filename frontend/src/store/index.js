@@ -11,6 +11,7 @@ import tokens from '@/store/modules/tokens'
 import rating from '@/store/modules/rating'
 import statistics from '@/store/modules/statistics'
 import tasks from '@/store/modules/tasks'
+import competitions from '@/store/modules/competitions'
 
 Vue.use(Vuex)
 
@@ -26,5 +27,6 @@ export default new Vuex.Store({
         rating,
         statistics,
         tasks,
+        competitions
     },
 })

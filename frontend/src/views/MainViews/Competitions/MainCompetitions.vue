@@ -121,86 +121,39 @@
                         <th class="row__id">#</th>
                         <th class="">Соревнование</th>
                         <th class="">Исход</th>
-                        <th class="">Критерий</th>
-                        <th class="">Показатель</th>
-                        <th class="">Противник</th>
+                        <th class="">Здоровье</th>
+                        <th class="">Энергия</th>
+                        <th class="">id победителя</th>
                         <th class="">Выигрыш</th>
                     </tr>
-                </thead>
-                <tbody>
+                </thead><!-- <div v-for="item in competitions" :key="item.length">
+                    {{item}}
+                </div> -->
+                <tbody v-for="competition in competitions" :key="competition.length">
                     <tr class="table__row">
                         <td class="row__id">
-                            1
+                            {{competition.id}}
                         </td>
                         <td class="row__logo">
-                            <img class='competition__logo' src="@/assets/img/competitions/competition__logo.jpg" alt="logo">
                             Бой телепузиков
                         </td>
-                        <td class="row__result result__win">
-                            <p>Выигрыш</p>
+                        <td class="row__result" v-bind:class="[competition.isCompleted ? 'result__win' : 'result__losing',]">
+                            <p> {{competition.isCompleted ? 'Победа' : 'Поражение'}} </p>
                         </td>
                         <td class="">
-                            Продуктивность
+                            <HeartSvg class="table__svg"/>
+                            {{competition.health}}
                         </td>
                         <td class="">
-                            88 vs 67
+                            <LightningSvg class="table__svg"/>
+                            {{competition.energy}}
                         </td>
                         <td class="row__enemy">
-                            <img class='enemy__logo' src="@/assets/img/competitions/enemy__logo.jpg" alt="pht">
-                            Evan Flores
+                            {{competition.winner}}
                         </td>
                         <td class="">
-                            $452.85
-                        </td>
-                    </tr>
-                    <tr class="table__row">
-                        <td class="row__id">
-                            2
-                        </td>
-                        <td class="row__logo">
-                            <img class='competition__logo' src="@/assets/img/competitions/competition__logo.jpg" alt="logo">
-                            Бой телепузиков
-                        </td>
-                        <td class="row__result result__losing">
-                            <p>Проигрыш</p>
-                        </td>
-                        <td class="">
-                            Качество
-                        </td>
-                        <td class="">
-                            13 vs 67
-                        </td>
-                        <td class="row__enemy">
-                            <img class='enemy__logo' src="@/assets/img/competitions/enemy__logo.jpg" alt="pht">
-                            Steven Flores
-                        </td>
-                        <td class="">
-                            $412.85
-                        </td>
-                    </tr>
-                    <tr class="table__row">
-                        <td class="row__id">
-                            3
-                        </td>
-                        <td class="row__logo">
-                            <img class='competition__logo' src="@/assets/img/competitions/competition__logo.jpg" alt="logo">
-                            Атака ведьм
-                        </td>
-                        <td class="row__result result__draw">
-                            <p>Ничья</p>
-                        </td>
-                        <td class="">
-                            Уровень
-                        </td>
-                        <td class="">
-                            13 vs 67
-                        </td>
-                        <td class="row__enemy">
-                            <img class='enemy__logo' src="@/assets/img/competitions/enemy__logo.jpg" alt="pht">
-                            Steven Flores
-                        </td>
-                        <td class="">
-                            $412.85
+                            <CoinSvg class="table__svg"/>
+                            ${{competition.money}}
                         </td>
                     </tr>
                 </tbody>
@@ -225,19 +178,32 @@
 </template>
 
 <script>
-import SearchSvg from '@/assets/icons/search.svg'
-//import ExitSvg from '@/assets/icons/exit.svg'
-import ModalCompetitions from '@/components/ModalCompetitions'
-import routesList from '@/router/routesList'
-
+import SearchSvg from '@/assets/icons/search.svg';
+//import ExitSvg from '@/assets/icons/exit.svg';
+import ModalCompetitions from '@/components/ModalCompetitions';
+import CoinSvg from '@/assets/icons/coin.svg';
+import HeartSvg from '@/assets/icons/heart.svg';
+import LightningSvg from '@/assets/icons/lightning.svg';
+import routesList from '@/router/routesList';
+import { mapGetters } from 'vuex';
 export default {
     name: 'Competitions',
     components: {
         SearchSvg,
         ModalCompetitions,
+        HeartSvg,
+        CoinSvg,
+        LightningSvg
         //ExitSvg,
     },
     props: {},
+    computed: {
+        ...mapGetters('competitions', ['getCompetitions']),
+        competitions: function() {
+            console.log(this.getCompetitions,'competitions')
+            return this.getCompetitions
+        },
+    },
     data() {
         return {
             status: false,
@@ -444,6 +410,9 @@ export default {
                     color: #545969;
                 }
         }
+        .table__svg {
+            width: 20px;
+        }
         thead {
             .table__row {
                 margin-top: 2px;
@@ -456,8 +425,9 @@ export default {
         tbody {
             .table__row {
                 td {
+                    
                     margin-top: 2px;
-                    padding: 1px 13px 7px 13px;
+                    padding: 7px 13px 7px 13px;
                     .competition__logo {
                         width: 42px;
                         margin-right: 20px;
