@@ -620,15 +620,21 @@ def get_quests(request):
         quests = models.MainQuest.objects.all().filter(division=user.division)
         active_quests = [x for x in quests if x.is_active is True]
         quest_serializer = serializers.QuestSerializer(active_quests, many=True)
+        tasks_user_status = models.TaskUserStatus.objects.all().filter(user_id=user.id)
         for quest in quest_serializer.data:  # прогоняем каждый квест
-            tasks_trees = models.MainQuestTree.objects.all().filter(mainQuest=quest['id'])
-            tasks = models.Task.objects.filter(id__in=[task_tree.task.id for task_tree in tasks_trees])
+            tree_tasks = models.MainQuestTree.objects.all().filter(mainQuest=quest['id'])  # Берём дерево
+            tree_tasks_serializer = serializers.QuestTreeSerializer(tree_tasks, many=True)
+            quest['tree'] = tree_tasks_serializer.data
+            tasks = models.Task.objects.filter(id__in=[task_tree.task.id for task_tree in tree_tasks])
             serializer = serializers.TaskSerializer(tasks, many=True)
             quest['tasks'] = serializer.data
             for task in serializer.data:
                 sub_tasks = models.Task.objects.all().filter(parent=task['id'])
                 sub_tasks_serializer = serializers.TaskSerializer(sub_tasks, many=True)
                 task['subTasks'] = sub_tasks_serializer.data
+                task_status = tasks_user_status.filter(task_id=task['id'])
+                task_status_serializer = serializers.TaskUserStatusSerializer(task_status, many=True)
+                task['status'] = task_status_serializer.data
         return Response(quest_serializer.data)
 
 
