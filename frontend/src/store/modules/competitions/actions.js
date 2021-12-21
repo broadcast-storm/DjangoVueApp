@@ -6,19 +6,15 @@ import {
 } from '@/store/action-types/competitions'
 
 const actions = {
-    [COMPETITIONS_REQUEST_FETCHING]: async ({ commit, rootState }) => {
+    [COMPETITIONS_REQUEST_FETCHING]: async ({ commit }) => {
         try {
-            const token = rootState.tokens.accessToken
-            commit(COMPETITIONS_REQUEST_FETCHING)
-            const response = await axios.get(`/api/competition`, {
+            const response = await axios.get(`http://ygamification.std-1550.ist.mospolytech.ru/api/competition`, {
                 headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json'
                 },
             })
-            console.log(response.data)
             commit(COMPETITIONS_REQUEST_SUCCESS, {
-                newProfileInfo: response.data,
+                newCompetitions: response.data,
             })
         } catch (error) {
             commit(COMPETITIONS_REQUEST_ERROR, error)

@@ -10,7 +10,7 @@ const mutations = {
     },
     [COMPETITIONS_REQUEST_SUCCESS]: (state, { newCompetitions }) => {
         state.competitionStatus = 'success'
-        state.competitionList = [...newCompetitions]
+        state.competitions = [...newCompetitions]
     },
     [COMPETITIONS_REQUEST_ERROR]: state => {
         state.competitionStatus = 'error'

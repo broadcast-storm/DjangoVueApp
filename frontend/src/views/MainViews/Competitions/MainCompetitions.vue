@@ -179,13 +179,14 @@
 
 <script>
 import SearchSvg from '@/assets/icons/search.svg';
-//import ExitSvg from '@/assets/icons/exit.svg';
 import ModalCompetitions from '@/components/ModalCompetitions';
 import CoinSvg from '@/assets/icons/coin.svg';
 import HeartSvg from '@/assets/icons/heart.svg';
 import LightningSvg from '@/assets/icons/lightning.svg';
 import routesList from '@/router/routesList';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
+import {COMPETITIONS_REQUEST_FETCHING} from '@/store/action-types/competitions'
+
 export default {
     name: 'Competitions',
     components: {
@@ -194,13 +195,11 @@ export default {
         HeartSvg,
         CoinSvg,
         LightningSvg
-        //ExitSvg,
     },
     props: {},
     computed: {
         ...mapGetters('competitions', ['getCompetitions']),
         competitions: function() {
-            console.log(this.getCompetitions,'competitions')
             return this.getCompetitions
         },
     },
@@ -212,7 +211,11 @@ export default {
             versus: localStorage.getItem('versus')
         }
     },
+  async mounted() {
+    await this.COMPETITIONS_REQUEST_FETCHING()
+  },
     methods: {
+      ...mapActions('competitions', [COMPETITIONS_REQUEST_FETCHING]),
         openWindow: function() {
             this.$router.push(routesList.competitionsPage.path + '/' + routesList.competitionsPage.children.SearchCompetitions.path)
         },
