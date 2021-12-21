@@ -3,11 +3,11 @@
         <div class="competition__search">
             <div>
                 <div class="search__item">
-                    <label for='competitions__input'>Поиск соперника</label>
+                    <label for="competitions__input">Поиск соперника</label>
                 </div>
                 <div class="search__input">
                     <input
-                        id = 'competitions__input'
+                        id="competitions__input"
                         v-model="user"
                         class="input__item"
                         type="text"
@@ -17,7 +17,7 @@
                 </div>
             </div>
         </div>
-        <div class='competition__versus'>
+        <div class="competition__versus">
             <div class="competition__user">
                 <div class="user__profile">
                     <div class="profile__image">
@@ -53,7 +53,7 @@
                     </div>
                 </div>
             </div>
-            <h1 class='versus'>VS</h1>
+            <h1 class="versus">VS</h1>
             <div class="competition__user">
                 <div class="user__profile">
                     <div class="profile__image">
@@ -90,8 +90,8 @@
                 </div>
             </div>
         </div>
-        <div class='user__actions user__actions_center'>
-            <button  @click="openWindow()">Начать соревнование</button>
+        <div class="user__actions user__actions_center">
+            <button @click="openWindow()">Начать соревнование</button>
         </div>
         <ModalCompetitions :status="status" />
         <!-- КОНЕЦ СОРЕВНОВАНИЯ -->
@@ -105,7 +105,7 @@ export default {
     name: 'Competitions',
     components: {
         SearchSvg,
-        ModalCompetitions
+        ModalCompetitions,
     },
     props: {},
     data() {
@@ -153,7 +153,7 @@ export default {
             cursor: pointer;
             width: 449px;
             padding: 5.5px 0;
-            background-color: #5F66A9;
+            background-color: #5f66a9;
             border: none;
             color: white;
             font-size: 24px;
@@ -226,7 +226,7 @@ export default {
         font-weight: 400;
         font-size: 24px;
         margin-right: 15px;
-        color: #1A2740;
+        color: #1a2740;
         span {
             margin-right: 30px;
             &:last-child {
@@ -276,10 +276,10 @@ export default {
         border-collapse: separate;
         border-spacing: 0 2px;
         .table__row {
-            background-color: #F0F3FE;
-                .row__id {
-                    color: #545969;
-                }
+            background-color: #f0f3fe;
+            .row__id {
+                color: #545969;
+            }
         }
         thead {
             .table__row {
@@ -320,18 +320,18 @@ export default {
                     max-width: 90px;
                     text-align: center;
                     border-radius: 5px;
-                    border: 1px solid #7FC008;
+                    border: 1px solid #7fc008;
                 }
                 .result__win p {
-                    color: #7FC008
+                    color: #7fc008;
                 }
-                .result__losing p{
-                    border-color: #DB303F;
-                    color: #DB303F;
+                .result__losing p {
+                    border-color: #db303f;
+                    color: #db303f;
                 }
                 .result__draw p {
-                    color: #DB8C28;
-                    border-color: #DB8C28;
+                    color: #db8c28;
+                    border-color: #db8c28;
                 }
             }
         }
@@ -339,7 +339,7 @@ export default {
 }
 .about {
     &__description {
-        color: #4C4F56;
+        color: #4c4f56;
         padding: 8px 13px;
         border: 1px solid #545969;
     }
@@ -369,8 +369,8 @@ export default {
         align-items: center;
         button {
             cursor: pointer;
-            color:#B0BAC9;
-            border: 1px solid #B0BAC9;
+            color: #b0bac9;
+            border: 1px solid #b0bac9;
             background-color: white;
             padding: 9px 12px 7px 12px;
             border-radius: 6px;
@@ -385,11 +385,11 @@ export default {
             justify-content: space-around;
             margin: 0 12px;
             font-size: 14px;
-            color: #B0BAC9;
+            color: #b0bac9;
             input {
-                color:#26BCC2;
+                color: #26bcc2;
                 height: 34px;
-                border: 1px solid #B0BAC9;
+                border: 1px solid #b0bac9;
                 text-align: center;
                 width: 35px;
             }
@@ -405,16 +405,16 @@ export default {
     }
     &__pagesCount {
         display: flex;
-        color:#454D59;
+        color: #454d59;
         align-items: center;
         font-size: 14px;
-            input {
-                margin-left: 20px;
-                height: 34px;
-                border: 1px solid #B0BAC9;
-                padding: 0 10px;
-                width: 40px;
-            }
+        input {
+            margin-left: 20px;
+            height: 34px;
+            border: 1px solid #b0bac9;
+            padding: 0 10px;
+            width: 40px;
+        }
     }
 }
 .input {
@@ -424,7 +424,7 @@ export default {
         font-weight: 100 !important;
         font-size: 18px;
         line-height: 18px;
-        color: #8E9AC0;
+        color: #8e9ac0;
         border: 0;
         width: 650px;
         height: 33px;
@@ -433,9 +433,9 @@ export default {
         &:hover {
             cursor: pointer;
         }
-        &::placeholder{
+        &::placeholder {
             font-weight: 100;
-            color: #8E9AC0;
+            color: #8e9ac0;
         }
         &:focus ~ .input__hint {
             opacity: 0;

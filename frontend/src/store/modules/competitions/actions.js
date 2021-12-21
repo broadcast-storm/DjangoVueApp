@@ -8,11 +8,14 @@ import {
 const actions = {
     [COMPETITIONS_REQUEST_FETCHING]: async ({ commit }) => {
         try {
-            const response = await axios.get(`http://ygamification.std-1550.ist.mospolytech.ru/api/competition`, {
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-            })
+            const response = await axios.get(
+                `http://ygamification.std-1550.ist.mospolytech.ru/api/competition`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            )
             commit(COMPETITIONS_REQUEST_SUCCESS, {
                 newCompetitions: response.data,
             })
@@ -20,7 +23,7 @@ const actions = {
             commit(COMPETITIONS_REQUEST_ERROR, error)
             throw error
         }
-    }
+    },
 }
 
 export default actions

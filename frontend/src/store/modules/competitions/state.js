@@ -1,5 +1,5 @@
 const state = {
-    competitions: []
+    competitions: [],
 }
 
 export default state

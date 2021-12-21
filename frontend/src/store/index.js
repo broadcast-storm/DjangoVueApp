@@ -27,6 +27,6 @@ export default new Vuex.Store({
         rating,
         statistics,
         tasks,
-        competitions
+        competitions,
     },
 })

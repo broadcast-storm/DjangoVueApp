@@ -73,11 +73,7 @@
                     >
                         <div class="b-left__num">{{ rating.id }}</div>
                         <div class="b-left__info">
-                            <img
-                                class="b-left__img"
-                                :src="rating.img"
-                                alt=""
-                            />
+                            <img class="b-left__img" :src="rating.img" alt="" />
                             <div class="b-left__wrap">
                                 <h4 class="b-left__title">
                                     {{ rating.name }}

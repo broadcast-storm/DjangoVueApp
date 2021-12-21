@@ -1,7 +1,7 @@
 <template>
     <div class="competition">
         <!-- Versus -->
-        <div v-if="versus" class='competition__versus'>
+        <div v-if="versus" class="competition__versus">
             <div class="competition__user">
                 <div class="user__profile">
                     <div class="profile__image">
@@ -37,7 +37,7 @@
                     </div>
                 </div>
             </div>
-            <h1 class='versus'>VS</h1>
+            <h1 class="versus">VS</h1>
             <div class="competition__user">
                 <div class="user__profile">
                     <div class="profile__image">
@@ -78,43 +78,72 @@
         <div v-else class="competition__search">
             <div>
                 <div class="search__item">
-                    <label for='competitions__input'>Поиск соперника</label>
+                    <label for="competitions__input">Поиск соперника</label>
                 </div>
                 <div class="search__input">
                     <input
-                        id = 'competitions__input'
+                        id="competitions__input"
                         v-model="user"
                         class="input__item"
                         type="text"
                         placeholder="Имя и Фамилия"
                     />
-                    <SearchSvg @click="openWindow()" class="input__svg" />
+                    <SearchSvg class="input__svg" @click="openWindow()" />
                 </div>
             </div>
             <div class="competition__indicators">
-                <h3 class='indicators__title'>Мои показатели:</h3>
-                <div class='indicators'>
+                <h3 class="indicators__title">Мои показатели:</h3>
+                <div class="indicators">
                     <p class="competition__indicator">
-                        <img class='indicators__image' src="@/assets/img/competitions/indicator__productivity.png" alt="img">
+                        <img
+                            class="indicators__image"
+                            src="@/assets/img/competitions/indicator__productivity.png"
+                            alt="img"
+                        />
                         <span>85%</span>
                     </p>
                     <p class="competition__indicator">
-                        <img class='indicators__image' src="@/assets/img/competitions/indicator__quality.png" alt="img">
+                        <img
+                            class="indicators__image"
+                            src="@/assets/img/competitions/indicator__quality.png"
+                            alt="img"
+                        />
                         <span>75</span>
                     </p>
                     <p class="competition__indicator">
-                        <img class='indicators__image' src="@/assets/img/competitions/indicator__level.png" alt="img">
+                        <img
+                            class="indicators__image"
+                            src="@/assets/img/competitions/indicator__level.png"
+                            alt="img"
+                        />
                         <span>88</span>
                     </p>
                 </div>
             </div>
         </div>
         <div class="competition__about">
-            <h2 class="about__title competition__title">Как проходят соревнования?</h2>
-            <p class="about__description">Lorem ipsum, dolor sit amet consectetur adipisicing elit. In, iste maiores sint, unde soluta sed explicabo necessitatibus ipsa veniam ipsum ipsam hic deserunt accusantium quasi ad quam aliquam ea itaque, molestiae iure! Dolor nostrum harum maiores officiis minima pariatur praesentium atque repellat natus. Excepturi nulla mollitia iure tempore. Voluptatem deserunt est quos beatae quasi debitis, maiores quibusdam asperiores numquam laborum totam necessitatibus illum quis sequi voluptatibus impedit optio, ducimus explicabo vel. Soluta nemo eum assumenda blanditiis, quaerat culpa corporis voluptatem itaque, amet ipsam vero doloremque qui hic illo saepe laboriosam. Temporibus accusantium laborum ea fuga similique dicta nisi minima nobis.</p>
+            <h2 class="about__title competition__title">
+                Как проходят соревнования?
+            </h2>
+            <p class="about__description">
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. In,
+                iste maiores sint, unde soluta sed explicabo necessitatibus ipsa
+                veniam ipsum ipsam hic deserunt accusantium quasi ad quam
+                aliquam ea itaque, molestiae iure! Dolor nostrum harum maiores
+                officiis minima pariatur praesentium atque repellat natus.
+                Excepturi nulla mollitia iure tempore. Voluptatem deserunt est
+                quos beatae quasi debitis, maiores quibusdam asperiores numquam
+                laborum totam necessitatibus illum quis sequi voluptatibus
+                impedit optio, ducimus explicabo vel. Soluta nemo eum assumenda
+                blanditiis, quaerat culpa corporis voluptatem itaque, amet ipsam
+                vero doloremque qui hic illo saepe laboriosam. Temporibus
+                accusantium laborum ea fuga similique dicta nisi minima nobis.
+            </p>
         </div>
         <div class="competition__myCompetition">
-            <h2 class="myCompetition__title competition__title">Мои соревнования</h2>
+            <h2 class="myCompetition__title competition__title">
+                Мои соревнования
+            </h2>
             <table class="myCompetition__table">
                 <thead>
                     <tr class="table__row">
@@ -126,51 +155,79 @@
                         <th class="">id победителя</th>
                         <th class="">Выигрыш</th>
                     </tr>
-                </thead><!-- <div v-for="item in competitions" :key="item.length">
+                </thead>
+                <!-- <div v-for="item in competitions" :key="item.length">
                     {{item}}
                 </div> -->
-                <tbody v-for="competition in competitions" :key="competition.length">
+                <tbody
+                    v-for="competition in competitions"
+                    :key="competition.length"
+                >
                     <tr class="table__row">
                         <td class="row__id">
-                            {{competition.id}}
+                            {{ competition.id }}
                         </td>
                         <td class="row__logo">
                             Бой телепузиков
                         </td>
-                        <td class="row__result" v-bind:class="[competition.isCompleted ? 'result__win' : 'result__losing',]">
-                            <p> {{competition.isCompleted ? 'Победа' : 'Поражение'}} </p>
+                        <td
+                            class="row__result"
+                            :class="[
+                                competition.isCompleted
+                                    ? 'result__win'
+                                    : 'result__losing',
+                            ]"
+                        >
+                            <p>
+                                {{
+                                    competition.isCompleted
+                                        ? 'Победа'
+                                        : 'Поражение'
+                                }}
+                            </p>
                         </td>
                         <td class="">
-                            <HeartSvg class="table__svg"/>
-                            {{competition.health}}
+                            <HeartSvg class="table__svg" />
+                            {{ competition.health }}
                         </td>
                         <td class="">
-                            <LightningSvg class="table__svg"/>
-                            {{competition.energy}}
+                            <LightningSvg class="table__svg" />
+                            {{ competition.energy }}
                         </td>
                         <td class="row__enemy">
-                            {{competition.winner}}
+                            {{ competition.winner }}
                         </td>
                         <td class="">
-                            <CoinSvg class="table__svg"/>
-                            ${{competition.money}}
+                            <CoinSvg class="table__svg" />
+                            ${{ competition.money }}
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <div class='competition__control'>
+        <div class="competition__control">
             <div class="control__pages">
-                <button><img src="@/assets/img/competitions/arrow__left.png" alt="arrow left"></button>
+                <button>
+                    <img
+                        src="@/assets/img/competitions/arrow__left.png"
+                        alt="arrow left"
+                    />
+                </button>
                 <div>
-                    <input type=number value='1' class='select__page'>
+                    <input type="number" value="1" class="select__page" />
                     /
-                    <span class='select__pages'>10</span></div>
-                <button><img src="@/assets/img/competitions/arrow__right.png" alt="arrow riht"></button>
+                    <span class="select__pages">10</span>
+                </div>
+                <button>
+                    <img
+                        src="@/assets/img/competitions/arrow__right.png"
+                        alt="arrow riht"
+                    />
+                </button>
             </div>
             <div class="control__pagesCount">
-                <label for='pagesCount'>Показывать на странице</label>
-                <input id='pagesCount' type="number" value='6'>
+                <label for="pagesCount">Показывать на странице</label>
+                <input id="pagesCount" type="number" value="6" />
             </div>
         </div>
         <ModalCompetitions :status="status" />
@@ -178,14 +235,14 @@
 </template>
 
 <script>
-import SearchSvg from '@/assets/icons/search.svg';
-import ModalCompetitions from '@/components/ModalCompetitions';
-import CoinSvg from '@/assets/icons/coin.svg';
-import HeartSvg from '@/assets/icons/heart.svg';
-import LightningSvg from '@/assets/icons/lightning.svg';
-import routesList from '@/router/routesList';
-import { mapGetters, mapActions } from 'vuex';
-import {COMPETITIONS_REQUEST_FETCHING} from '@/store/action-types/competitions'
+import SearchSvg from '@/assets/icons/search.svg'
+import ModalCompetitions from '@/components/ModalCompetitions'
+import CoinSvg from '@/assets/icons/coin.svg'
+import HeartSvg from '@/assets/icons/heart.svg'
+import LightningSvg from '@/assets/icons/lightning.svg'
+import routesList from '@/router/routesList'
+import { mapGetters, mapActions } from 'vuex'
+import { COMPETITIONS_REQUEST_FETCHING } from '@/store/action-types/competitions'
 
 export default {
     name: 'Competitions',
@@ -194,30 +251,34 @@ export default {
         ModalCompetitions,
         HeartSvg,
         CoinSvg,
-        LightningSvg
+        LightningSvg,
     },
     props: {},
+    data() {
+        return {
+            status: false,
+            test_page: false,
+            user: '',
+            versus: localStorage.getItem('versus'),
+        }
+    },
     computed: {
         ...mapGetters('competitions', ['getCompetitions']),
         competitions: function() {
             return this.getCompetitions
         },
     },
-    data() {
-        return {
-            status: false,
-            test_page: false,
-            user: '',
-            versus: localStorage.getItem('versus')
-        }
+    async mounted() {
+        await this.COMPETITIONS_REQUEST_FETCHING()
     },
-  async mounted() {
-    await this.COMPETITIONS_REQUEST_FETCHING()
-  },
     methods: {
-      ...mapActions('competitions', [COMPETITIONS_REQUEST_FETCHING]),
+        ...mapActions('competitions', [COMPETITIONS_REQUEST_FETCHING]),
         openWindow: function() {
-            this.$router.push(routesList.competitionsPage.path + '/' + routesList.competitionsPage.children.SearchCompetitions.path)
+            this.$router.push(
+                routesList.competitionsPage.path +
+                    '/' +
+                    routesList.competitionsPage.children.SearchCompetitions.path
+            )
         },
     },
 }
@@ -333,7 +394,7 @@ export default {
         font-weight: 400;
         font-size: 24px;
         margin-right: 15px;
-        color: #1A2740;
+        color: #1a2740;
         span {
             margin-right: 30px;
             &:last-child {
@@ -388,7 +449,7 @@ export default {
             cursor: pointer;
             width: 449px;
             padding: 5.5px 0;
-            background-color: #5F66A9;
+            background-color: #5f66a9;
             border: none;
             color: white;
             font-size: 24px;
@@ -408,10 +469,10 @@ export default {
         border-collapse: separate;
         border-spacing: 0 2px;
         .table__row {
-            background-color: #F0F3FE;
-                .row__id {
-                    color: #545969;
-                }
+            background-color: #f0f3fe;
+            .row__id {
+                color: #545969;
+            }
         }
         .table__svg {
             width: 20px;
@@ -428,7 +489,6 @@ export default {
         tbody {
             .table__row {
                 td {
-                    
                     margin-top: 2px;
                     padding: 7px 13px 7px 13px;
                     .competition__logo {
@@ -456,18 +516,18 @@ export default {
                     max-width: 90px;
                     text-align: center;
                     border-radius: 5px;
-                    border: 1px solid #7FC008;
+                    border: 1px solid #7fc008;
                 }
                 .result__win p {
-                    color: #7FC008
+                    color: #7fc008;
                 }
-                .result__losing p{
-                    border-color: #DB303F;
-                    color: #DB303F;
+                .result__losing p {
+                    border-color: #db303f;
+                    color: #db303f;
                 }
                 .result__draw p {
-                    color: #DB8C28;
-                    border-color: #DB8C28;
+                    color: #db8c28;
+                    border-color: #db8c28;
                 }
             }
         }
@@ -475,7 +535,7 @@ export default {
 }
 .about {
     &__description {
-        color: #4C4F56;
+        color: #4c4f56;
         padding: 8px 13px;
         border: 1px solid #545969;
     }
@@ -505,8 +565,8 @@ export default {
         align-items: center;
         button {
             cursor: pointer;
-            color:#B0BAC9;
-            border: 1px solid #B0BAC9;
+            color: #b0bac9;
+            border: 1px solid #b0bac9;
             background-color: white;
             padding: 9px 12px 7px 12px;
             border-radius: 6px;
@@ -521,11 +581,11 @@ export default {
             justify-content: space-around;
             margin: 0 12px;
             font-size: 14px;
-            color: #B0BAC9;
+            color: #b0bac9;
             input {
-                color:#26BCC2;
+                color: #26bcc2;
                 height: 34px;
-                border: 1px solid #B0BAC9;
+                border: 1px solid #b0bac9;
                 text-align: center;
                 width: 35px;
             }
@@ -541,16 +601,16 @@ export default {
     }
     &__pagesCount {
         display: flex;
-        color:#454D59;
+        color: #454d59;
         align-items: center;
         font-size: 14px;
-            input {
-                margin-left: 20px;
-                height: 34px;
-                border: 1px solid #B0BAC9;
-                padding: 0 10px;
-                width: 40px;
-            }
+        input {
+            margin-left: 20px;
+            height: 34px;
+            border: 1px solid #b0bac9;
+            padding: 0 10px;
+            width: 40px;
+        }
     }
 }
 .input {
@@ -560,7 +620,7 @@ export default {
         font-weight: 100 !important;
         font-size: 18px;
         line-height: 18px;
-        color: #8E9AC0;
+        color: #8e9ac0;
         border: 0;
         width: 650px;
         height: 33px;
@@ -569,9 +629,9 @@ export default {
         &:hover {
             cursor: pointer;
         }
-        &::placeholder{
+        &::placeholder {
             font-weight: 100;
-            color: #8E9AC0;
+            color: #8e9ac0;
         }
         &:focus ~ .input__hint {
             opacity: 0;
@@ -690,4 +750,3 @@ export default {
     }
 }
 </style>
-

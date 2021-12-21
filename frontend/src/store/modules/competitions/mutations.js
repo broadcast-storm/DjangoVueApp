@@ -14,7 +14,7 @@ const mutations = {
     },
     [COMPETITIONS_REQUEST_ERROR]: state => {
         state.competitionStatus = 'error'
-    }
+    },
 }
 
 export default mutations

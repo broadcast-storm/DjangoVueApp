@@ -3,20 +3,30 @@
     <div v-if="status" class="competition__window">
         <div class="window">
             <div class="window__title">
-                <ExitSvg class="window__exit__button"/>
+                <ExitSvg class="window__exit__button" />
                 <h2>Вы и Джонатан Смирнов начинаете новое соревнование</h2>
             </div>
             <div class="window__body">
-                <label for='competition__name'>Введите название</label>
-                <input id='competition__name' type="text" class="window__input" />
-                <label for='competition__criterion'>Выберите критерий</label>
-                <select id='competition__criterion' type="text" class="window__select">
+                <label for="competition__name">Введите название</label>
+                <input
+                    id="competition__name"
+                    type="text"
+                    class="window__input"
+                />
+                <label for="competition__criterion">Выберите критерий</label>
+                <select
+                    id="competition__criterion"
+                    type="text"
+                    class="window__select"
+                >
                     <option value="productivity">Продуктивность</option>
                     <option value="quality">Качество</option>
                     <option value="level">Текущий уровень</option>
                 </select>
             </div>
-            <button @click="startCompetition()"  class="window__button" >Создать</button>
+            <button class="window__button" @click="startCompetition()">
+                Создать
+            </button>
         </div>
     </div>
     <!-- КОНЕЦ СОРЕВНОВАНИЯ -->
@@ -46,7 +56,7 @@ export default {
         startCompetition: function() {
             this.status = !this.status
             this.$router.push(routesList.competitionsPage.path)
-            localStorage.setItem('versus',true)
+            localStorage.setItem('versus', true)
         },
     },
 }
@@ -120,7 +130,7 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
-        background: #5F66A9;
+        background: #5f66a9;
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
         border-radius: 8px;
         width: 249px;

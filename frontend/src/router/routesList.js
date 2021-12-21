@@ -21,8 +21,8 @@ const routesList = {
             },
             MainCompetitions: {
                 path: '',
-                header:'Соревнования'
-            }
+                header: 'Соревнования',
+            },
         },
     },
     statisticsPage: {
