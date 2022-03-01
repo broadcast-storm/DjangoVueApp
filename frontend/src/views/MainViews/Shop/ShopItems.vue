@@ -180,9 +180,15 @@ export default {
             const { searchText } = this
             let c = this.items
             // eslint-disable-next-line prettier/prettier
-            c = c.filter(p => p.value >= this.minPrice && p.value <= this.maxPrice)
+            c = c.filter(
+                p => p.value >= this.minPrice && p.value <= this.maxPrice
+            )
             // eslint-disable-next-line prettier/prettier
-            c = c.filter(p => p.name.toLowerCase().indexOf(searchText.toLowerCase()) !== -1)
+            c = c.filter(
+                p =>
+                    p.name.toLowerCase().indexOf(searchText.toLowerCase()) !==
+                    -1
+            )
             switch (this.sort) {
                 case 'ascendingValue':
                     c = c.sort((a, b) => (a.value > b.value ? 1 : -1))
@@ -283,7 +289,7 @@ export default {
             font-size: 18px;
             line-height: 16px;
             margin-bottom: 20px;
-            position: fixed;
+            position: absolute;
             width: 822px;
             -webkit-touch-callout: none;
             -webkit-user-select: none;
@@ -391,10 +397,11 @@ export default {
     }
 }
 .filters {
+    height: 500px;
     background: #ffffff;
-    position: sticky;
+    position: fixed;
     top: 0px;
-    left: 1160px;
+    left: 1242px;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     margin: 0px 20px 20px 20px;
     padding: 18px 30px 82px 35px;
