@@ -149,8 +149,9 @@
 import CoinSvg from '@/assets/icons/coin.svg'
 import CartSvg from '@/assets/icons/cart.svg'
 import CheckMark from '@/assets/icons/mark.svg'
+import { mapGetters, mapActions } from 'vuex'
+import { ITEMS_REQUEST } from '@/store/action-types/items'
 
-import { mapGetters } from 'vuex'
 import { mapMutations } from 'vuex'
 
 import ShopState from '@/components/ShopState'
@@ -175,10 +176,13 @@ export default {
     },
     computed: {
         ...mapGetters('items', ['getItems']),
+        items: function() {
+            return this.getItems
+        },
         ...mapGetters('cart', ['getCart']),
         orderedItems: function() {
             const { searchText } = this
-            let c = this.items
+            let c = this.items.data
             // eslint-disable-next-line prettier/prettier
             c = c.filter(
                 p => p.value >= this.minPrice && p.value <= this.maxPrice
@@ -226,9 +230,7 @@ export default {
         cart: function() {
             return this.getCart
         },
-        items: function() {
-            return this.getItems
-        },
+
         pageCount() {
             let l = this.orderedItems.length,
                 s = this.size
@@ -240,7 +242,12 @@ export default {
             return this.orderedItems.slice(start, end)
         },
     },
+    async mounted() {
+        await this.ITEMS_REQUEST()
+        console.log(this.getItems)
+    },
     methods: {
+        ...mapActions('items', [ITEMS_REQUEST]),
         ...mapMutations(['addToCart']),
         addToCart: function(itemId) {
             this.$store.commit('cart/addToCart', { id: itemId })
