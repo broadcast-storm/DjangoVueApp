@@ -2,10 +2,12 @@
 .DS_Store
 node_modules
 /dist
+static/js
 __pycache__/
 *.py[cod]
 env/
 venv/
+frontend/dist
 *.sqlite3
 media/**.*
 logs/*.log
