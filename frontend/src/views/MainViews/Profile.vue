@@ -5,8 +5,9 @@
                 <div ref="profile" class="profile">
                     <div class="profile__main-info">
                         <div class="profile__main-info__photo">
+
                             <img
-                                :src="profileInfo.photo"
+                                :src="profileInfo.photo ? profileInfo.photo : '/static/img/UserPhoto.1508e6fd.jpg'"
                                 alt="User photo"
                                 class="img"
                             />
@@ -21,7 +22,7 @@
                                 </span>
                             </h2>
                             <p class="text__department">
-                                {{ profileInfo.division_details.title }}
+                                {{ profileInfo.division_details ? profileInfo.division_details.title : 'Подразделение'}}
                             </p>
                             <p class="text__bio">
                                 {{ profileInfo.description }}
@@ -125,10 +126,10 @@
                                     Качество:
                                 </td>
                                 <td class="profile__props-row-value">
-                                    {{ profileInfo.quality }}
+                                    {{ profileInfo.quality }}%
                                 </td>
                                 <td class="profile__props-row-light">
-                                    из 100 на сегодня
+                                    из 100% на сегодня
                                 </td>
                             </tr>
                             <tr class="profile__props-row level">
