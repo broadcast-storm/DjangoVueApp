@@ -62,10 +62,10 @@
                     </div>
                 </div>
             </div>
-            <div v-for="item in paginatedData" :key="item.id">
+            <div v-for="item in orderedItems" :key="item.id">
                 <div class="shop__item">
                     <div class="shop__item-img">
-                        <img :src="item.img" alt="" />
+                        <img :src="item.product.photo" alt="" />
                     </div>
                     <div class="shop__item-description">
                         <h2 class="item-headline">
@@ -73,14 +73,14 @@
                                 class="item-headline_link"
                                 :to="getLink(item.id)"
                                 exact
-                                >{{ item.name }}</router-link
+                                >{{ item.product.title }}</router-link
                             >
                         </h2>
                         <span class="item-description">{{
-                            item.description
+                            item.product.description
                         }}</span>
                         <span class="item-value"
-                            >{{ item.value }}<CoinSvg class="item-icon"
+                            >{{ item.money }}<CoinSvg class="item-icon"
                         /></span>
                         <div class="item-lower">
                             <span class="item-required_level"
@@ -149,9 +149,9 @@
 import CoinSvg from '@/assets/icons/coin.svg'
 import CartSvg from '@/assets/icons/cart.svg'
 import CheckMark from '@/assets/icons/mark.svg'
-
 import { mapGetters } from 'vuex'
 import { mapMutations } from 'vuex'
+import { mapActions } from 'vuex'
 
 import ShopState from '@/components/ShopState'
 export default {
@@ -173,36 +173,45 @@ export default {
             size: 2,
         }
     },
+    mounted() {
+        this.ITEMS_REQUEST()
+        console.log(this.getItems)
+    },
     computed: {
         ...mapGetters('items', ['getItems']),
         ...mapGetters('cart', ['getCart']),
         orderedItems: function() {
             const { searchText } = this
-            let c = this.items
+            let c = this.getItems.data
+            console.log(c)
             // eslint-disable-next-line prettier/prettier
-            c = c.filter(
-                p => p.value >= this.minPrice && p.value <= this.maxPrice
-            )
-            // eslint-disable-next-line prettier/prettier
-            c = c.filter(
-                p =>
-                    p.name.toLowerCase().indexOf(searchText.toLowerCase()) !==
-                    -1
-            )
-            switch (this.sort) {
-                case 'ascendingValue':
-                    c = c.sort((a, b) => (a.value > b.value ? 1 : -1))
-                    break
-                case 'descendingValue':
-                    c = c.sort((a, b) => (a.value < b.value ? 1 : -1))
-                    break
-                case 'ascendingLevel':
-                    c = c.sort((a, b) => (a.level > b.level ? 1 : -1))
-                    break
-                case 'descendingLevel':
-                    c = c.sort((a, b) => (a.level < b.level ? 1 : -1))
-                    break
+            if (c != null) {
+                c = c.filter(
+                    p => p.money >= this.minPrice && p.money <= this.maxPrice
+                )
+                // eslint-disable-next-line prettier/prettier
+                c = c.filter(
+                    p =>
+                        p.product.title
+                            .toLowerCase()
+                            .indexOf(searchText.toLowerCase()) !== -1
+                )
+                switch (this.sort) {
+                    case 'ascendingValue':
+                        c = c.sort((a, b) => (a.money > b.money ? 1 : -1))
+                        break
+                    case 'descendingValue':
+                        c = c.sort((a, b) => (a.money < b.money ? 1 : -1))
+                        break
+                    case 'ascendingLevel':
+                        c = c.sort((a, b) => (a.level > b.level ? 1 : -1))
+                        break
+                    case 'descendingLevel':
+                        c = c.sort((a, b) => (a.level < b.level ? 1 : -1))
+                        break
+                }
             }
+
             return c
         },
         currentInstrument: function() {
@@ -240,7 +249,9 @@ export default {
             return this.orderedItems.slice(start, end)
         },
     },
+
     methods: {
+        ...mapActions('items', ['ITEMS_REQUEST']),
         ...mapMutations(['addToCart']),
         addToCart: function(itemId) {
             this.$store.commit('cart/addToCart', { id: itemId })
