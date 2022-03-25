@@ -27,7 +27,7 @@
 Склонируйте репозиторий
 
 ```sh
-$ git clone https://github.com/nikita220800/DjangoVueApp.git
+$ git clone https://github.com/ArtemR238/DjangoVueApp.git
 ```
 
 ### 1) Настройка Django
@@ -36,7 +36,7 @@ $ git clone https://github.com/nikita220800/DjangoVueApp.git
 
 ```sh
 $ python -m venv “venv”
-$ .\venv\Scripts\activate (для Linux: source ./venv/bin/activate)
+$ .\venv\Scripts\activate (для Unix: source ./venv/bin/activate)
 ```
 
 #### Все последующие действия производить внутри виртуального окружения
