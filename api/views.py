@@ -354,7 +354,7 @@ def users_select(request):
 
 @api_view(['GET'])
 # For prod use IsAuthenticated . AllowAny using for Debug
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated, ])
 # @ensure_csrf_cookie
 def test_questions(request):
     """
@@ -390,7 +390,7 @@ def test_questions(request):
 
 @api_view(['POST'])
 # For prod use IsAuthenticated . AllowAny using for Debug
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated, ])
 # @ensure_csrf_cookie
 def test_post(request):
     """
@@ -533,7 +533,7 @@ def test_post(request):
 
 @api_view(['GET', 'PUT'])
 # For prod use IsAuthenticated . AllowAny using for Debug
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated, ])
 # @ensure_csrf_cookie
 def shop(request):
     """
@@ -590,7 +590,7 @@ class TaskViewSet(viewsets.ModelViewSet):
 
 
 @api_view(['GET'])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated, ])
 def get_daily_tasks(request):
     if request.method == 'GET':
         user = models.UserProfile.objects.get(id=request.user.id)
