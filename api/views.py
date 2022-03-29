@@ -648,18 +648,18 @@ class TaskUserStatusViewSet(viewsets.ModelViewSet):
     queryset = models.TaskUserStatus.objects.all()
 
 
-class LogoutView(APIView):
-    permission_classes = (AllowAny,)
-
-    def post(self, request):
-        try:
-            token = RefreshToken(request.data["refresh_token"])
-            token.blacklist()
-
-            return Response(status=status.HTTP_205_RESET_CONTENT)
-        except Exception as e:
-            print(e)
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+# class LogoutView(APIView):
+#     permission_classes = (AllowAny,)
+#
+#     def post(self, request):
+#         try:
+#             token = RefreshToken(request.data["refresh_token"])
+#             token.blacklist()
+#
+#             return Response(status=status.HTTP_205_RESET_CONTENT)
+#         except Exception as e:
+#             print(e)
+#             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class LogoutAllView(APIView):
