@@ -4,7 +4,7 @@ from . import views
 
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
-    TokenRefreshView,
+    TokenRefreshView, TokenVerifyView,
 )
 
 router = DefaultRouter()
@@ -33,10 +33,10 @@ router.register(r'achievement-user-status',
 
 urlpatterns = [
     path("", include(router.urls)),
-    path('login', TokenObtainPairView.as_view(), name='login'),
-    path('logout', views.LogoutView.as_view(), name='auth_logout'),
-    path('logout-all', views.LogoutAllView.as_view(), name='auth_logout_all'),
-    path('refresh-token', TokenRefreshView.as_view(), name='refresh-token'),
+    # path('login', TokenObtainPairView.as_view(), name='login'),
+    # path('logout', views.LogoutView.as_view(), name='auth_logout'),
+    # path('logout-all', views.LogoutAllView.as_view(), name='auth_logout_all'),
+    # path('refresh-token', TokenRefreshView.as_view(), name='refresh-token'),
     path('shop', views.shop, name='shop'),
     path('update-data', views.update_user_money_energy, name='update-data'),
     path('unresolved_test', views.unresolved_test, name='unresolved_test'),

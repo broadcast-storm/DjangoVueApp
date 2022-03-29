@@ -23,6 +23,7 @@ from django.http import HttpResponse, JsonResponse
 
 
 class JobPositionViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
     serializer_class = serializers.JobPositionSerializer
     queryset = models.JobPosition.objects.all()
 
@@ -39,17 +40,18 @@ class QuestionThemeViewSet(viewsets.ModelViewSet):
 
 
 class UserProfileViewSet(viewsets.ModelViewSet):
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
     serializer_class = serializers.UserProfileSerializer
     queryset = models.UserProfile.objects.all()
 
     def get_permissions(self):
         if self.action == 'retrieve' or self.action == 'update':
-            permission_classes = [AllowAny]
+            permission_classes = [IsAuthenticated]
         else:
-            permission_classes = [AllowAny]
+            permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
 
+    @property
     def get_serializer_class(self):
         if self.action == 'list':
             return serializers.UserGetListSerializer
@@ -89,7 +91,7 @@ def update_user_money_energy(request):
 
 class ProductViewSet(viewsets.ModelViewSet):
     # For prod use IsAuthenticated . AllowAny using for Debug
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
     serializer_class = serializers.ProductSerializer
     queryset = models.Product.objects.all().filter(count__gt=0)
 
@@ -125,7 +127,7 @@ class AnswersViewSet(viewsets.ModelViewSet):
 
 
 class AchievementViewSet(viewsets.ModelViewSet):
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
     serializer_class = serializers.AchievementSerializer
     queryset = models.Achievement.objects.all()
 
@@ -572,6 +574,7 @@ def shop(request):
 
 
 class StatisticsViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated, ]
     serializer_class = serializers.StatisticsSerializer
     queryset = models.Statistics.objects.all()
 
@@ -662,12 +665,12 @@ class TaskUserStatusViewSet(viewsets.ModelViewSet):
 #             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-class LogoutAllView(APIView):
-    permission_classes = (AllowAny,)
-
-    def post(self, request):
-        tokens = OutstandingToken.objects.filter(user_id=request.user.id)
-        for token in tokens:
-            t, _ = BlacklistedToken.objects.get_or_create(token=token)
-
-        return Response(status=status.HTTP_205_RESET_CONTENT)
+# class LogoutAllView(APIView):
+#     permission_classes = (AllowAny,)
+#
+#     def post(self, request):
+#         tokens = OutstandingToken.objects.filter(user_id=request.user.id)
+#         for token in tokens:
+#             t, _ = BlacklistedToken.objects.get_or_create(token=token)
+#
+#         return Response(status=status.HTTP_205_RESET_CONTENT)
