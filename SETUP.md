@@ -1,6 +1,6 @@
 # Яндекс Геймификация
 
-[Ссылка на рабочую версию](http://yandex-gamification.std-884.ist.mospolytech.ru)
+[Ссылка на рабочую версию](http://ygamification.std-1550.ist.mospolytech.ru)
 
 [Ссылка на Figma](https://www.figma.com/file/sM5uZE2Cl2Kc94G7qO5XtE/Ya.Game?node-id=1%3A15)
 
@@ -27,7 +27,7 @@
 Склонируйте репозиторий
 
 ```sh
-$ git clone https://github.com/nikita220800/DjangoVueApp.git
+$ git clone https://github.com/ArtemR238/DjangoVueApp
 ```
 
 ### 1) Настройка Django
