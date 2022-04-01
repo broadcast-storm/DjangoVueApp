@@ -83,12 +83,12 @@
                 <div class="search__input">
                     <input
                         id="competitions__input"
-                        v-model="user"
+                        v-model="search"
                         class="input__item"
                         type="text"
                         placeholder="Имя и Фамилия"
                     />
-                    <SearchSvg class="input__svg" @click="openWindow()" />
+                    <router-link :to="{path: 'competitions/search', query: {query: search}}"><SearchSvg class="input__svg"  /></router-link>
                 </div>
             </div>
             <div class="competition__indicators">
@@ -156,9 +156,6 @@
                         <th class="">Выигрыш</th>
                     </tr>
                 </thead>
-                <!-- <div v-for="item in competitions" :key="item.length">
-                    {{item}}
-                </div> -->
                 <tbody
                     v-for="competition in competitions"
                     :key="competition.length"
@@ -207,18 +204,18 @@
         </div>
         <div class="competition__control">
             <div class="control__pages">
-                <button>
+                <button @click='prevPage'>
                     <img
                         src="@/assets/img/competitions/arrow__left.png"
                         alt="arrow left"
                     />
                 </button>
                 <div>
-                    <input type="number" value="1" class="select__page" />
+                    <input type="number" :value="pageNum+1" class="select__page" />
                     /
-                    <span class="select__pages">10</span>
+                    <span class="select__pages">{{totalPages}}</span>
                 </div>
-                <button>
+                <button @click='nextPage'>
                     <img
                         src="@/assets/img/competitions/arrow__right.png"
                         alt="arrow riht"
@@ -226,8 +223,8 @@
                 </button>
             </div>
             <div class="control__pagesCount">
-                <label for="pagesCount">Показывать на странице</label>
-                <input id="pagesCount" type="number" value="6" />
+                <!-- <label for="pagesCount">Показывать на странице</label>
+                <input id="pagesCount" type="number" value="6" /> -->
             </div>
         </div>
         <ModalCompetitions :status="status" />
@@ -257,29 +254,35 @@ export default {
     data() {
         return {
             status: false,
-            test_page: false,
-            user: '',
+            search: '',
             versus: localStorage.getItem('versus'),
+            routesList,
+            pageNum: 1,
+            size: 5
         }
     },
     computed: {
         ...mapGetters('competitions', ['getCompetitions']),
-        competitions: function() {
-            return this.getCompetitions
+        totalPages(){
+            return Math.ceil(this.getCompetitions.length / this.size)
         },
+        competitions() {
+            const start = this.pageNum * this.size,
+            end = start + this.size;
+            return this.getCompetitions.slice(start,end)
+        }
     },
     async mounted() {
         await this.COMPETITIONS_REQUEST_FETCHING()
     },
     methods: {
         ...mapActions('competitions', [COMPETITIONS_REQUEST_FETCHING]),
-        openWindow: function() {
-            this.$router.push(
-                routesList.competitionsPage.path +
-                    '/' +
-                    routesList.competitionsPage.children.SearchCompetitions.path
-            )
+        nextPage() {
+            this.pageNum++
         },
+        prevPage() {
+            this.pageNum--
+        }
     },
 }
 </script>

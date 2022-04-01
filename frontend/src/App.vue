@@ -34,7 +34,6 @@ export default {
             if (newValue && !oldValue) {
                 self.timerId = setTimeout(async function tick() {
                     await self.AUTH_REFRESH_REQUEST()
-                    console.log(`refresh access token`)
                     self.timerId = setTimeout(tick, timeToRefresh)
                 }, timeToRefresh)
             }

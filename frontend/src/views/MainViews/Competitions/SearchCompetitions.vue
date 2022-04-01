@@ -3,12 +3,12 @@
         <div class="competition__search">
             <div>
                 <div class="search__item">
-                    <label for="competitions__input">Поиск соперника</label>
+                    <label for="competitions__input">Поиск соперника </label>
                 </div>
                 <div class="search__input">
                     <input
                         id="competitions__input"
-                        v-model="user"
+                        v-model="search"
                         class="input__item"
                         type="text"
                         placeholder="Имя и Фамилия"
@@ -17,11 +17,15 @@
                 </div>
             </div>
         </div>
-        <div class="competition__user">
+        <div
+            v-for='user in users'
+            :key="user.id"
+            class="competition__user"
+        >
             <div class="user__profile">
                 <div class="profile__image">
                     <img
-                        src="@/assets/img/competitions/UserPhoto.jpg"
+                        src='https://sun9-83.userapi.com/impf/c638620/v638620169/b968c/e-VX7of7gXw.jpg?size=600x600&quality=96&sign=70d85cfa4ef50ccbb84ffb9cf57725d5&type=album'
                         class="user-image"
                         alt=""
                     />
@@ -29,24 +33,24 @@
                 <div class="profile__information">
                     <div class="information__name">
                         <h3 class="information__title">
-                            Александра Пушкина
+                            {{user.name}} {{user.surname}}
                         </h3>
                         <p class="information__subtitle">
-                            состоит в команде ВКЦэхи
+                            состоит в команде {{user.team}}
                         </p>
                     </div>
                     <div class="information__description">
                         <p class="information__indicator">
                             Продуктивность
-                            <span class="desctiption-bold">85%</span>
+                            <span class="desctiption-bold">{{user.productivity}}%</span>
                         </p>
                         <p class="information__indicator">
                             Качество
-                            <span class="desctiption-bold">85%</span>
+                            <span class="desctiption-bold">{{user.quality}}%</span>
                         </p>
                         <p class="information__indicator">
                             Текущий уровень
-                            <span class="desctiption-bold">85%</span>
+                            <span class="desctiption-bold">{{user.level}}%</span>
                         </p>
                     </div>
                 </div>
@@ -63,21 +67,37 @@
 <script>
 import SearchSvg from '@/assets/icons/search.svg'
 import ModalCompetitions from '@/components/ModalCompetitions'
+import { USERS_REQUEST_FETCHING } from '@/store/action-types/users'
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
     name: 'Competitions',
     components: {
         SearchSvg,
         ModalCompetitions,
     },
-    props: {},
+    // props: ['search'],
     data() {
         return {
             status: false,
             test_page: false,
-            user: '',
+            search: ''
         }
     },
+    computed: {
+        ...mapGetters('users', ['getUsers']),
+        users() {
+            return this.getUsers.filter(user=>{
+                let name = user.name + ' ' + user.surname
+                return name.toLowerCase().includes(this.search.toLowerCase())
+            })
+        },
+    },
+    async mounted() {
+        await this.USERS_REQUEST_FETCHING()
+    },
     methods: {
+        ...mapActions('users', [USERS_REQUEST_FETCHING]),
         openWindow: function() {
             this.status = !this.status
         },
