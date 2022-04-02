@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from . import models
 
 
@@ -74,7 +75,7 @@ class TaskSerializer(serializers.ModelSerializer):
         model = models.Task
         fields = ["id", "difficulty", "taskType", "title", "description",
                   "subTasksCount", "isTeamTask", "accessLevel", "deadline",
-                  "money", "health", "energy", "division", ]
+                  "money", "health", "energy", "division", "parent"]
 
 
 class QuestSerializer(serializers.ModelSerializer):
@@ -87,15 +88,15 @@ class QuestSerializer(serializers.ModelSerializer):
 class QuestTreeSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.MainQuestTree
-        fields = ["id", "mainQuest", "task", "parentTask"]
+        fields = ["id", "mainQuest", "task", "parentTask", "childTask"]
 
 
 class TaskUserStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.TaskUserStatus
         fields = ['task', 'user',
-                  'subTasksCount', 'subTasksCompletedCount', 'status'
-                                                             'started_at', 'done_at']
+                  'subTasksCount', 'subTasksCompletedCount', 'status',
+                  'started_at', 'done_at']
 
 
 class ProductSerializer(serializers.ModelSerializer):

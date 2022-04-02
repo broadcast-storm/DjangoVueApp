@@ -23,6 +23,7 @@ from django.http import HttpResponse, JsonResponse
 
 
 class JobPositionViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
     serializer_class = serializers.JobPositionSerializer
     queryset = models.JobPosition.objects.all()
 
@@ -39,17 +40,18 @@ class QuestionThemeViewSet(viewsets.ModelViewSet):
 
 
 class UserProfileViewSet(viewsets.ModelViewSet):
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
     serializer_class = serializers.UserProfileSerializer
     queryset = models.UserProfile.objects.all()
 
     def get_permissions(self):
         if self.action == 'retrieve' or self.action == 'update':
-            permission_classes = [AllowAny]
+            permission_classes = [IsAuthenticated]
         else:
-            permission_classes = [AllowAny]
+            permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
 
+    @property
     def get_serializer_class(self):
         if self.action == 'list':
             return serializers.UserGetListSerializer
@@ -89,7 +91,7 @@ def update_user_money_energy(request):
 
 class ProductViewSet(viewsets.ModelViewSet):
     # For prod use IsAuthenticated . AllowAny using for Debug
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
     serializer_class = serializers.ProductSerializer
     queryset = models.Product.objects.all().filter(count__gt=0)
 
@@ -125,7 +127,7 @@ class AnswersViewSet(viewsets.ModelViewSet):
 
 
 class AchievementViewSet(viewsets.ModelViewSet):
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
     serializer_class = serializers.AchievementSerializer
     queryset = models.Achievement.objects.all()
 
@@ -352,7 +354,7 @@ def users_select(request):
 
 @api_view(['GET'])
 # For prod use IsAuthenticated . AllowAny using for Debug
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated, ])
 # @ensure_csrf_cookie
 def test_questions(request):
     """
@@ -388,7 +390,7 @@ def test_questions(request):
 
 @api_view(['POST'])
 # For prod use IsAuthenticated . AllowAny using for Debug
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated, ])
 # @ensure_csrf_cookie
 def test_post(request):
     """
@@ -531,7 +533,7 @@ def test_post(request):
 
 @api_view(['GET', 'PUT'])
 # For prod use IsAuthenticated . AllowAny using for Debug
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated, ])
 # @ensure_csrf_cookie
 def shop(request):
     """
@@ -572,6 +574,7 @@ def shop(request):
 
 
 class StatisticsViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated, ]
     serializer_class = serializers.StatisticsSerializer
     queryset = models.Statistics.objects.all()
 
@@ -587,7 +590,7 @@ class TaskViewSet(viewsets.ModelViewSet):
 
 
 @api_view(['GET'])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated, ])
 def get_daily_tasks(request):
     if request.method == 'GET':
         user = models.UserProfile.objects.get(id=request.user.id)
@@ -620,15 +623,21 @@ def get_quests(request):
         quests = models.MainQuest.objects.all().filter(division=user.division)
         active_quests = [x for x in quests if x.is_active is True]
         quest_serializer = serializers.QuestSerializer(active_quests, many=True)
+        tasks_user_status = models.TaskUserStatus.objects.all().filter(user_id=user.id)
         for quest in quest_serializer.data:  # прогоняем каждый квест
-            tasks_trees = models.MainQuestTree.objects.all().filter(mainQuest=quest['id'])
-            tasks = models.Task.objects.filter(id__in=[task_tree.task.id for task_tree in tasks_trees])
+            tree_tasks = models.MainQuestTree.objects.all().filter(mainQuest=quest['id'])  # Берём дерево
+            tree_tasks_serializer = serializers.QuestTreeSerializer(tree_tasks, many=True)
+            quest['tree'] = tree_tasks_serializer.data
+            tasks = models.Task.objects.filter(id__in=[task_tree.task.id for task_tree in tree_tasks])
             serializer = serializers.TaskSerializer(tasks, many=True)
             quest['tasks'] = serializer.data
             for task in serializer.data:
                 sub_tasks = models.Task.objects.all().filter(parent=task['id'])
                 sub_tasks_serializer = serializers.TaskSerializer(sub_tasks, many=True)
                 task['subTasks'] = sub_tasks_serializer.data
+                task_status = tasks_user_status.filter(task_id=task['id'])
+                task_status_serializer = serializers.TaskUserStatusSerializer(task_status, many=True)
+                task['status'] = task_status_serializer.data
         return Response(quest_serializer.data)
 
 
@@ -642,26 +651,26 @@ class TaskUserStatusViewSet(viewsets.ModelViewSet):
     queryset = models.TaskUserStatus.objects.all()
 
 
-class LogoutView(APIView):
-    permission_classes = (AllowAny,)
+# class LogoutView(APIView):
+#     permission_classes = (AllowAny,)
+#
+#     def post(self, request):
+#         try:
+#             token = RefreshToken(request.data["refresh_token"])
+#             token.blacklist()
+#
+#             return Response(status=status.HTTP_205_RESET_CONTENT)
+#         except Exception as e:
+#             print(e)
+#             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-    def post(self, request):
-        try:
-            token = RefreshToken(request.data["refresh_token"])
-            token.blacklist()
 
-            return Response(status=status.HTTP_205_RESET_CONTENT)
-        except Exception as e:
-            print(e)
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-
-class LogoutAllView(APIView):
-    permission_classes = (AllowAny,)
-
-    def post(self, request):
-        tokens = OutstandingToken.objects.filter(user_id=request.user.id)
-        for token in tokens:
-            t, _ = BlacklistedToken.objects.get_or_create(token=token)
-
-        return Response(status=status.HTTP_205_RESET_CONTENT)
+# class LogoutAllView(APIView):
+#     permission_classes = (AllowAny,)
+#
+#     def post(self, request):
+#         tokens = OutstandingToken.objects.filter(user_id=request.user.id)
+#         for token in tokens:
+#             t, _ = BlacklistedToken.objects.get_or_create(token=token)
+#
+#         return Response(status=status.HTTP_205_RESET_CONTENT)

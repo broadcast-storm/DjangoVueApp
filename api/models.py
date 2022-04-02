@@ -1,5 +1,7 @@
 from datetime import datetime, timedelta
 
+from django.db.models.signals import post_save, pre_save
+from django.dispatch import receiver
 from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
@@ -507,6 +509,9 @@ class MainQuestTree(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE, )
     parentTask = models.ForeignKey(
         Task, on_delete=models.CASCADE, related_name='parentTask')
+    childTask = models.ForeignKey(
+        Task, on_delete=models.CASCADE, related_name='childTask', blank=True, null=True)
+
 
     # IDs
 
@@ -1205,3 +1210,94 @@ class Purchase(models.Model):
     class Meta:
         verbose_name = "покупка"
         verbose_name_plural = "покупки"
+
+
+##############################################
+# SIGNALS
+##############################################
+
+# -----------------------------------------------------------
+# При создании Task добавляет в него юзеров в зависимости от подразделения
+# -----------------------------------------------------------
+@receiver(post_save, sender=Task)
+def on_create_task(instance: Task, created, **kwargs):
+    if created:
+        if instance.division is not None:
+            users = UserProfile.objects.filter(division=instance.division)
+            instance.users.set(users)
+        else:
+            if instance.parent is not None:
+                if instance.parent.division is not None:
+                    users = UserProfile.objects.filter(division=instance.parent.division)
+                else:
+                    users = UserProfile.objects.all()
+                instance.users.set(users)
+            else:
+                users = UserProfile.objects.all()
+                instance.users.set(users)
+        instance.save()
+
+
+# -----------------------------------------------------------
+# При изменении Task подразделения изменяет пользователей относящихся к данному Task
+# -----------------------------------------------------------
+@receiver(pre_save, sender=Task)
+def on_change_task(instance: Task, **kwargs):
+    if instance.id is not None:
+        previous = Task.objects.get(id=instance.id)
+        if previous.division != instance.division:
+            new_users = UserProfile.objects.filter(division=instance.division)
+            subtasks = Task.objects.filter(parent=instance)
+            for subtask in subtasks:
+                subtask.users.set(new_users)
+            instance.users.set(new_users)
+
+
+# -----------------------------------------------------------
+# При изменении TaskUserStatus в зависимости от статуса и пользователя меняет информацию о выполнении MainQuest
+# -----------------------------------------------------------
+@receiver(pre_save, sender=TaskUserStatus)
+def on_change_task_user_status(instance: TaskUserStatus, **kwargs):
+    if instance.id is not None:
+        previous = TaskUserStatus.objects.get(id=instance.id)
+        if previous.status != instance.status:
+            if instance.status == "completed":
+                completed_tasks_tree = MainQuestTree.objects.filter(task=instance.task)
+                for completed_task_tree in completed_tasks_tree:
+                    all_tasks_in_tree = MainQuestTree.objects.filter(mainQuest=completed_task_tree.mainQuest)
+                    for task_in_tree in all_tasks_in_tree.exclude(task=instance.task):
+                        status = TaskUserStatus.objects.filter(user=instance.user,
+                                                               task=task_in_tree.task).first().status
+                        if status != "completed":
+                            break
+                    else:
+                        MainQuestStatus.objects.filter(mainQuest=completed_task_tree.mainQuest,
+                                                       user=instance.user).update(status="completed")
+            if instance.status == "in_progress":
+                changed_tasks_tree = MainQuestTree.objects.filter(task=instance.task)
+                for changed_task_tree in changed_tasks_tree:
+                    MainQuestStatus.objects.filter(mainQuest=changed_task_tree.mainQuest, user=instance.user).update(
+                        status="in_progress")
+
+
+# -----------------------------------------------------------
+# При создании MainQuest добавляет пользователей относящихся к указанному дивизиону
+# -----------------------------------------------------------
+@receiver(post_save, sender=MainQuest)
+def on_create_main_quest(instance, created, **kwargs):
+    if created:
+        if instance.division:
+            users = UserProfile.objects.filter(division=instance.division)
+            instance.users.set(users)
+
+
+# -----------------------------------------------------------
+# При изменении MainQuest дивизиона изменяет пользователей относящихся к данному квесту.
+# -----------------------------------------------------------
+@receiver(pre_save, sender=MainQuest)
+def on_change_main_quest(instance: MainQuest, **kwargs):
+    if instance.id is not None:
+        previous = MainQuest.objects.get(id=instance.id)
+        if previous.division != instance.division:
+            users = UserProfile.objects.filter(division=instance.division)
+            instance.users.set(users)

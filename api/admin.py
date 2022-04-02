@@ -3,7 +3,8 @@ from django.contrib.auth.models import Group, User
 from django.contrib.auth.admin import GroupAdmin, UserAdmin
 from .models import UserProfile, MainQuest, Task, WeeklyTask, Division, JobPosition, Team, \
     MainQuest, Question, QuestionTheme, Test, TestUser, TestUserAnswer, TestBlock, Achievement, \
-    RequirenmentToGetAchieve, Product, RequirementsToBuyProduct, ProductCategory, Answer
+    RequirenmentToGetAchieve, Product, RequirementsToBuyProduct, ProductCategory, Answer, TaskUserStatus, \
+    MainQuestStatus, MainQuestTree
 from django.db import models
 from django.db.models import Q
 from django import forms
@@ -213,7 +214,8 @@ class TasksInline(admin.StackedInline):
     model = MainQuest.tasks.through
     fields = (
         ('task',
-         'parentTask')
+         'parentTask',
+         'childTask')
     )
 
 
@@ -487,6 +489,10 @@ admin.site = MyAdminSite()
 admin.site.register(WeeklyTask, WeeklyTaskAdmin)
 admin.site.register(Task, TaskAdmin)
 admin.site.register(MainQuest, MainQuestAdmin)
+
+admin.site.register(TaskUserStatus)
+admin.site.register(MainQuestStatus)
+admin.site.register(MainQuestTree)
 
 admin.site.register(Test, TestAdmin)
 admin.site.register(TestUser, TestUserAdmin)
