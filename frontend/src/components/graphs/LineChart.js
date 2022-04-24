@@ -17,6 +17,12 @@ export default {
                 legend: {
                     display: false,
                 },
+                layout:{
+                  padding: {
+                      left: 25,
+                      right: 25,
+                  }
+                },
                 plugins: {
                     datalabels: {
                         color: '#7c7c7c',
