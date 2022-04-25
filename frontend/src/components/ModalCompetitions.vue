@@ -3,7 +3,7 @@
     <div v-if="status" class="competition__window">
         <div class="window">
             <div class="window__title">
-                <ExitSvg class="window__exit__button" />
+                <ExitSvg class="window__exit__button" @click='close' />
                 <h2>Вы и Джонатан Смирнов начинаете новое соревнование</h2>
             </div>
             <div class="window__body">
@@ -12,17 +12,47 @@
                     id="competition__name"
                     type="text"
                     class="window__input"
+                    placeholder="Битва магов"
                 />
-                <label for="competition__criterion">Выберите критерий</label>
+                <label for="competition__criterior">Выберите критерий</label>
+                <div class='criteriorButtons'>
+                    <input
+                        id="criterior1"
+                        type="radio"
+                        class="window__input input__criterior"
+                        text="Битва магов"
+                        value='quality'
+                        v-model="criterior"
+                    />
+                    <label class='criterior__label' :class="[criterior==='quality'?'active':'']" for="criterior1">Качество</label>
+                    <input
+                        id="criterior2"
+                        type="radio"
+                        class="window__input input__criterior"
+                        text="Битва магов"
+                        value='productivity'
+                        v-model="criterior"
+                    />  
+                    <label class='criterior__label' :class="[criterior==='productivity'?'active':'']" for="criterior2">Продуктивность</label>
+                </div>
+                <label for="competition__rate">Ваша ставка</label>
                 <select
-                    id="competition__criterion"
+                    id="competition__rate"
                     type="text"
                     class="window__select"
                 >
-                    <option value="productivity">Продуктивность</option>
-                    <option value="quality">Качество</option>
-                    <option value="level">Текущий уровень</option>
+                    <option value="productivity">Монетки</option>
+                    <option value="quality">Энергия</option>
+                    <option value="level">Жизни</option>
                 </select>
+                <label for="competition__name">Количество</label>
+                <input
+                    id="competition__name"
+                    type="text"
+                    class="window__input"
+                    placeholder="100"
+                />
+
             </div>
             <button class="window__button" @click="startCompetition()">
                 Создать
@@ -44,12 +74,13 @@ export default {
         status: {
             default: false,
             type: Boolean,
-        },
+        }
     },
     data() {
         return {
             test_page: false,
             user: '',
+            criterior: 'quality',
         }
     },
     methods: {
@@ -58,6 +89,9 @@ export default {
             this.$router.push(routesList.competitionsPage.path)
             localStorage.setItem('versus', true)
         },
+        close() {
+            this.$emit('close');
+        }
     },
 }
 </script>
@@ -83,19 +117,50 @@ export default {
     padding: 10px;
     background: #d8dcea;
     width: 480px;
-    height: 306px;
     padding-bottom: 25px;
+    input[type='radio'] {
+        display: none;
+    }
+    input::placeholder{
+        color: #9BA2B9
+    }
+    &__input, &__select,.criterior__label {
+        border: 1px solid #C1C6E8;
+        padding-left: 15px;
+        border-radius: 10px;
+        color:#545969;
+    }
     &__input {
         width: 446px;
         height: 33px;
-        border: none;
-        padding-left: 20px;
+        
+    }
+    .criteriorButtons {
+        display: flex;
+        justify-content: space-between;
+        .input__criterior {
+            // display: none;
+        }
+        .criterior__label {
+            width: 40%;
+            text-align: center;
+            background-color: white;
+            padding: 5px 0 5px 0;
+            border-width: 2px;
+        }
+        .active {
+            color: #4753BF;
+            border: 2px solid #4753BF;
+            box-shadow: 0 0 7px rgba(128, 128, 128, 0.612);
+        }
     }
     &__select {
         width: 466px;
         height: 33px;
-        border: none;
-        padding-left: 20px;
+        color: #545969;
+        option {
+            color: #545969
+        }
     }
     &__title {
         display: flex;
@@ -125,8 +190,14 @@ export default {
             border: 0;
             outline: none;
         }
+        label {
+            padding-top: 10px;
+            padding-bottom: 5px;
+            color: #545969;
+        }
     }
     &__button {
+        margin-top: 15px;
         display: flex;
         justify-content: center;
         align-items: center;

@@ -56,10 +56,10 @@
                 </div>
             </div>
             <div class="user__actions">
-                <button @click="openWindow()">Начать соревнование</button>
+                <button @click="openWindow()">Начать соревнование {{user.name}}</button>
+            <ModalCompetitions :status="status" @close='openWindow' />
             </div>
         </div>
-        <ModalCompetitions :status="status" />
         <!-- КОНЕЦ СОРЕВНОВАНИЯ -->
     </div>
 </template>
@@ -91,10 +91,11 @@ export default {
                 let name = user.name + ' ' + user.surname
                 return name.toLowerCase().includes(this.search.toLowerCase())
             })
-        },
+        }
     },
     async mounted() {
-        await this.USERS_REQUEST_FETCHING()
+        await this.USERS_REQUEST_FETCHING(),
+        this.search=this.$route.query.query
     },
     methods: {
         ...mapActions('users', [USERS_REQUEST_FETCHING]),
@@ -391,7 +392,7 @@ export default {
         font-weight: 100 !important;
         font-size: 18px;
         line-height: 18px;
-        color: #8e9ac0;
+        color: #545969;
         border: 0;
         width: 650px;
         height: 33px;
