@@ -1,3 +1,8 @@
+from datetime import datetime, timedelta
+
+from django.db.models.signals import post_save, pre_save
+from django.dispatch import receiver
+from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from taggit.managers import TaggableManager
@@ -369,7 +374,7 @@ class Task(models.Model):
         UserProfile, through='TaskUserStatus', through_fields=('task', 'user'), )
 
     division = models.ForeignKey(
-        Division, on_delete=models.CASCADE, verbose_name="Подразделение", blank=True, null=True,)
+        Division, on_delete=models.CASCADE, verbose_name="Подразделение", blank=True, null=True, )
 
     # IDs
 
@@ -443,7 +448,6 @@ class TaskUserStatus(models.Model):
 
 
 class MainQuest(models.Model):
-
     EASY = 'easy'
     MEDIUM = 'medium'
     HARD = 'hard'
@@ -464,11 +468,20 @@ class MainQuest(models.Model):
 
     # IDs
 
-    difficulty = models.CharField(max_length=20, choices=DIFFICULTY_TYPE_CHOICES,
-                                  default=EASY, verbose_name="Сложность")
-    title = models.CharField(max_length=120, verbose_name="Называние")
+    difficulty = models.CharField(max_length=20, choices=DIFFICULTY_TYPE_CHOICES, default=EASY,
+                                  verbose_name="Сложность")
+    title = models.CharField(max_length=120, verbose_name="Название")
     description = models.TextField(verbose_name="Описание")
-    deadline = models.IntegerField(default=0, verbose_name="Дедлайн")
+    deadline = models.DateTimeField(verbose_name="Дедлайн", default=timezone.now)
+
+    @property
+    def is_active(self):
+        return timezone.now() < self.deadline if self.deadline else False
+
+    @property
+    def time_left(self):
+        return self.deadline - timezone.now() if self.deadline else False
+
     accessLevel = models.IntegerField(
         default=0, verbose_name="Уровень доступа")
     tasksCount = models.IntegerField(
@@ -497,7 +510,8 @@ class MainQuestTree(models.Model):
     parentTask = models.ForeignKey(
         Task, on_delete=models.CASCADE, related_name='parentTask')
     childTask = models.ForeignKey(
-        Task, on_delete=models.CASCADE, related_name='childTask')
+        Task, on_delete=models.CASCADE, related_name='childTask', blank=True, null=True)
+
 
     # IDs
 
@@ -542,6 +556,20 @@ class MainQuestStatus(models.Model):
         verbose_name_plural = "статусы основных квестов пользователей"
 
 
+class UserNotification(models.Model):
+    NOTIFICATION_STATUS_CHOICE = (
+        ("VIEWED", 'просмотрено'),
+        ("NOT VIEWED", 'не просмотрено')
+    )
+    user = models.ForeignKey("UserProfile", verbose_name='Уведомление пользователя', related_name='user',
+                             on_delete=models.CASCADE, null=True)
+    title = models.CharField(max_length=255, verbose_name='Название уведомления', null=False, default="nothing here")
+    message = models.CharField(max_length=255, verbose_name='Сообщение', null=False, blank=False,
+                               default="nothing here")
+    status = models.CharField(max_length=16, verbose_name='Статус уведомления', choices=NOTIFICATION_STATUS_CHOICE,
+                              default='NOT VIEWED')
+
+
 ##############################################
 # СОРЕВНОВАНИЯ
 ##############################################
@@ -550,21 +578,15 @@ class Competition(models.Model):
     # IDs
 
     # users = models.ManyToManyField(UserProfile)
+
     winner = models.ForeignKey(
-        UserProfile, on_delete=models.CASCADE, related_name='winner')
+        UserProfile, on_delete=models.SET_NULL, related_name='winner',
+        null=True)
 
     # IDs
 
-    title = models.CharField(max_length=120)
     isCompleted = models.BooleanField(default=False)
-    deadline = models.DateTimeField(blank=True, null=True)
-
-    levelCriterion = models.IntegerField(
-        default=0, verbose_name="Требуемый уровень")
-    qualityCriterion = models.FloatField(
-        default=0.0, verbose_name="Требуемое качество")
-    productivityCriterion = models.FloatField(
-        default=0.0, verbose_name="Требуемая продуктивность")
+    deadline = models.DateTimeField(blank=False, null=False, default=datetime.now() + timedelta(days=30))
 
     money = models.IntegerField(default=0, verbose_name="Валюта")
     health = models.IntegerField(default=0, verbose_name="Жизни")
@@ -572,6 +594,8 @@ class Competition(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     done_at = models.DateTimeField(blank=True, null=True)
+    request = models.OneToOneField('CompetitionRequest', on_delete=models.DO_NOTHING,
+                                   verbose_name='Запрос на участие в соревновании', null=True)
 
     def __str__(self):
         return str(self.title)
@@ -581,14 +605,19 @@ class Competition(models.Model):
         verbose_name_plural = "соревнования"
 
 
-class CompetitionUser(models.Model):
+class CompetitionRequest(models.Model):
+    REQUEST_STATUS_CHOICE = (
+        ("SENT", 'отправлено'),
+        ("ACCEPTED", 'принято'),
+        ("DISCARDED", 'отклонено'),
+    )
+    title = models.CharField(max_length=120)
+    sender = models.ForeignKey(to=UserProfile, on_delete=models.CASCADE, related_name='sender')
+    receiver = models.ForeignKey(to=UserProfile, on_delete=models.CASCADE, related_name='receiver')
+    send_time = models.DateTimeField(auto_now_add=True)
+    decay_time = models.DateTimeField(blank=False, null=False, default=datetime.now() + timedelta(days=4))
+    status = models.CharField(max_length=10, choices=REQUEST_STATUS_CHOICE, default='sent')
 
-    competition = models.ForeignKey(
-        'Competition', on_delete=models.CASCADE, related_name='competition_id')
-    first_user = models.ForeignKey(
-        'UserProfile', on_delete=models.CASCADE, related_name='first_name')
-    second_user = models.ForeignKey(
-        'UserProfile', on_delete=models.CASCADE, related_name='second_name')
 
 ##############################################
 # ДОСТИЖЕНИЯ
@@ -843,7 +872,6 @@ class Test(models.Model):
 
 
 class TestBlock(models.Model):
-
     # IDs
     questionTheme = models.ForeignKey(
         QuestionTheme, on_delete=models.CASCADE, verbose_name="Тематика", )
@@ -852,9 +880,9 @@ class TestBlock(models.Model):
     questions = models.ManyToManyField(
         Question, verbose_name="Вопросы", related_name="qst")
 
-    test = models.ForeignKey(
-        Test, on_delete=models.CASCADE, verbose_name="Тест", )
-    questions = models.ManyToManyField(Question, verbose_name="", default=None)
+    # test = models.ForeignKey(
+    #     Test, on_delete=models.CASCADE, verbose_name="Тест", )
+    # questions = models.ManyToManyField(Question, verbose_name="", default=None)   зачем это?
     # IDs
 
     questionsCount = models.IntegerField(
@@ -1089,6 +1117,7 @@ class RequirementsToBuyProduct(models.Model):
 
     health = models.IntegerField(default=0, verbose_name="Кол-во Жизней")
     energy = models.IntegerField(default=0, verbose_name="Кол-во Энергии")
+
     # Данные атрибуты не успользуются при работе на стороне клиента
 
     def __str__(self):
@@ -1159,7 +1188,7 @@ class Purchase(models.Model):
     PURCHASE_STATUS_CHOICES = (
         (PENDING, 'оформляется'),
         (PAID, 'оплачен'),
-        (EXPECTS, 'оможно забрать'),
+        (EXPECTS, 'можно забрать'),
         (RECEIVED, 'получен'),
     )
     # IDs
@@ -1178,7 +1207,97 @@ class Purchase(models.Model):
     def __str__(self):
         return str(self.id)
 
+    class Meta:
+        verbose_name = "покупка"
+        verbose_name_plural = "покупки"
 
-class Meta:
-    verbose_name = "покупка"
-    verbose_name_plural = "покупки"
+
+##############################################
+# SIGNALS
+##############################################
+
+# -----------------------------------------------------------
+# При создании Task добавляет в него юзеров в зависимости от подразделения
+# -----------------------------------------------------------
+@receiver(post_save, sender=Task)
+def on_create_task(instance: Task, created, **kwargs):
+    if created:
+        if instance.division is not None:
+            users = UserProfile.objects.filter(division=instance.division)
+            instance.users.set(users)
+        else:
+            if instance.parent is not None:
+                if instance.parent.division is not None:
+                    users = UserProfile.objects.filter(division=instance.parent.division)
+                else:
+                    users = UserProfile.objects.all()
+                instance.users.set(users)
+            else:
+                users = UserProfile.objects.all()
+                instance.users.set(users)
+        instance.save()
+
+
+# -----------------------------------------------------------
+# При изменении Task подразделения изменяет пользователей относящихся к данному Task
+# -----------------------------------------------------------
+@receiver(pre_save, sender=Task)
+def on_change_task(instance: Task, **kwargs):
+    if instance.id is not None:
+        previous = Task.objects.get(id=instance.id)
+        if previous.division != instance.division:
+            new_users = UserProfile.objects.filter(division=instance.division)
+            subtasks = Task.objects.filter(parent=instance)
+            for subtask in subtasks:
+                subtask.users.set(new_users)
+            instance.users.set(new_users)
+
+
+# -----------------------------------------------------------
+# При изменении TaskUserStatus в зависимости от статуса и пользователя меняет информацию о выполнении MainQuest
+# -----------------------------------------------------------
+@receiver(pre_save, sender=TaskUserStatus)
+def on_change_task_user_status(instance: TaskUserStatus, **kwargs):
+    if instance.id is not None:
+        previous = TaskUserStatus.objects.get(id=instance.id)
+        if previous.status != instance.status:
+            if instance.status == "completed":
+                completed_tasks_tree = MainQuestTree.objects.filter(task=instance.task)
+                for completed_task_tree in completed_tasks_tree:
+                    all_tasks_in_tree = MainQuestTree.objects.filter(mainQuest=completed_task_tree.mainQuest)
+                    for task_in_tree in all_tasks_in_tree.exclude(task=instance.task):
+                        status = TaskUserStatus.objects.filter(user=instance.user,
+                                                               task=task_in_tree.task).first().status
+                        if status != "completed":
+                            break
+                    else:
+                        MainQuestStatus.objects.filter(mainQuest=completed_task_tree.mainQuest,
+                                                       user=instance.user).update(status="completed")
+            if instance.status == "in_progress":
+                changed_tasks_tree = MainQuestTree.objects.filter(task=instance.task)
+                for changed_task_tree in changed_tasks_tree:
+                    MainQuestStatus.objects.filter(mainQuest=changed_task_tree.mainQuest, user=instance.user).update(
+                        status="in_progress")
+
+
+# -----------------------------------------------------------
+# При создании MainQuest добавляет пользователей относящихся к указанному дивизиону
+# -----------------------------------------------------------
+@receiver(post_save, sender=MainQuest)
+def on_create_main_quest(instance, created, **kwargs):
+    if created:
+        if instance.division:
+            users = UserProfile.objects.filter(division=instance.division)
+            instance.users.set(users)
+
+
+# -----------------------------------------------------------
+# При изменении MainQuest дивизиона изменяет пользователей относящихся к данному квесту.
+# -----------------------------------------------------------
+@receiver(pre_save, sender=MainQuest)
+def on_change_main_quest(instance: MainQuest, **kwargs):
+    if instance.id is not None:
+        previous = MainQuest.objects.get(id=instance.id)
+        if previous.division != instance.division:
+            users = UserProfile.objects.filter(division=instance.division)
+            instance.users.set(users)

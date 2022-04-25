@@ -26,13 +26,15 @@
             </div>
             <div v-for="item in items" :key="item.id" class="shop__item">
                 <div class="shop__item-img">
-                    <img :src="item.img" alt="" />
+                    <img :src="item.product.photo" alt="" />
                 </div>
                 <div class="shop__item-description">
-                    <h3 class="item-headline">{{ item.name }}</h3>
-                    <span class="item-description">{{ item.description }}</span>
+                    <h3 class="item-headline">{{ item.product.title }}</h3>
+                    <span class="item-description">{{
+                        item.product.description
+                    }}</span>
                     <span class="item-value"
-                        >{{ item.value }}<CoinSvg class="item-icon"
+                        >{{ item.money }}<CoinSvg class="item-icon"
                     /></span>
                     <span class="item-required_level"
                         >требуемый уровень: {{ item.level }}</span
@@ -84,7 +86,7 @@ export default {
         ...mapGetters('items', ['getItems']),
         ...mapGetters('cart', ['getCart']),
         items: function() {
-            let items = this.getItems
+            let items = this.getItems.data
             let cart = this.getCart
             return items.filter(a => cart.filter(b => b.id == a.id).length != 0)
         },
@@ -94,7 +96,7 @@ export default {
         cartSumm: function() {
             let summ = 0
             for (let i of this.items) {
-                summ += i.value
+                summ += i.money
             }
             return summ
         },
@@ -228,7 +230,7 @@ export default {
                 border-radius: 100px;
                 border: none;
                 outline: none;
-                background: #26bcc2;
+                background: #5f66a9;
                 box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
                 cursor: pointer;
                 &_icon {
@@ -284,7 +286,7 @@ export default {
                 }
             }
             &-buy {
-                background: #26bcc2;
+                background: #5f66a9;
                 height: 36px;
                 width: 174px;
                 box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
