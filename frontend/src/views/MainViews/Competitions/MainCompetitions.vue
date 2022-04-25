@@ -227,13 +227,11 @@
                 <input id="pagesCount" type="number" value="6" /> -->
             </div>
         </div>
-        <ModalCompetitions :status="status" />
     </div>
 </template>
 
 <script>
 import SearchSvg from '@/assets/icons/search.svg'
-import ModalCompetitions from '@/components/ModalCompetitions'
 import CoinSvg from '@/assets/icons/coin.svg'
 import HeartSvg from '@/assets/icons/heart.svg'
 import LightningSvg from '@/assets/icons/lightning.svg'
@@ -245,7 +243,6 @@ export default {
     name: 'Competitions',
     components: {
         SearchSvg,
-        ModalCompetitions,
         HeartSvg,
         CoinSvg,
         LightningSvg,
@@ -253,12 +250,13 @@ export default {
     props: {},
     data() {
         return {
-            status: false,
             search: '',
             versus: localStorage.getItem('versus'),
             routesList,
-            pageNum: 1,
-            size: 5
+            pageNum: 0,
+            size: 5,
+            maxPage: 0,
+            isCompetition: false,
         }
     },
     computed: {
@@ -270,7 +268,7 @@ export default {
             const start = this.pageNum * this.size,
             end = start + this.size;
             return this.getCompetitions.slice(start,end)
-        }
+        },
     },
     async mounted() {
         await this.COMPETITIONS_REQUEST_FETCHING()

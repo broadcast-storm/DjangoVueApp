@@ -56,11 +56,11 @@
                 </div>
             </div>
             <div class="user__actions">
-                <button @click="openWindow()">Начать соревнование {{user.name}}</button>
-            <ModalCompetitions :status="status" @close='openWindow' />
+                <button @click="openWindow(user.name,user.surname)">Начать соревнование</button>
             </div>
         </div>
         <!-- КОНЕЦ СОРЕВНОВАНИЯ -->
+        <ModalCompetitions :status='status' :name='modalData' @close='openWindow' />
     </div>
 </template>
 
@@ -81,7 +81,8 @@ export default {
         return {
             status: false,
             test_page: false,
-            search: ''
+            search: '',
+            modalData:'Sur',
         }
     },
     computed: {
@@ -99,8 +100,9 @@ export default {
     },
     methods: {
         ...mapActions('users', [USERS_REQUEST_FETCHING]),
-        openWindow: function() {
-            this.status = !this.status
+        openWindow: function(name,surname) {
+            this.status = !this.status,
+            this.modalData = name + ' ' + surname
         },
     },
 }

@@ -4,7 +4,7 @@
         <div class="window">
             <div class="window__title">
                 <ExitSvg class="window__exit__button" @click='close' />
-                <h2>Вы и Джонатан Смирнов начинаете новое соревнование</h2>
+                <h2>Вы и {{name}} начинаете новое соревнование</h2>
             </div>
             <div class="window__body">
                 <label for="competition__name">Введите название</label>
@@ -71,10 +71,8 @@ export default {
         ExitSvg,
     },
     props: {
-        status: {
-            default: false,
-            type: Boolean,
-        }
+        status: Boolean,
+        name: String
     },
     data() {
         return {
@@ -92,7 +90,7 @@ export default {
         close() {
             this.$emit('close');
         }
-    },
+    }
 }
 </script>
 
