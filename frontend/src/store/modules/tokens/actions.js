@@ -15,7 +15,7 @@ const actions = {
         try {
             commit(AUTH_REQUEST)
             const response = await axios.post(
-                '/api/login',
+                '/api/token/',
                 {
                     username: userCredentials.username,
                     password: userCredentials.password,
@@ -41,7 +41,7 @@ const actions = {
         try {
             commit(AUTH_REFRESH_REQUEST)
             const response = await axios.post(
-                '/api/refresh-token',
+                '/api/token/refresh/',
                 {
                     refresh: state.refreshToken,
                 },

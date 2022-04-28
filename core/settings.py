@@ -37,7 +37,7 @@ REFRESH_TOKEN_EXPIRES = env("REFRESH_TOKEN_EXPIRES", default=14)
 DEBUG = env('DEBUG')
 # DEBUG = True
 
-ALLOWED_HOSTS = ['ygamification.std-1550.ist.mospolytech.ru', '127.0.0.1']
+ALLOWED_HOSTS = ['ygamification.std-1550.ist.mospolytech.ru', '127.0.0.1', 'localhost']
 
 # Application definition
 
@@ -67,8 +67,9 @@ INSTALLED_APPS = [
     'taggit',
     'django_cleanup',
     'easy_thumbnails',
+    'silk',
+    'baton.autodiscover',  # at the end
 
-     'baton.autodiscover', #at the end
 ]
 
 MIDDLEWARE = [
@@ -81,16 +82,16 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'silk.middleware.SilkyMiddleware',
 ]
 
 CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_WHITELIST = (
-    'http://localhost:8080',
-    'http://127.0.0.1:8080',
-)
-
-
-# CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+    'http://ygamification.std-1550.ist.mospolytech.ru',
+    'http://195.9.87.69:80'
+]
 
 ROOT_URLCONF = 'core.urls'
 
@@ -161,7 +162,7 @@ SWAGGER_SETTINGS = {
     'DOC_EXPANSION': 'none',
     'SECURITY_DEFINITIONS': {
         'USE_SESSION_AUTH': False,
-        'Bearer': {
+        'JWT': {
             'type': 'apiKey',
             'name': 'Authorization',
             'in': 'header'
@@ -200,7 +201,6 @@ FRONTEND_DIR = os.path.join(BASE_DIR, 'frontend')
 STATICFILES_DIRS = [
     os.path.join(FRONTEND_DIR, 'dist/static'),
 ]
-
 
 # Webpack output location containing Vue index.html file (outputDir)
 TEMPLATES[0]['DIRS'] += [
@@ -247,7 +247,6 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
-
 
 LOGGING = {
     'version': 1,
@@ -307,19 +306,19 @@ BATON = {
     # 'MENU_ALWAYS_COLLAPSED': True,
 
     'MENU': (
-        { 'type': 'title', 'label': 'Задания', 'apps': ('api', ) },
-        { 'type': 'model', 'label': 'Квест', 'name': 'mainquest', 'app': 'api' },
-        { 'type': 'model', 'label': 'Задачи', 'name': 'task', 'app': 'api' },
-        { 'type': 'model', 'label': 'Тесты', 'name': 'test', 'app': 'api' },
+        {'type': 'title', 'label': 'Задания', 'apps': ('api',)},
+        {'type': 'model', 'label': 'Квест', 'name': 'mainquest', 'app': 'api'},
+        {'type': 'model', 'label': 'Задачи', 'name': 'task', 'app': 'api'},
+        {'type': 'model', 'label': 'Тесты', 'name': 'test', 'app': 'api'},
 
-        { 'type': 'title', 'label': 'Поощрения', 'apps': ('api', ) },
-        { 'type': 'model', 'label': 'Ачивки', 'name': 'achievement', 'app': 'api' },
-        { 'type': 'model', 'label': 'Товары', 'name': 'product', 'app': 'api' },
+        {'type': 'title', 'label': 'Поощрения', 'apps': ('api',)},
+        {'type': 'model', 'label': 'Ачивки', 'name': 'achievement', 'app': 'api'},
+        {'type': 'model', 'label': 'Товары', 'name': 'product', 'app': 'api'},
 
-        { 'type': 'title', 'label': 'Пользователи', 'apps': ('api', ) },
-        { 'type': 'model', 'label': 'Подразделения', 'name': 'division', 'app': 'api' },
-        { 'type': 'model', 'label': 'Команды', 'name': 'team', 'app': 'api' },
-        { 'type': 'model', 'label': 'Сотрудники', 'name': 'userprofile', 'app': 'api' },
+        {'type': 'title', 'label': 'Пользователи', 'apps': ('api',)},
+        {'type': 'model', 'label': 'Подразделения', 'name': 'division', 'app': 'api'},
+        {'type': 'model', 'label': 'Команды', 'name': 'team', 'app': 'api'},
+        {'type': 'model', 'label': 'Сотрудники', 'name': 'userprofile', 'app': 'api'},
     ),
 
     # example of Google Analytics

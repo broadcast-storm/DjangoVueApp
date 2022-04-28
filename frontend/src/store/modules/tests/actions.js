@@ -19,7 +19,7 @@ const actions = {
             const response = await axios.get(`/api/unresolved_test`, {
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `JWT ${token}`,
                 },
             })
             console.log('tests list:')
@@ -45,7 +45,7 @@ const actions = {
                 {
                     headers: {
                         'Content-Type': 'application/json',
-                        Authorization: `Bearer ${token}`,
+                        Authorization: `JWT ${token}`,
                     },
                 }
             )
@@ -122,7 +122,7 @@ const actions = {
             const response = await axios.post(`/api/send-answers`, data, {
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `JWT ${token}`,
                 },
             })
             console.log(response.data)

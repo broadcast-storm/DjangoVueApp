@@ -51,7 +51,6 @@ class UserProfileViewSet(viewsets.ModelViewSet):
             permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
 
-    @property
     def get_serializer_class(self):
         if self.action == 'list':
             return serializers.UserGetListSerializer
