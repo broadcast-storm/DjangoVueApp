@@ -2,7 +2,7 @@
     <div class="cart-wrapper">
         <div v-if="cart.length == 0" class="cart__cleared">
             <div class="cart__header">
-                <router-link to="/shop" class="cart__back"
+                <router-link to="/shop/" class="cart__back"
                     >Вернуться к покупкам</router-link
                 >
                 <h2 v-if="!status" class="cart__headline">Корзина</h2>

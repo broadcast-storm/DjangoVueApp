@@ -13,7 +13,7 @@ const actions = {
             const response = await axios.get(`/api/shop`, {
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `JWT ${token}`,
+                    Authorization: `Bearer ${token}`,
                 },
             })
             console.log('items:')
