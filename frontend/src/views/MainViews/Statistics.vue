@@ -232,9 +232,9 @@ export default {
             display: flex;
             flex-direction: column;
             box-sizing: border-box;
-            min-width: 350px;
-            max-width: 370px;
-            margin-left: 25px;
+            min-width: 300px;
+            max-width: 320px;
+            margin-left: 0px;
             background-color: #fff;
             height: 100%;
             min-height: 300px;
@@ -251,11 +251,11 @@ export default {
                     padding-bottom: 10px;
                     .statistic-title {
                         width: 200px;
-                        font-size: 24px;
+                        font-size: 20px;
                         color: #808080;
                     }
                     .statistic-result {
-                        font-size: 24px;
+                        font-size: 20px;
                         color: #1a2740;
                         padding-left: 24px;
                         font-weight: bolder;
@@ -271,11 +271,11 @@ export default {
                 &__header {
                     margin-bottom: 20px;
                     .header-title {
-                        font-size: 24px;
+                        font-size: 20px;
                         color: #1a2740;
                     }
                     .header-date {
-                        font-size: 24px;
+                        font-size: 20px;
                         color: #808080;
                     }
                 }
@@ -286,11 +286,11 @@ export default {
                     padding-bottom: 10px;
                     .best-title {
                         width: 200px;
-                        font-size: 24px;
+                        font-size: 20px;
                         color: #808080;
                     }
                     .best-result {
-                        font-size: 24px;
+                        font-size: 20px;
                         color: #1a2740;
                         padding-left: 15px;
                         font-weight: bolder;
@@ -305,7 +305,7 @@ export default {
             height: 100%;
             overflow: auto;
             flex: 1;
-            padding: 25px;
+            padding: 15px;
             box-sizing: border-box;
             &__title {
                 font-size: 24px;
@@ -379,14 +379,20 @@ export default {
                 }
             }
         }
-
+        @media screen and (max-device-width: 1200px){
+           .achievements{
+            &__item {
+              max-width: 350px;
+              min-width: 300px;
+            }
+        }}
         .indicators {
             display: flex;
             flex-direction: column;
             height: 100%;
             overflow: auto;
             flex: 1.2;
-            padding: 25px;
+            padding: 10px 25px;
             box-sizing: border-box;
             &__title {
                 font-size: 24px;
