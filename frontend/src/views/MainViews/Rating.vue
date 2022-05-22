@@ -233,14 +233,17 @@ export default {
         }
     }
     .selection {
-        margin-left: 120px;
+        transform:translate3d(120px, 130px, 0px);
+        position: absolute;
         background: #ffffff;
         color: #6a6d76;
         width: 120px;
+
         &-method {
             font-size: 18px;
             padding-left: 23px;
             cursor: pointer;
+            margin: 5px 0px;
             -webkit-user-select: none;
             -khtml-user-select: none;
             -moz-user-select: none;
