@@ -17,7 +17,7 @@ html {
     display: flex;
     justify-content: center;
 }
-.wrapper {
+.wrapper1 {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -81,6 +81,30 @@ html {
 }
 .shop {
     &__items {
+        .cont {
+            margin-left: 16px;
+            width: 825px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .button_for_slide_r {
+            color: white;
+            font-size: 25px;
+            background-color: #5f66a9;
+            border-radius: 50%;
+            width: 33px;
+            height: 33px;
+            background-repeat: no-repeat;
+        }
+        .button_for_slide_l {
+            color: white;
+            font-size: 25px;
+            background-color: #5f66a9;
+            border-radius: 50%;
+            width: 33px;
+            height: 33px;
+            background-repeat: no-repeat;
+        }
         .shop__instruments {
             padding-left: 15px;
             font-family: 'Advent Pro', sans-serif;

@@ -1,6 +1,6 @@
 <template
     ><div class="center">
-        <div class="wrapper">
+        <div class="wrapper1">
             <ShopState />
             <div class="shop">
                 <form class="filters">
@@ -68,7 +68,7 @@
                         </div>
                     </div>
                     <div class="grid-items">
-                        <div v-for="item in orderedItems" :key="item.id">
+                        <div v-for="item in paginatedData" :key="item.id">
                             <div class="card">
                                 <div class="front">
                                     <div class="img">
@@ -152,6 +152,22 @@
                             </div>
                         </div>
                     </div>
+                    <div class="cont">
+                        <button
+                            class="button_for_slide_l"
+                            :disabled="pageNumber == 0"
+                            @click="prevPage"
+                        >
+                            ←
+                        </button>
+                        <button
+                            class="button_for_slide_r"
+                            :disabled="pageNumber >= pageCount - 1"
+                            @click="nextPage"
+                        >
+                            →
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -182,7 +198,7 @@ export default {
             searchText: '',
             sort: 'ascendingValue',
             pageNumber: 0,
-            size: 10,
+            size: 6,
         }
     },
     computed: {
@@ -225,6 +241,19 @@ export default {
             }
 
             return c
+        },
+        pageCount() {
+            let l = this.orderedItems.length,
+                s = this.size
+            return Math.ceil(l / s)
+        },
+        paginatedData() {
+            if (this.orderedItems != undefined) {
+                const start = this.pageNumber * this.size,
+                    end = Number(start) + Number(this.size)
+                return this.orderedItems.slice(start, end)
+            }
+            return undefined
         },
         cart: function() {
             return this.getCart
@@ -270,6 +299,12 @@ export default {
             document.getElementById('3').classList.remove('target_sort')
             document.getElementById('4').classList.remove('target_sort')
             document.getElementById(x).classList.add('target_sort')
+        },
+        nextPage() {
+            this.pageNumber++
+        },
+        prevPage() {
+            this.pageNumber--
         },
     },
 }

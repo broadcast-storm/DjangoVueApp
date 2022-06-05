@@ -26,7 +26,7 @@ html {
           justify-content: center;
 }
 
-.wrapper {
+.wrapper1 {
   position: relative;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -112,6 +112,37 @@ html {
           align-items: center;
   font-size: 24px;
   color: #545969;
+}
+
+.shop__items .cont {
+  margin-left: 16px;
+  width: 825px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.shop__items .button_for_slide_r {
+  color: white;
+  font-size: 25px;
+  background-color: #5f66a9;
+  border-radius: 50%;
+  width: 33px;
+  height: 33px;
+  background-repeat: no-repeat;
+}
+
+.shop__items .button_for_slide_l {
+  color: white;
+  font-size: 25px;
+  background-color: #5f66a9;
+  border-radius: 50%;
+  width: 33px;
+  height: 33px;
+  background-repeat: no-repeat;
 }
 
 .shop__items .shop__instruments {
