@@ -403,7 +403,9 @@ input::-webkit-inner-spin-button {
           perspective: 1000px;
 }
 
-.card img {
+.card .img {
+  background-image: url("./photo.jpg");
+  background-size: contain;
   width: 255px;
   height: 186px;
   border-radius: 8px;

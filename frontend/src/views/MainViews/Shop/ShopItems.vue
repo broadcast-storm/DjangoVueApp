@@ -72,7 +72,7 @@
                             <div class="card">
                                 <div class="front">
                                     <div class="img">
-                                        <img :src="item.product.photo" alt="" />
+                                        <div class="img"></div>
                                     </div>
                                     <div class="shop__item-description">
                                         <div class="item-headline">
@@ -199,6 +199,7 @@ export default {
             sort: 'ascendingValue',
             pageNumber: 0,
             size: 6,
+            photo: './photo.jpg',
         }
     },
     computed: {
