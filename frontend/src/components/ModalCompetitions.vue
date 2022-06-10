@@ -48,7 +48,7 @@
                 <label for="competition__name">Количество</label>
                 <input
                     id="competition__name"
-                    type="text"
+                    type="number"
                     class="window__input"
                     placeholder="100"
                 />
@@ -140,6 +140,7 @@ export default {
             // display: none;
         }
         .criterior__label {
+            cursor: pointer;
             width: 40%;
             text-align: center;
             background-color: white;
