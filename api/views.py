@@ -366,7 +366,12 @@ def test_questions(request):
         # all_data это массив первый элемент которого тестблок внутри которого вопросы второй элемент массива это ответы
         all_data = []
         test_block = models.TestBlock.objects.filter(
-            test=request.data.get('test_id')).all()
+            test_id=request.query_params.get('test_id')).all()
+        test_info = models.Test.objects.get(
+            id=request.query_params.get('test_id'))
+
+        serializer_test = serializers.TestsWithoutUsersSerializer(test_info, many=False)
+
         serializer = serializers.TestBlockQuestionsSerializer(test_block, many=True)
         # заполняем массив question_id айдишниками вопросов в нужном тесте (через каждый test_block)
         # Не отправляет ответы для вопросов с вводом текста и числа
@@ -383,7 +388,8 @@ def test_questions(request):
             question__in=question_without_choice_id).all()
         serializer2 = serializers.AnswersWithoutFlagSerializer(answers_choice, many=True)
         serializer3 = serializers.AnswersIdSerializer(answers_without_choice, many=True)
-        all_data = (serializer.data, serializer2.data, serializer3.data)
+        all_data = {'testBlocks': serializer.data, 'answerOptions': serializer2.data, 'answerIds': serializer3.data,
+                    'testInfo': serializer_test.data}
         return JsonResponse(all_data, safe=False)
 
 
@@ -525,7 +531,8 @@ def test_post(request):
             "money": right_answers * 2000,
             "energy": right_answers * 10000,
             "right_answers": right_answers,
-            "total_questions": right_answers + wrong_answers
+            "total_questions": right_answers + wrong_answers,
+            "status": status
         }
         return Response(data=response)
 

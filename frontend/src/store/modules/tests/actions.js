@@ -37,11 +37,8 @@ const actions = {
         try {
             const token = rootState.tokens.accessToken
             commit(QUESTIONS_REQUEST)
-            const response = await axios.post(
-                `/api/test-questions`,
-                {
-                    test_id: id,
-                },
+            const response = await axios.get(
+                `/api/test-questions?test_id=${id}`,
                 {
                     headers: {
                         'Content-Type': 'application/json',
@@ -119,7 +116,7 @@ const actions = {
                         break
                 }
             })
-            const response = await axios.post(`/api/send-answers`, data, {
+            const response = await axios.post(`/api/test-post`, data, {
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `JWT ${token}`,
