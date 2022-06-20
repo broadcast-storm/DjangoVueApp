@@ -10,7 +10,7 @@ const actions = {
         try {
             const token = rootState.tokens.accessToken
             const response = await axios.get(
-                `/api/competition`,
+                `http://ygamification.std-1550.ist.mospolytech.ru/api/competition`,
                 {
                     headers: {
                         'Content-Type': 'application/json',
