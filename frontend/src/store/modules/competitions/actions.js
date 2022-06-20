@@ -6,13 +6,15 @@ import {
 } from '@/store/action-types/competitions'
 
 const actions = {
-    [COMPETITIONS_REQUEST_FETCHING]: async ({ commit }) => {
+    [COMPETITIONS_REQUEST_FETCHING]: async ({ commit, rootState }) => {
         try {
+            const token = rootState.tokens.accessToken
             const response = await axios.get(
-                `http://ygamification.std-1550.ist.mospolytech.ru/api/competition`,
+                `/api/competition`,
                 {
                     headers: {
                         'Content-Type': 'application/json',
+                        Authorization: `JWT ${token}`,
                     },
                 }
             )

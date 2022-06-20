@@ -1,5 +1,4 @@
 const state = {
-    isLoading: true,
     users: [
         {
             id: 1,

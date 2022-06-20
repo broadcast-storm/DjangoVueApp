@@ -6,13 +6,15 @@ import {
 } from '@/store/action-types/users'
 
 const actions = {
-    [USERS_REQUEST_FETCHING]: async ({ commit }) => {
+    [USERS_REQUEST_FETCHING]: async ({ commit,rootState }) => {
         try {
+            const token = rootState.tokens.accessToken
             const response = await axios.get(
                 `http://ygamification.std-1550.ist.mospolytech.ru/api/users`,
                 {
                     headers: {
                         'Content-Type': 'application/json',
+                        Authorization: `JWT ${token}`,
                     },
                 }
             )

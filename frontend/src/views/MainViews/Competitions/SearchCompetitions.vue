@@ -88,6 +88,7 @@ export default {
     computed: {
         ...mapGetters('users', ['getUsers']),
         users() {
+            console.log(this.$route.query.query)
             return this.getUsers.filter(user=>{
                 let name = user.name + ' ' + user.surname
                 return name.toLowerCase().includes(this.search.toLowerCase())
@@ -95,8 +96,8 @@ export default {
         }
     },
     async mounted() {
-        await this.USERS_REQUEST_FETCHING(),
-        this.search=this.$route.query.query
+        this.search=this.$route.query.query,
+        await this.USERS_REQUEST_FETCHING()
     },
     methods: {
         ...mapActions('users', [USERS_REQUEST_FETCHING]),
