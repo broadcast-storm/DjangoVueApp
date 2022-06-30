@@ -62,7 +62,7 @@ INSTALLED_APPS = [
     # 'djoser',
     'drf_yasg',
     'corsheaders',
-    # 'rest_framework_simplejwt.token_blacklist',
+    'rest_framework_simplejwt.token_blacklist',
     'api.apps.ApiConfig',
     'taggit',
     'django_cleanup',
