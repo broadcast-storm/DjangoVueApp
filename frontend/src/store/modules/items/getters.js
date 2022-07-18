@@ -1,5 +1,9 @@
 const getters = {
-    getItems: state => state.items,
+    getItems: state => {
+        return {
+            data: state.items,
+        }
+    },
 }
 
 export default getters

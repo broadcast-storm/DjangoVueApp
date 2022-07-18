@@ -19,7 +19,7 @@ const actions = {
             const response = await axios.get(`/api/unresolved_test`, {
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `JWT ${token}`,
                 },
             })
             console.log('tests list:')
@@ -37,15 +37,12 @@ const actions = {
         try {
             const token = rootState.tokens.accessToken
             commit(QUESTIONS_REQUEST)
-            const response = await axios.post(
-                `/api/test-questions`,
-                {
-                    test_id: id,
-                },
+            const response = await axios.get(
+                `/api/test-questions?test_id=${id}`,
                 {
                     headers: {
                         'Content-Type': 'application/json',
-                        Authorization: `Bearer ${token}`,
+                        Authorization: `JWT ${token}`,
                     },
                 }
             )
@@ -119,10 +116,10 @@ const actions = {
                         break
                 }
             })
-            const response = await axios.post(`/api/send-answers`, data, {
+            const response = await axios.post(`/api/test-post`, data, {
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `JWT ${token}`,
                 },
             })
             console.log(response.data)

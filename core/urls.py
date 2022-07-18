@@ -21,6 +21,8 @@ from django.urls import path, include, re_path
 import os
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
+
 from .views import index, indexForTest
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
@@ -40,12 +42,17 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('', index, name='index'),
+
+    path('api/token/', TokenObtainPairView.as_view()),
+    path('api/token/refresh/', TokenRefreshView.as_view()),
+    path('api/token/verify/', TokenVerifyView.as_view()),
+
     # re_path(r'^favicon\.ico$', favicon_view),
     path('main-quest/', index, name='index'),
     path('competitions/', index, name='index'),
     path('competitions/versus/', index, name='index'),
     path('statistics/', index, name='index'),
-    path('raiting/', index, name='index'),
+    path('rating/', index, name='index'),
     path('shop/', index, name='index'),
     path('shop/cart/', index, name='index'),
     path('tests/', index, name='index'),
@@ -54,6 +61,9 @@ urlpatterns = [
     path('auth/forgot-password/', index, name='index'),
     url(r'^baton/', include('baton.urls')),
     url(r'^admin/', admin.site.urls),
+    # url(r'^auth/', include('djoser.urls')),
+    # url(r'^auth/', include('djoser.urls.authtoken')),
+    # url(r'^auth/', include('djoser.urls.jwt')),
     url(r'^api/', include('api.urls')),
     url(r'^swagger(?P<format>\.json|\.yaml)$',
         schema_view.without_ui(cache_timeout=0), name='schema-json'),
@@ -62,8 +72,9 @@ urlpatterns = [
     url(r'^redoc/$', schema_view.with_ui('redoc',
                                          cache_timeout=0), name='schema-redoc'),
 
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
 
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL,
-                          document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL,
+                          document_root=settings.STATIC_ROOT)

@@ -4,6 +4,8 @@
 
 [Ссылка на Figma](https://www.figma.com/file/sM5uZE2Cl2Kc94G7qO5XtE/Ya.Game?node-id=1%3A15)
 
+[Ссылка на новую Figma](https://www.figma.com/file/3fkYWADZVM2hyMxWr6UwY0/%D1%80%D0%B5%D0%B9%D1%82%D0%B8%D0%BD%D0%B3?node-id=0%3A1)
+
 [Ссылка на схему БД](https://drive.google.com/file/d/12doNF7ebLjCgTaV6Uq4hnegJmZVonzlp/view?usp=sharing)
 
 Доступные учетные записи
@@ -25,7 +27,7 @@
 Склонируйте репозиторий
 
 ```sh
-$ git clone https://github.com/nikita220800/DjangoVueApp.git
+$ git clone https://github.com/ArtemR238/DjangoVueApp.git
 ```
 
 ### 1) Настройка Django
@@ -34,7 +36,7 @@ $ git clone https://github.com/nikita220800/DjangoVueApp.git
 
 ```sh
 $ python -m venv “venv”
-$ .\venv\Scripts\activate (для Linux: source ./venv/bin/activate)
+$ .\venv\Scripts\activate (для Unix: source ./venv/bin/activate)
 ```
 
 #### Все последующие действия производить внутри виртуального окружения

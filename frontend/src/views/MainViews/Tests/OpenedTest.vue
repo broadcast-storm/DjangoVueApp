@@ -85,12 +85,13 @@
                 />
                 <template v-if="getAnswersResult.status === 'success'">
                     <Medal
-                        v-if="getAnswersResult.data.status === 'done'"
+                        v-if="getAnswersResult.data.status === 'Выполнен'"
                         class="test-passed__medal"
                     />
                     <h2 class="test-passed__headline">
+
                         {{
-                            getAnswersResult.data.status === 'done'
+                            getAnswersResult.data.status === 'Выполнен'
                                 ? 'Тест пройден'
                                 : 'Тест провален'
                         }}
@@ -106,7 +107,7 @@
                         </div> -->
                     </div>
                     <div
-                        v-if="getAnswersResult.data.status === 'done'"
+                        v-if="getAnswersResult.data.status === 'Выполнен'"
                         class="test-passed__reward"
                     >
                         <div class="reward__coins">
@@ -371,7 +372,7 @@ export default {
                 width: 312px;
                 height: 41px;
                 cursor: pointer;
-                justify-self: space-between;
+                justify-content: space-between;
                 margin-bottom: 10px;
                 &:disabled {
                     border: none;
@@ -435,7 +436,7 @@ export default {
                     margin-left: 23px;
                     .time__icon {
                         width: 21.64px;
-                        height: 24.59;
+                        height: 24.59px;
                     }
                 }
             }

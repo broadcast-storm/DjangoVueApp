@@ -8,9 +8,11 @@ import items from '@/store/modules/items'
 import cart from '@/store/modules/cart'
 import tests from '@/store/modules/tests'
 import tokens from '@/store/modules/tokens'
-import raiting from '@/store/modules/raiting'
+import rating from '@/store/modules/rating'
+import users from '@/store/modules/users'
 import statistics from '@/store/modules/statistics'
 import tasks from '@/store/modules/tasks'
+import competitions from '@/store/modules/competitions'
 
 Vue.use(Vuex)
 
@@ -23,8 +25,10 @@ export default new Vuex.Store({
         tokens,
         tests,
         mainQuest,
-        raiting,
+        rating,
         statistics,
         tasks,
+        competitions,
+        users,
     },
 })

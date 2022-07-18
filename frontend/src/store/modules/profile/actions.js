@@ -18,7 +18,7 @@ const actions = {
             const response = await axios.get(`/api/users/${userId}`, {
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `JWT ${token}`,
                 },
             })
             console.log(response.data)
@@ -38,7 +38,7 @@ const actions = {
             const response = await axios.get(`/api/users/${userId}`, {
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `JWT ${token}`,
                 },
             })
             console.log(response.data)

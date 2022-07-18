@@ -1,15 +1,25 @@
 <template>
-    <div class="competition-wrapper">
-        <!-- НАЧАЛО СОРЕВНОВАНИЯ -->
-        <div class="competition-header">
-            <div class="header__text">
-                <h3>Текущие соревнование</h3>
-                <h3>Бой телепузиков</h3>
+    <div class="competition">
+        <div class="competition__search">
+            <div>
+                <div class="search__item">
+                    <label for="competitions__input">Поиск соперника</label>
+                </div>
+                <div class="search__input">
+                    <input
+                        id="competitions__input"
+                        v-model="user"
+                        class="input__item"
+                        type="text"
+                        placeholder="Имя и Фамилия"
+                    />
+                    <SearchSvg class="input__svg" />
+                </div>
             </div>
         </div>
-        <div class="competition-content">
-            <div class="content__block">
-                <div class="profile">
+        <div class="competition__versus">
+            <div class="competition__user">
+                <div class="user__profile">
                     <div class="profile__image">
                         <img
                             src="@/assets/img/competitions/UserPhoto.jpg"
@@ -43,11 +53,9 @@
                     </div>
                 </div>
             </div>
-            <div class="content__split">
-                <h1>VS</h1>
-            </div>
-            <div class="content__block">
-                <div class="profile">
+            <h1 class="versus">VS</h1>
+            <div class="competition__user">
+                <div class="user__profile">
                     <div class="profile__image">
                         <img
                             src="@/assets/img/competitions/UserPhoto.jpg"
@@ -57,9 +65,11 @@
                     </div>
                     <div class="profile__information">
                         <div class="information__name">
-                            <h3 class="information__title">Джонатан Смирнов</h3>
+                            <h3 class="information__title">
+                                Александра Пушкина
+                            </h3>
                             <p class="information__subtitle">
-                                состоит в команде Пирожков
+                                состоит в команде ВКЦэхи
                             </p>
                         </div>
                         <div class="information__description">
@@ -80,14 +90,23 @@
                 </div>
             </div>
         </div>
+        <div class="user__actions user__actions_center">
+            <button @click="openWindow()">Начать соревнование</button>
+        </div>
+        <ModalCompetitions :status="status" />
         <!-- КОНЕЦ СОРЕВНОВАНИЯ -->
     </div>
 </template>
 
 <script>
+import SearchSvg from '@/assets/icons/search.svg'
+import ModalCompetitions from '@/components/ModalCompetitions'
 export default {
     name: 'Competitions',
-    components: {},
+    components: {
+        SearchSvg,
+        ModalCompetitions,
+    },
     props: {},
     data() {
         return {
@@ -105,19 +124,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.competition-wrapper {
-    display: flex;
-    flex-direction: column;
-    margin-top: 90px;
-    flex-wrap: wrap;
-    width: 100%;
-    overflow-y: auto;
-    height: calc(100vh - 90px);
-}
-.competition-header {
-    margin-left: 20px;
-    margin-top: 40px;
-}
 .header {
     &__text {
         display: flex;
@@ -127,38 +133,37 @@ export default {
         color: #545969;
     }
 }
-.competition-content {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 85%;
-    margin-left: 20px;
-    margin-top: 40px;
-}
-.content {
-    &__block {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 502px;
-        height: 287px;
-        border: 1px solid #545969;
-    }
-
-    &__split {
-        font-weight: bold;
-        font-size: 48px;
-        color: #545969;
-    }
-}
 .profile {
-    display: flex;
-
     &__information {
         display: flex;
         flex-direction: column;
         justify-content: space-around;
+        font-size: 18px;
         margin-left: 20px;
+    }
+}
+.user {
+    &__profile {
+        display: flex;
+        flex-direction: row;
+    }
+    &__actions {
+        margin-top: 20px;
+        button {
+            cursor: pointer;
+            width: 449px;
+            padding: 5.5px 0;
+            background-color: #5f66a9;
+            border: none;
+            color: white;
+            font-size: 24px;
+            border-radius: 8px;
+            box-shadow: 0 5px 5px gray;
+        }
+        &_center {
+            margin-right: 10%;
+            align-self: center;
+        }
     }
 }
 .user-image {
@@ -182,28 +187,161 @@ export default {
     &__subtitle {
         //font-family: HelveticaNeueCyr;
         font-style: normal;
-        font-weight: 550;
         font-size: 18px;
         line-height: 18px;
         margin-top: 10px;
         color: #7d849a;
     }
-    &__indicator {
-        //font-family: Helvetica;
-        font-style: normal;
-        font-weight: normal;
+}
+.indicators {
+    display: flex;
+    &__title {
+        font-weight: 700;
         font-size: 18px;
-        color: #1a2740;
+        color: #545969;
+    }
+    &__image {
+        margin-right: 12px;
+        width: 40px;
     }
 }
-.desctiption-bold {
-    font-weight: bold;
-    color: #1a2740;
-}
 .competition {
+    margin-left: 100px;
+    margin-right: 90px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    margin-top: 89px;
+    overflow-y: auto;
+    height: calc(100vh - 90px);
     &__search {
-        margin-left: 100px;
+        display: flex;
+        justify-content: space-between;
         margin-top: 20px;
+    }
+    &__indicator {
+        display: flex;
+        align-items: center;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 24px;
+        margin-right: 15px;
+        color: #1a2740;
+        span {
+            margin-right: 30px;
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+    &__title {
+        font-size: 24px;
+        color: #545969;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+    &__about {
+        margin-top: 50px;
+    }
+    &__myCompetition {
+        margin-top: 40px;
+    }
+    &__control {
+        margin-top: 30px;
+        display: flex;
+        justify-content: space-between;
+    }
+    &__user {
+        margin-top: 50px;
+    }
+    &__versus {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 90%;
+        .versus {
+            font-size: 72px;
+            font-weight: 700;
+            color: #545969;
+        }
+    }
+}
+.myCompetition {
+    &__table {
+        width: 100%;
+        font-size: 18px;
+        border-collapse: separate;
+        border-spacing: 0 2px;
+        .table__row {
+            background-color: #f0f3fe;
+            .row__id {
+                color: #545969;
+            }
+        }
+        thead {
+            .table__row {
+                margin-top: 2px;
+                th {
+                    text-align: left;
+                    padding: 23px 13px;
+                }
+            }
+        }
+        tbody {
+            .table__row {
+                td {
+                    margin-top: 2px;
+                    padding: 1px 13px 7px 13px;
+                    .competition__logo {
+                        width: 42px;
+                        margin-right: 20px;
+                    }
+                }
+                .row__logo {
+                    display: flex;
+                    align-items: center;
+                }
+                .row__enemy {
+                    vertical-align: middle;
+                    .enemy__logo {
+                        vertical-align: middle;
+                        margin-right: 15px;
+                        width: 24px;
+                        height: 24px;
+                        border-radius: 100px;
+                    }
+                }
+                .row__result p {
+                    padding: 2px 10px;
+                    width: 120px;
+                    max-width: 90px;
+                    text-align: center;
+                    border-radius: 5px;
+                    border: 1px solid #7fc008;
+                }
+                .result__win p {
+                    color: #7fc008;
+                }
+                .result__losing p {
+                    border-color: #db303f;
+                    color: #db303f;
+                }
+                .result__draw p {
+                    color: #db8c28;
+                    border-color: #db8c28;
+                }
+            }
+        }
+    }
+}
+.about {
+    &__description {
+        color: #4c4f56;
+        padding: 8px 13px;
+        border: 1px solid #545969;
     }
 }
 .search {
@@ -211,10 +349,12 @@ export default {
         color: #545969;
         //font-family: HelveticaNeueCyr;
         font-style: normal;
-        font-weight: 550;
         font-size: 18px;
         line-height: 18px;
         color: #545969;
+        label {
+            font-weight: 700;
+        }
     }
 
     &__input {
@@ -223,21 +363,79 @@ export default {
         margin-top: 12px;
     }
 }
+.control {
+    &__pages {
+        display: flex;
+        align-items: center;
+        button {
+            cursor: pointer;
+            color: #b0bac9;
+            border: 1px solid #b0bac9;
+            background-color: white;
+            padding: 9px 12px 7px 12px;
+            border-radius: 6px;
+            img {
+                height: 15px;
+            }
+        }
+        div {
+            display: flex;
+            align-items: center;
+            width: 80px;
+            justify-content: space-around;
+            margin: 0 12px;
+            font-size: 14px;
+            color: #b0bac9;
+            input {
+                color: #26bcc2;
+                height: 34px;
+                border: 1px solid #b0bac9;
+                text-align: center;
+                width: 35px;
+            }
+            input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+            .select__pages {
+                color: black;
+            }
+        }
+    }
+    &__pagesCount {
+        display: flex;
+        color: #454d59;
+        align-items: center;
+        font-size: 14px;
+        input {
+            margin-left: 20px;
+            height: 34px;
+            border: 1px solid #b0bac9;
+            padding: 0 10px;
+            width: 40px;
+        }
+    }
+}
 .input {
     &__item {
         //font-family: HelveticaNeueCyr;
         font-style: normal;
-        font-weight: normal;
+        font-weight: 100 !important;
         font-size: 18px;
         line-height: 18px;
-        color: #d8dcea;
+        color: #8e9ac0;
         border: 0;
         width: 650px;
         height: 33px;
-        padding-left: 30px;
+        padding-left: 27px;
         outline: none;
         &:hover {
             cursor: pointer;
+        }
+        &::placeholder {
+            font-weight: 100;
+            color: #8e9ac0;
         }
         &:focus ~ .input__hint {
             opacity: 0;
@@ -275,7 +473,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #26bcc2;
+    background: #5f66a9;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 8px;
     width: 449px;
@@ -283,6 +481,7 @@ export default {
     margin-top: 20px;
     color: white;
     font-size: 24px;
+    border: 0;
 }
 .competition-button:hover {
     cursor: pointer;
@@ -341,7 +540,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #26bcc2;
+    background: #5f66a9;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 8px;
     width: 249px;

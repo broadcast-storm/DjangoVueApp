@@ -1,7 +1,6 @@
 from rest_framework import serializers
-from .models import JobPosition, Division, UserProfile, Statistics, Task, TaskUserStatus, Team, Product, \
-    RequirementsToBuyProduct, Test, Question, Answer, TestBlock, Achievement, RequirenmentToGetAchieve, AchieveRequirenmentStatus,\
-    AchievementUserStatus, Competition, WeeklyTask, TestUser, QuestionTheme
+
+from . import models
 
 
 class EmptySerializer(serializers.Serializer):
@@ -10,14 +9,15 @@ class EmptySerializer(serializers.Serializer):
 
 class JobPositionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = JobPosition
+        model = models.JobPosition
         fields = ["id", "title", "description"]
 
 
 class DivisionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Division
+        model = models.Division
         fields = ["id", "title", "description"]
+
 
 # ============================================
 # ПОЛЬЗОВАТЕЛИ
@@ -26,7 +26,7 @@ class DivisionSerializer(serializers.ModelSerializer):
 
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
-        model = UserProfile
+        model = models.UserProfile
         fields = '__all__'
 
 
@@ -34,7 +34,7 @@ class UserGetSerializer(serializers.ModelSerializer):
     division_details = DivisionSerializer(source="division")
 
     class Meta:
-        model = UserProfile
+        model = models.UserProfile
         fields = ["id", "email", "username", "name", "userType", "surname", "patronymic",
                   "birthDate", "description", "photo", "level", "money", "health", "energy", "quality",
                   "productivity", "competitionCount", "winCompetitionCount", "jobPosition", "division_details",
@@ -43,53 +43,65 @@ class UserGetSerializer(serializers.ModelSerializer):
 
 class UserGetListSerializer(serializers.ModelSerializer):
     class Meta:
-        model = UserProfile
+        model = models.UserProfile
         fields = ["id", "username", "name", "userType", "surname",
                   "birthDate", "photo", "level", "quality",
-                  "productivity",  "jobPosition", "division", "userType"]
+                  "productivity", "jobPosition", "division", "userType"]
 
 
 class StatisticsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Statistics
+        model = models.Statistics
         fields = '__all__'
 
 
 class TeamSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Team
+        model = models.Team
         fields = ['users', 'division', 'title', 'description',
                   'maxUsersCount', 'created_at', 'updated_at']
 
 
 class WeeklyTaskSerializer(serializers.ModelSerializer):
     class Meta:
-        model = WeeklyTask
+        model = models.WeeklyTask
         fields = ["id", "difficulty", "title", "description",
                   "subTasksCount", "isTeamTask", "accessLevel", "deadline",
-                  "money",  "health", "energy", "division", ]
+                  "money", "health", "energy", "division", ]
 
 
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Task
+        model = models.Task
         fields = ["id", "difficulty", "taskType", "title", "description",
                   "subTasksCount", "isTeamTask", "accessLevel", "deadline",
-                  "money",  "health", "energy", "division", ]
+                  "money", "health", "energy", "division", "parent"]
+
+
+class QuestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.MainQuest
+        fields = ["id", "tasks", "difficulty", "title", "description",
+                  "accessLevel", "money", "health", "energy", "is_active", "time_left"]
+
+
+class QuestTreeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.MainQuestTree
+        fields = ["id", "mainQuest", "task", "parentTask", "childTask"]
 
 
 class TaskUserStatusSerializer(serializers.ModelSerializer):
     class Meta:
-        model = TaskUserStatus
+        model = models.TaskUserStatus
         fields = ['task', 'user',
-                  'subTasksCount', 'subTasksCompletedCount', 'status'
-                                                             'started_at', 'done_at']
+                  'subTasksCount', 'subTasksCompletedCount', 'status',
+                  'started_at', 'done_at']
 
 
 class ProductSerializer(serializers.ModelSerializer):
-
     class Meta:
-        model = Product
+        model = models.Product
         fields = '__all__'
 
 
@@ -97,88 +109,72 @@ class RequirementsToBuyProductSerializer(serializers.ModelSerializer):
     product = ProductSerializer()
 
     class Meta:
-        model = RequirementsToBuyProduct
+        model = models.RequirementsToBuyProduct
         fields = '__all__'
 
 
 class TestsSerializer(serializers.ModelSerializer):
-
     class Meta:
-        model = Test
+        model = models.Test
         fields = '__all__'
 
 
 class TestsWithoutUsersSerializer(serializers.ModelSerializer):
-
     class Meta:
-        model = Test
+        model = models.Test
         fields = ["id", "title", "description", "pointsToComplete", "canLeave", "canSkip", "showAnswers",
                   "isInterview", "canSeeSpentTime", "canSeeTestClosing", "created_at", "updated_at"]
 
 
 class QuestionThemeSerializer(serializers.ModelSerializer):
-
     class Meta:
-        model = QuestionTheme
+        model = models.QuestionTheme
         fields = '__all__'
 
 
 class QuestionsSerializer(serializers.ModelSerializer):
-
     class Meta:
-        model = Question
-        fields = ["id", "answerType", "description",
-                  "difficulty", "image", "title"]
+        model = models.Question
+        fields = '__all__'
 
 
 class TestBlockQuestionsSerializer(serializers.ModelSerializer):
     questions = QuestionsSerializer(many=True)
 
     class Meta:
-        model = TestBlock
-        fields = ["id", "questionTheme", "questions", ]
+        model = models.TestBlock
+        fields = '__all__'
 
 
 class TestBlockSerializer(serializers.ModelSerializer):
-
     class Meta:
-        model = TestBlock
+        model = models.TestBlock
         fields = '__all__'
 
 
 class TestUserSerializer(serializers.ModelSerializer):
-
     class Meta:
-        model = TestUser
+        model = models.TestUser
         fields = '__all__'
 
 
-class TestUserShortSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = TestUser
-        fields = ["test", ]
-
-
 class AnswersSerializer(serializers.ModelSerializer):
-
     class Meta:
-        model = Answer
+        model = models.Answer
         fields = '__all__'
 
 
 class AnswersWithoutFlagSerializer(serializers.ModelSerializer):
-
     class Meta:
-        model = Answer
+        model = models.Answer
         fields = ['id', 'text', 'description', 'image', 'question']
 
 
 class AnswersIdSerializer(serializers.ModelSerializer):
-
     class Meta:
-        model = Answer
+        model = models.Answer
         fields = ['id', 'question']
+
 
 # class ShopSerializer(serializers.ModelSerializer):
 #     product = ProductSerializer(read_only=True)
@@ -189,41 +185,55 @@ class AnswersIdSerializer(serializers.ModelSerializer):
 
 
 class AchievementSerializer(serializers.ModelSerializer):
-
     class Meta:
-        model = Achievement
+        model = models.Achievement
         fields = '__all__'
 
 
 class RequirenmentToGetAchieveSerializer(serializers.ModelSerializer):
-
     class Meta:
-        model = RequirenmentToGetAchieve
+        model = models.RequirenmentToGetAchieve
         fields = '__all__'
 
 
 class AchieveRequirenmentStatusSerializer(serializers.ModelSerializer):
-
     class Meta:
-        model = AchieveRequirenmentStatus
+        model = models.AchieveRequirenmentStatus
         fields = '__all__'
 
 
 class AchievementUserStatusSerializer(serializers.ModelSerializer):
-
     class Meta:
-        model = AchievementUserStatus
+        model = models.AchievementUserStatus
         fields = '__all__'
 
 
 class UserCompetitionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = UserProfile
+        model = models.UserProfile
         fields = ['id', 'username', 'name', 'surname',
                   'productivity', 'quality', 'level', 'photo']
 
 
 class CompetitionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Competition
+        model = models.Competition
         fields = '__all__'
+
+
+class CompetitionRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.CompetitionRequest
+        fields = '__all__'
+
+
+class UserNotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.UserNotification
+        fields = '__all__'
+
+
+class UserProfileForCompetitionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.UserProfile
+        fields = ['level', 'quality', 'productivity']

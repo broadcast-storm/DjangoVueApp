@@ -19,7 +19,7 @@ const actions = {
             const response = await axios.get(`/api/get-weekly-tasks`, {
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `JWT ${token}`,
                 },
             })
             console.log('weekly:')
@@ -40,7 +40,7 @@ const actions = {
             const response = await axios.get(`/api/get-daily-tasks`, {
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `JWT ${token}`,
                 },
             })
             console.log('daily:')
@@ -61,7 +61,7 @@ const actions = {
             const response = await axios.get(`/api/get-quests`, {
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `JWT ${token}`,
                 },
             })
             console.log('quests:')

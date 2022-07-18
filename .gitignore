@@ -4,6 +4,7 @@ node_modules
 /dist
 __pycache__/
 *.py[cod]
+env/
 venv/
 *.sqlite3
 media/**.*
@@ -28,6 +29,7 @@ pnpm-debug.log*
 # Editor directories and files
 .idea
 venv
+frontend/.env.example
 *.suo
 *.ntvs*
 *.njsproj
